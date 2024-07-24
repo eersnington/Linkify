@@ -220,9 +220,6 @@ export async function getLinkedInProfile(data: FormData) {
   //   },
   // });
 
-  //simulate delay
-  // await new Promise((resolve) => setTimeout(resolve, 0.5 * 1000));
-
   const fullName = response.firstName + " " + response.lastName;
   const title = response.headline || "N/A";
   const description = response.summary || "N/A";
