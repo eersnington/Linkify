@@ -1,0 +1,72 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "rhel-openssl-1.0.x"]
+}
+
+datasource db {
+  provider     = "postgresql"
+  url          = env("DATABASE_URL")
+  // directUrl    = env("DATABASE_URL_NON_POOLING") // uses a direct connection
+  relationMode = "prisma"
+}
+
+model User {
+  id            String    @id @default(cuid())
+  firstName     String?
+  lastName      String?
+  email         String   @unique
+  emailVerified DateTime?
+  image         String?
+  createdAt     DateTime  @default(now()) @map(name: "created_at")
+  updatedAt     DateTime  @default(now()) @map(name: "updated_at")
+
+  stripeCustomerId       String?   @unique @map(name: "stripe_customer_id")
+  stripeSubscriptionId   String?   @unique @map(name: "stripe_subscription_id")
+  stripePriceId          String?   @map(name: "stripe_price_id")
+  stripeCurrentPeriodEnd DateTime? @map(name: "stripe_current_period_end")
+
+  linkedInProfile LinkedInProfile?
+  website        Website?
+
+  @@map(name: "users")
+}
+
+model LinkedInProfile {
+  id                String   @id @default(cuid())
+  userEmail         String  @unique @map(name: "user_email")
+
+  fullName          String
+  title             String
+  description       String
+
+  linkedInUrl       String
+  photoUrl          String
+
+  certifications    Json
+  workExperiences   Json
+  recommendations   Json
+
+  education         Json
+  skills            String[]
+
+  user User @relation(fields: [userEmail], references: [email])
+
+  @@map(name: "linkedin_profiles")
+}
+
+model Website {
+  id         String   @id @default(cuid())
+  userEmail     String @unique @map(name: "user_email")
+
+  user User @relation(fields: [userEmail], references: [email])
+  
+  domainName String   @unique
+  template   Int
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@map(name: "website")
+}
