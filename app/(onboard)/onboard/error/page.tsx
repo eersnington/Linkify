@@ -7,6 +7,11 @@ import OnboardCard from "@/components/onboard-card";
 import { pf_display } from "@/app/fonts";
 import { Alert } from "@/components/ui/alert";
 import { redirect } from "next/navigation";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Onboard",
@@ -24,22 +29,9 @@ export default async function OnboardPage({
 
   const user = await currentUser(); 
 
-  const emailStr = user?.emailAddresses[0].emailAddress || email;
-
-  const formdata = {
-    email: emailStr,
-  };
-
-  const response = await getLinkedInProfile(formdata);
-
-  const { status, message, data } = response;
-
-  if (status === "error") {
-    return redirect("/onboard/error?email=" + emailStr);
-  }
-
-  const name = data?.firstName + " " + data?.lastName;
-  const imageUrl = data?.photoUrl || "/images/placeholder.jpg";
+    if (user){
+        redirect("/dashboard");
+    }
 
   return (
     <div className="flex flex-col items-center justify-center space-y-12 px-4 text-center">
@@ -59,11 +51,30 @@ export default async function OnboardPage({
         </div>
       </div>
       <div className="w-full max-w-md">
-        <OnboardCard
-          email={emailStr}
-          name={name}
-          imageUrl={imageUrl}
-        />
+        <Card className="mx-auto w-full max-w-md border-2 border-slate-900 drop-shadow-xl">
+      <CardHeader>
+        <CardTitle>Error</CardTitle>
+        <CardDescription>
+          Please verify the following information to continue.
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <div className="flex flex-col items-center justify-center space-y-4 ">
+                   <div className="space-y-2">
+            <Label className="text-lg">We couldn&apos;t find a LinkedIn account associated to {" "}{email}</Label>
+          </div>
+        </div>
+      </CardContent>
+      <CardFooter>
+        <div className="flex w-full justify-center gap-14">
+          <Link
+          href={"/"}
+          className="bg-black rounded-lg text-base hover:bg-black/80 text-white px-4 py-2 font-bold">
+            {"Try Again?"}
+          </Link>
+        </div>
+      </CardFooter>
+    </Card>
       </div>
     </div>
   );

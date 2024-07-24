@@ -1,6 +1,5 @@
 import "@/styles/globals.css";
 
-
 import { fontHeading, fontSans, fontUrban } from "@/assets/fonts";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Analytics } from "@vercel/analytics/react";
