@@ -1,5 +1,7 @@
 // pages/onboard/mypage.tsx
 
+export const maxDuration = 30;
+
 import { redirect } from "next/navigation";
 import { getStoredProfile } from "@/actions/get-linkedin-profile";
 import { LinkedInProfileProvider } from "@/context/linkedin-profile-context";
