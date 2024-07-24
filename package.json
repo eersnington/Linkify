@@ -1,12 +1,21 @@
 {
   "name": "linkify",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
+  "author": {
+    "name": "sreenington",
+    "url": "https://twitter.com/sreenington/"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "turbo": "next dev --turbo",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "lint:fix": "next lint --fix",
+    "preview": "next build && next start",
+    "postinstall": "prisma generate",
+    "email": "email dev --dir emails --port 3333"
   },
   "dependencies": {
     "react": "^18",
