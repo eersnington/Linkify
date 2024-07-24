@@ -19,6 +19,9 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "@/components/ui/use-toast";
+import { env } from "@/env.mjs"
+
+const url = env.NEXT_PUBLIC_APP_URL
 
 interface PublishDialogProps {
   email: string;
@@ -54,7 +57,7 @@ export function PublishDialog({ email, selectedTemplate }: PublishDialogProps) {
           setShowConfetti(true);
           toast({
             title: "Success",
-            description: `Your page has been published at example.com/${domainName} 🎉`,
+            description: `Your page has been published at ${url}/${domainName} 🎉`,
             className: "bg-green-500 text-white font-mono",
           });
           setTimeout(() => setShowConfetti(false), 5000); // Hide confetti after 5 seconds
@@ -118,7 +121,7 @@ export function PublishDialog({ email, selectedTemplate }: PublishDialogProps) {
               type="submit"
               onClick={handlePublish}
               disabled={isPublishing}
-              className="bg-gradient_indigo-purple"
+              className="bg-purple-500"
             >
               {isPublishing ? "Publishing..." : "Publish"}
             </Button>

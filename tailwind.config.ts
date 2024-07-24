@@ -68,14 +68,6 @@ const config = {
         heading: ["var(--font-heading)", ...fontFamily.sans],
       },
       keyframes: {
-        shimmer: {
-          from: {
-            backgroundPosition: "0 0",
-          },
-          to: {
-            backgroundPosition: "-200% 0",
-          },
-        },
         "accordion-down": {
           from: { height: "0" },
           to: { height: "var(--radix-accordion-content-height)" },
@@ -147,7 +139,6 @@ const config = {
         "fade-in": "fade-in 0.4s",
         "fade-out": "fade-out 0.4s",
       },
-      shimmer: "shimmer 2s linear infinite",
     },
   },
   plugins: [require("tailwindcss-animate"), require("@tailwindcss/typography")],

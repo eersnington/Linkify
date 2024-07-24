@@ -1,6 +1,4 @@
-// const { withContentlayer } = require("next-contentlayer2");
-
-import { withContentlayer } from "next-contentlayer2";
+const { withContentlayer } = require("next-contentlayer2");
 
 import("./env.mjs");
 
@@ -22,6 +20,10 @@ const nextConfig = {
         protocol: "https",
         hostname: "randomuser.me",
       },
+      {
+        protocol: "https",
+        hostname: "media.licdn.com",
+      },
     ],
   },
   experimental: {
@@ -29,4 +31,4 @@ const nextConfig = {
   },
 };
 
-export default withContentlayer(nextConfig);
+module.exports = withContentlayer(nextConfig);

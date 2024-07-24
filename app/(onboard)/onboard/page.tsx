@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 import { getLinkedInProfile } from "@/actions/get-linkedin-profile";
+import { currentUser } from '@clerk/nextjs/server';
 
 import { cn } from "@/lib/utils";
 import OnboardCard from "@/components/onboard-card";
@@ -19,8 +20,12 @@ export default async function OnboardPage({
 }) {
   const { email } = searchParams;
 
+  const user = await currentUser(); 
+
+  const emailStr = user?.emailAddresses[0].emailAddress || email;
+
   const formdata = {
-    email: email,
+    email: emailStr,
   };
 
   const response = await getLinkedInProfile(formdata);
@@ -48,7 +53,7 @@ export default async function OnboardPage({
       </div>
       <div className="w-full max-w-md">
         <OnboardCard
-          email={searchParams.email}
+          email={emailStr}
           name={name}
           imageUrl={imageUrl}
         />
