@@ -10,10 +10,10 @@ export const ModalProvider = () => {
     return null;
   }
 
-  return (
-    <>
-      <SignInModal />
-      {/* add your own modals here... */}
-    </>
-  );
+return (
+  <>
+    <SignInModal />
+    {/* add your own modals here... */}
+  </>
+);
 };
