@@ -20,6 +20,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "@/components/ui/use-toast";
 import { env } from "@/env.mjs"
+import { useSigninModal } from "@/hooks/use-signin-modal";
 
 const url = env.NEXT_PUBLIC_APP_URL
 
@@ -33,15 +34,16 @@ export function PublishDialog({ email, selectedTemplate }: PublishDialogProps) {
   const [isPublishing, setIsPublishing] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
   const [open, setOpen] = useState(false);
-  const [showSignupDialog, setShowSignupDialog] = useState(false);
-
+  const signUpModal = useSigninModal();
+  
   const { isSignedIn } = useUser(); // Use the useUser hook to get user info
   const router = useRouter();
 
   const handlePublish = async () => {
     if (!isSignedIn) {
       setOpen(false);
-      setShowSignupDialog(true);
+
+      signUpModal.onOpen();
       return;
     } else {
       setIsPublishing(true);
@@ -124,33 +126,6 @@ export function PublishDialog({ email, selectedTemplate }: PublishDialogProps) {
               className="bg-purple-950 hover:bg-purple-700 text-white font-mono font-bold px-4 py-2 rounded-lg"
             >
               {isPublishing ? "Publishing..." : "Publish"}
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-
-      {/* Signup Prompt Dialog */}
-      <Dialog open={showSignupDialog} onOpenChange={setShowSignupDialog}>
-        <DialogContent className="sm:max-w-[425px]">
-          <DialogHeader>
-            <DialogTitle className="flex items-center font-mono text-lg font-bold">
-              <span role="img" aria-label="wave" className="mr-2">
-                🙌🏻
-              </span>{" "}
-              You&apos;re almost there!
-            </DialogTitle>
-            <DialogDescription className="mt-2 font-mono text-base text-gray-500">
-              Just one step remaining.
-              <br />
-              You need to sign up to publish your page.
-            </DialogDescription>
-          </DialogHeader>
-          <DialogFooter className="flex justify-center">
-            <Button
-              onClick={handleSignupRedirect}
-              className="rounded-lg bg-gradient-to-r from-purple-500 to-indigo-500 px-4 py-2 font-bold text-white hover:from-purple-600 hover:to-indigo-600"
-            >
-              Sign Up
             </Button>
           </DialogFooter>
         </DialogContent>

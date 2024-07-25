@@ -14,6 +14,7 @@ import { Icons } from "@/components/shared/icons";
 import { SubscriptionPlan } from "../types/index";
 import { ToggleGroup, ToggleGroupItem } from "./ui/toggle-group";
 import { useRouter } from "next/navigation";
+import { useSigninModal } from "@/hooks/use-signin-modal";
 
 interface PricingCardsProps {
   userId?: string;
@@ -24,6 +25,7 @@ export function PricingCards({ userId, subscriptionPlan }: PricingCardsProps) {
   const isYearlyDefault = !subscriptionPlan?.stripeCustomerId || subscriptionPlan.interval === "year";
   const [isYearly, setIsYearly] = useState<boolean>(isYearlyDefault);
   const router = useRouter();
+  const signUpModal = useSigninModal();
 
   const toggleBilling = () => {
     setIsYearly(!isYearly);
@@ -150,7 +152,7 @@ export function PricingCards({ userId, subscriptionPlan }: PricingCardsProps) {
               variant={"outline"}
               size="lg"
               onClick={() => {
-                router.push("/signup");
+                signUpModal.onOpen();
               }}
               className={cn(
                 "text-base font-semibold rounded-full",

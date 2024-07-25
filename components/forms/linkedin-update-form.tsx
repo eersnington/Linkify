@@ -39,6 +39,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/components/ui/use-toast";
 import { Icons } from "@/components/shared/icons";
+import { useSigninModal } from "@/hooks/use-signin-modal";
 
 interface LinkedInProfileFormProps {
   email: string;
@@ -49,6 +50,8 @@ export function LinkedInProfileForm({ email }: LinkedInProfileFormProps) {
   const updateProfileWithId = updateLinkedInProfile.bind(null, email);
   const { profile, updateProfile } = useLinkedInProfile();
   const { isSignedIn, user } = useUser();
+
+  const signUpModal = useSigninModal();
 
   const form = useForm<LinkedInProfileFormData>({
     resolver: zodResolver(linkedInProfileSchema),
@@ -75,10 +78,7 @@ export function LinkedInProfileForm({ email }: LinkedInProfileFormProps) {
 
   const onSubmit: SubmitHandler<LinkedInProfileFormData> = (data) => {
     if (!isSignedIn || user?.emailAddresses[0].emailAddress !== email) {
-      toast({
-        description: "You need to be signed in to update your profile.",
-        className: "bg-green-500 text-white font-semibold",
-      });
+      signUpModal.onOpen();
       return;
     }
 

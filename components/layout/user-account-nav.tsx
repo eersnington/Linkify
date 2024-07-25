@@ -1,8 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { SignOutButton, UserButton } from "@clerk/nextjs";
+import { UserButton } from "@clerk/nextjs";
 import { CreditCard, LayoutDashboard, LogOut, Settings } from "lucide-react";
+import { useClerk } from '@clerk/nextjs';
 
 import {
   DropdownMenu,
@@ -18,6 +19,9 @@ interface UserProps {
 }
 
 export function UserAccountNav({ user }: { user: UserProps }) {
+  const { signOut } = useClerk();
+
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
@@ -60,8 +64,9 @@ export function UserAccountNav({ user }: { user: UserProps }) {
           </Link>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem className="cursor-pointer">
-          <SignOutButton />
+        <DropdownMenuItem className="cursor-pointer"
+          onClick={() => signOut({ redirectUrl: '/' })}>
+          Sign out
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
