@@ -89,7 +89,7 @@ export function PublishDialog({ email, selectedTemplate }: PublishDialogProps) {
       {showConfetti && <Confetti />}
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>
-          <Button variant="default" className="bg-slate-900">
+          <Button variant="default" className="bg-purple-950">
             Publish
           </Button>
         </DialogTrigger>
