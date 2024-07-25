@@ -1,11 +1,10 @@
 // app/[userDomain]/page.tsx
 
 import { notFound } from "next/navigation";
-import { getStoredProfile } from "@/actions/get-linkedin-profile";
-
-import { prisma } from "@/lib/db";
 
 import UserPageContent from "./_component/user-page-content";
+import { prisma } from "@/lib/db";
+import { getStoredProfile } from "@/actions/get-linkedin-profile";
 import { ThemeTemplateProvider } from "@/context/editor-sidebar-context";
 
 export async function generateMetadata({
@@ -15,8 +14,9 @@ export async function generateMetadata({
 }) {
   const website = await prisma.website.findUnique({
     where: { domainName: params.userDomain },
-    include: { user: true },
   });
+
+  console.log(website)
 
   if (!website) {
     return {
@@ -24,9 +24,16 @@ export async function generateMetadata({
     };
   }
 
+  if (website.firstName?.length == 0 || website.firstName == null) {
+    return {
+      title: `${website.domainName}'s Page`,
+      description: `Welcome to ${website.domainName}'s personal page`,
+    };
+  }
+
   return {
-    title: `${website.user.firstName}'s Page`,
-    description: `Welcome to ${website.user.firstName}'s personal page`,
+    title: `${website.firstName}'s Page`,
+    description: `Welcome to ${website.firstName}'s personal page`,
   };
 }
 
@@ -37,14 +44,13 @@ export default async function UserPage({
 }) {
   const website = await prisma.website.findUnique({
     where: { domainName: params.userDomain },
-    include: { user: true },
   });
 
   if (!website) {
     notFound();
   }
 
-  const { data: profile } = await getStoredProfile(website.user.email);
+  const { data: profile } = await getStoredProfile(website.userEmail);
 
   if (!profile) {
     notFound();
