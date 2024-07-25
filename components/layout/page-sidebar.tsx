@@ -41,15 +41,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import { LinkedInProfileForm } from "../forms/linkedin-update-form";
 
-type LinkedInProfile = {
-  fullName: string;
-  title: string;
-  description: string;
-  photoUrl: string;
-  workExperiences: any;
-  education: any;
-};
-
 interface PageSidebarProps {
   email: string;
 }
@@ -230,7 +221,7 @@ export function PageSidebar({ email }: PageSidebarProps) {
             <TabsContent value="template">{renderTemplateCards()}</TabsContent>
             <TabsContent value="theme">{renderThemeCards()}</TabsContent>
             <TabsContent value="blocks">
-              <LinkedInProfileForm userId={email} />
+              <LinkedInProfileForm email={email} />
             </TabsContent>
           </div>
         </ScrollArea>

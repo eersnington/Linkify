@@ -37,6 +37,7 @@ model User {
 model LinkedInProfile {
   id                String   @id @default(cuid())
   userEmail         String  @unique @map(name: "user_email")
+  user User @relation(fields: [userEmail], references: [email], onDelete: Cascade)
 
   fullName          String
   title             String
@@ -52,17 +53,15 @@ model LinkedInProfile {
   education         Json
   skills            String[]
 
-  user User @relation(fields: [userEmail], references: [email])
-
   @@map(name: "linkedin_profiles")
 }
 
 model Website {
   id         String   @id @default(cuid())
   userEmail     String @unique @map(name: "user_email")
+  firstName     String? @default("")
+  user User @relation(fields: [userEmail], references: [email], onDelete: Cascade)
 
-  user User @relation(fields: [userEmail], references: [email])
-  
   domainName String   @unique
   template   Int
   createdAt  DateTime @default(now())

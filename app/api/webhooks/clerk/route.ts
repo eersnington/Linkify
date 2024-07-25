@@ -56,31 +56,70 @@ export async function POST(req: Request) {
   console.log("✅ ClerkAuth Webhook verified!");
 
   try {
-    const { id, email_addresses, first_name, last_name, image_url } =
-      payload?.data;
-
-    const email = email_addresses[0]?.email_address;
+    const { id, } = payload?.data;
     console.log("✅", payload);
 
-    await prisma.user.upsert({
-      where: { id: id },
-      update: {
-        email,
-        firstName: first_name,
-        lastName: last_name,
-        image: image_url,
-      },
-      create: {
-        id: id,
-        email,
-        firstName: first_name || "",
-        lastName: last_name || "",
-        image: image_url || "",
-      },
-    });
-    return new NextResponse("User updated in database successfully", {
-      status: 200,
-    });
+    console.log(payload.type);
+
+    if (payload.type === "user.deleted") { // action for deleting user
+
+      console.log("Action: Deleting user - ", id);
+
+      const user = await prisma.user.findFirst({
+        where: { id: id },
+      });
+
+      console.log("Awaiting user deletion");
+      await prisma.user.delete({
+        where: { id: id },
+      });
+
+      const user_email = user?.email;
+
+      console.log("Awaiting website deletion");
+      await prisma.website.deleteMany({
+        where: { userEmail: user_email },
+      });
+
+      console.log("Awaiting LinkedIn profile deletion");
+      await prisma.linkedInProfile.delete({
+        where: { userEmail: user_email },
+      });
+
+          
+      return new NextResponse("User deleted from database successfully", {
+        status: 200,
+      });
+      
+    }else{
+      const { email_addresses, first_name, last_name, image_url } = payload?.data;
+
+      const email = email_addresses[0]?.email_address;
+      console.log("Action: Upsert user - ", email);
+      console.log(payload.type)
+
+      await prisma.user.upsert({
+        where: { id: id },
+        update: {
+          email,
+          firstName: first_name,
+          lastName: last_name,
+          image: image_url,
+        },
+        create: {
+          id: id,
+          email,
+          firstName: first_name || "",
+          lastName: last_name || "",
+          image: image_url || "",
+        },
+      });
+      
+      return new NextResponse("User updated in database successfully", {
+        status: 200,
+      });
+
+    }
   } catch (error) {
     console.error("Error updating database:", error);
     return new NextResponse("Error updating user in database", { status: 500 });

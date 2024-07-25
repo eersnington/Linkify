@@ -121,7 +121,7 @@ export function PublishDialog({ email, selectedTemplate }: PublishDialogProps) {
               type="submit"
               onClick={handlePublish}
               disabled={isPublishing}
-              className="bg-purple-500"
+              className="bg-purple-950 hover:bg-purple-700 text-white font-mono font-bold px-4 py-2 rounded-lg"
             >
               {isPublishing ? "Publishing..." : "Publish"}
             </Button>

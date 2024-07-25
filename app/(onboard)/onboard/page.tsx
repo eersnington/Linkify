@@ -5,7 +5,6 @@ import { currentUser } from '@clerk/nextjs/server';
 import { cn } from "@/lib/utils";
 import OnboardCard from "@/components/onboard-card";
 import { pf_display } from "@/app/fonts";
-import { Alert } from "@/components/ui/alert";
 import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {

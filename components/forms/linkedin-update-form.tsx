@@ -1,5 +1,6 @@
 "use client";
 
+import { useUser } from "@clerk/nextjs";
 import { useTransition } from "react";
 import { updateLinkedInProfile } from "@/actions/get-linkedin-profile";
 import { useLinkedInProfile } from "@/context/linkedin-profile-context";
@@ -40,13 +41,14 @@ import { toast } from "@/components/ui/use-toast";
 import { Icons } from "@/components/shared/icons";
 
 interface LinkedInProfileFormProps {
-  userId: string;
+  email: string;
 }
 
-export function LinkedInProfileForm({ userId }: LinkedInProfileFormProps) {
+export function LinkedInProfileForm({ email }: LinkedInProfileFormProps) {
   const [isPending, startTransition] = useTransition();
-  const updateProfileWithId = updateLinkedInProfile.bind(null, userId);
+  const updateProfileWithId = updateLinkedInProfile.bind(null, email);
   const { profile, updateProfile } = useLinkedInProfile();
+  const { isSignedIn, user } = useUser();
 
   const form = useForm<LinkedInProfileFormData>({
     resolver: zodResolver(linkedInProfileSchema),
@@ -72,6 +74,14 @@ export function LinkedInProfileForm({ userId }: LinkedInProfileFormProps) {
   });
 
   const onSubmit: SubmitHandler<LinkedInProfileFormData> = (data) => {
+    if (!isSignedIn || user?.emailAddresses[0].emailAddress !== email) {
+      toast({
+        description: "You need to be signed in to update your profile.",
+        className: "bg-green-500 text-white font-semibold",
+      });
+      return;
+    }
+
     startTransition(async () => {
       const { status } = await updateProfileWithId(data);
 

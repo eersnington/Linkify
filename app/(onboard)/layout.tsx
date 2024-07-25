@@ -9,7 +9,7 @@ interface LayoutProps {
 
 export default function OnboardLayout({ children }: LayoutProps) {
   return (
-    <div className="flex min-h-screen flex-col bg-purple-950">
+    <div className="flex min-h-screen flex-col bg-gradient-to-r from-indigo-700 via-indigo-600 to-indigo-700">
       <Suspense fallback="...">
         <header className="flex items-center p-4">
           <Link

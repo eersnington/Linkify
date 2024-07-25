@@ -40,8 +40,7 @@ export function HeroLanding() {
     "/images/templates/Creative.png",
     "/images/templates/Modern.png",
     "/images/templates/Minimalist.png",
-    "/images/templates/Professional.png",
-    // Add more image paths as needed
+    "/images/templates/Professional.png"  
   ];
 
   useEffect(() => {
