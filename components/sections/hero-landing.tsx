@@ -116,7 +116,7 @@ export function HeroLanding() {
           profile
         </motion.div>
         <motion.div
-          className="hidden w-full flex-col items-center justify-center sm:w-9/1 "
+          className="flex w-full flex-col items-center justify-center sm:w-9/1 "
           initial="hidden"
           animate="visible"
           variants={formVariants}
