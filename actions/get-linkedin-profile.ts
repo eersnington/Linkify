@@ -317,10 +317,23 @@ export async function fetchLinkedInProfile(data: FormData) {
 
   const skills = response.skills.length > 0 ? response.skills : ["N/A"];
 
+  const linkedInProfile = {
+    fullName,
+    photoUrl,
+    title,
+    description,
+    linkedInUrl,
+    certifications,
+    workExperiences,
+    recommendations,
+    education,
+    skills,
+  };
+
   return {
     status: "success",
     message: `Welcome, ${email}`,
-    data: response,
+    data: linkedInProfile,
   };
 
   // try {

@@ -21,7 +21,7 @@ export default async function OnboardPage({
 }) {
   const { email } = searchParams;
 
-  const user = await currentUser(); 
+  const user = await currentUser();
 
   const emailStr = user?.emailAddresses[0].emailAddress || email;
 
@@ -29,7 +29,7 @@ export default async function OnboardPage({
     email: emailStr,
   };
 
-  const response = await getLinkedInProfile(formdata);
+  const response = await fetchLinkedInProfile(formdata);
 
   const { status, message, data } = response;
 
@@ -37,7 +37,7 @@ export default async function OnboardPage({
     return redirect("/onboard/error?email=" + emailStr);
   }
 
-  const name = data?.firstName + " " + data?.lastName;
+  const name = data?.fullName || "John Doe";
   const imageUrl = data?.photoUrl || "/images/placeholder.jpg";
 
   return (
