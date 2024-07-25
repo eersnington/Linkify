@@ -1,16 +1,11 @@
 import { Metadata } from "next";
-import { getLinkedInProfile } from "@/actions/get-linkedin-profile";
 import { currentUser } from '@clerk/nextjs/server';
 
 import { cn } from "@/lib/utils";
-import OnboardCard from "@/components/onboard-card";
 import { pf_display } from "@/app/fonts";
-import { Alert } from "@/components/ui/alert";
 import { redirect } from "next/navigation";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
 export const metadata: Metadata = {

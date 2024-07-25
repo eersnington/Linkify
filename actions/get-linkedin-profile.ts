@@ -232,7 +232,7 @@ async function rapidAPICall(email: string) {
  *
  */
 
-export async function getLinkedInProfile(data: FormData) {
+export async function fetchLinkedInProfile(data: FormData) {
   const parsed = ctaFormSchema.safeParse(data);
   if (!parsed.success) {
     return {
@@ -317,57 +317,63 @@ export async function getLinkedInProfile(data: FormData) {
 
   const skills = response.skills.length > 0 ? response.skills : ["N/A"];
 
-  try {
-    // Ensure the user exists or create a new user
-    await prisma.user.upsert({
-      where: { email: data.email },
-      update: {},
-      create: {
-        email: data.email,
-      },
-    });
+  return {
+    status: "success",
+    message: `Welcome, ${email}`,
+    data: response,
+  };
 
-    await prisma.linkedInProfile.upsert({
-      where: { userEmail: data.email },
-      update: {
-        fullName,
-        title,
-        description,
-        linkedInUrl,
-        photoUrl,
-        certifications,
-        workExperiences,
-        recommendations,
-        education,
-        skills,
-      },
-      create: {
-        userEmail: data.email,
-        fullName,
-        title,
-        description,
-        linkedInUrl,
-        photoUrl,
-        certifications,
-        workExperiences,
-        recommendations,
-        education,
-        skills,
-      },
-    });
+  // try {
+  //   // Ensure the user exists or create a new user
+  //   await prisma.user.upsert({
+  //     where: { email: data.email },
+  //     update: {},
+  //     create: {
+  //       email: data.email,
+  //     },
+  //   });
 
-    return {
-      status: "success",
-      message: `Welcome, ${email}`,
-      data: response,
-    };
-  } catch (error) {
-    console.error("Error saving LinkedIn profile:", error);
-    return {
-      status: "error",
-      message: "Failed to save LinkedIn profile",
-    };
-  }
+  //   await prisma.linkedInProfile.upsert({
+  //     where: { userEmail: data.email },
+  //     update: {
+  //       fullName,
+  //       title,
+  //       description,
+  //       linkedInUrl,
+  //       photoUrl,
+  //       certifications,
+  //       workExperiences,
+  //       recommendations,
+  //       education,
+  //       skills,
+  //     },
+  //     create: {
+  //       userEmail: data.email,
+  //       fullName,
+  //       title,
+  //       description,
+  //       linkedInUrl,
+  //       photoUrl,
+  //       certifications,
+  //       workExperiences,
+  //       recommendations,
+  //       education,
+  //       skills,
+  //     },
+  //   });
+
+  //   return {
+  //     status: "success",
+  //     message: `Welcome, ${email}`,
+  //     data: response,
+  //   };
+  // } catch (error) {
+  //   console.error("Error saving LinkedIn profile:", error);
+  //   return {
+  //     status: "error",
+  //     message: "Failed to save LinkedIn profile",
+  //   };
+  // }
 }
 
 /*

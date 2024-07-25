@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import { getLinkedInProfile } from "@/actions/get-linkedin-profile";
+import { fetchLinkedInProfile } from "@/actions/get-linkedin-profile";
 import { currentUser } from '@clerk/nextjs/server';
 
 import { cn } from "@/lib/utils";
