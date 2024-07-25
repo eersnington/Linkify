@@ -6,6 +6,7 @@ import { env } from "@/env.mjs";
 import { LinkedInProfile } from "@/types/linkedin";
 import { prisma } from "@/lib/db";
 import { ctaFormSchema } from "@/lib/validations/user";
+import { currentUser } from "@clerk/nextjs/server";
 
 // Example Response:
 const response = {
@@ -409,6 +410,13 @@ export async function updateLinkedInProfile(
   email: string,
   data: LinkedInProfile,
 ) {
+
+  const user = await currentUser();
+
+  if (!user || user.emailAddresses[0].emailAddress !== email) {
+    return { status: "error", error: "Unauthorized" };
+  }
+
   try {
     await prisma.linkedInProfile.update({
       where: { userEmail: email },
