@@ -34,7 +34,7 @@ export default async function MyPage() {
 
   return (
     <LinkedInProfileProvider initialProfile={data}>
-      <div className="flex h-full flex-1 bg-gradient-to-r from-indigo-700 via-indigo-600 to-indigo-700 p-4">
+      <div className="flex h-full flex-1 bg-purple-950 p-4">
         <PageEditor email={email} />
       </div>
     </LinkedInProfileProvider>
