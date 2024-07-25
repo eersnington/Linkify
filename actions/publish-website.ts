@@ -1,6 +1,7 @@
 "use server";
 
 import { prisma } from "@/lib/db";
+import { currentUser } from "@clerk/nextjs/server";
 
 function validateDomainName(domainName: string): string | boolean {
   // Check length
@@ -22,11 +23,19 @@ export async function publishWebsite(
   domainName: string,
   template: number,
 ) {
+  const user = await currentUser();
+
+  if (!user || user.emailAddresses[0].emailAddress !== email) {
+    return { status: "error", error: "Unauthorized" };
+  }
+
   // Validate domain name
   const validationError = validateDomainName(domainName);
   if (validationError !== false) {
     return { status: "error", error: validationError };
   }
+
+  console.log(`Publishing website for ${email} with domain name ${domainName}`);
 
   try {
     const existingWebsite = await prisma.website.findFirst({
@@ -40,11 +49,16 @@ export async function publishWebsite(
     const website = await prisma.website.upsert({
       where: { userEmail: email },
       create: {
+        id: user.id,
+        firstName: user.firstName,
         domainName,
         userEmail: email,
         template,
       },
       update: {
+        id: user.id,
+        firstName: user.firstName,
+        userEmail: email,
         domainName,
         template,
       },
