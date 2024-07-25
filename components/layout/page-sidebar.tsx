@@ -155,7 +155,7 @@ export function PageSidebar({ email }: PageSidebarProps) {
                   <DialogFooter>
                     <Button
                       type="submit"
-                      className="bg-purple-600 hover:bg-purple-700"
+                      className="bg-green-700 hover:bg-green-600"
                       onClick={() => router.push("/pricing")}
                     >
                       Subscribe Now
