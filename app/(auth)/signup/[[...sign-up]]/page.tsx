@@ -1,13 +1,26 @@
-import { Metadata } from "next";
-import { SignUp } from "@clerk/nextjs";
+import { Metadata } from 'next';
+import { SignUp } from '@clerk/nextjs';
 
 export const metadata: Metadata = {
-  title: "Sign Up",
-  description: "Sign up for an account",
+  title: 'Sign Up',
+  description: 'Sign up for an account',
 };
 
-const SignUpPage = () => {
-  return <SignUp />;
-};
+export default function SignUpPage({
+  searchParams,
+}: {
+  searchParams: {
+    email: string;
+    firstName: string;
+    lastName: string;
+  };
+}) {
+  const { email, firstName, lastName } = searchParams;
 
-export default SignUpPage;
+  const initialValues = {
+    emailAddress: email,
+    firstName: firstName,
+    lastName: lastName,
+  };
+  return <SignUp initialValues={initialValues} />;
+}
