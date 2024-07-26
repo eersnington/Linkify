@@ -1,24 +1,24 @@
-"use client";
+'use client';
 
-import { useUser } from "@clerk/nextjs";
-import { useTransition } from "react";
-import { updateLinkedInProfile } from "@/actions/get-linkedin-profile";
-import { useLinkedInProfile } from "@/context/linkedin-profile-context";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Plus, Trash2 } from "lucide-react";
-import { SubmitHandler, useFieldArray, useForm } from "react-hook-form";
+import { useUser } from '@clerk/nextjs';
+import { useTransition } from 'react';
+import { updateLinkedInProfile } from '@/actions/get-linkedin-profile';
+import { useLinkedInProfile } from '@/context/linkedin-profile-context';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Plus, Trash2 } from 'lucide-react';
+import { SubmitHandler, useFieldArray, useForm } from 'react-hook-form';
 
 import {
   linkedInProfileSchema,
   type LinkedInProfileFormData,
-} from "@/lib/validations/linkedin-profile";
+} from '@/lib/validations/linkedin-profile';
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "@/components/ui/accordion";
-import { Button } from "@/components/ui/button";
+} from '@/components/ui/accordion';
+import { Button } from '@/components/ui/button';
 import {
   Card,
   CardContent,
@@ -26,7 +26,7 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
+} from '@/components/ui/card';
 import {
   Form,
   FormControl,
@@ -34,12 +34,12 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { toast } from "@/components/ui/use-toast";
-import { Icons } from "@/components/shared/icons";
-import { useSigninModal } from "@/hooks/use-signin-modal";
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { toast } from '@/components/ui/use-toast';
+import { Icons } from '@/components/shared/icons';
+import { useSignupModal } from '@/hooks/use-signup-modal';
 
 interface LinkedInProfileFormProps {
   email: string;
@@ -51,7 +51,7 @@ export function LinkedInProfileForm({ email }: LinkedInProfileFormProps) {
   const { profile, updateProfile } = useLinkedInProfile();
   const { isSignedIn, user } = useUser();
 
-  const signUpModal = useSigninModal();
+  const signUpModal = useSignupModal();
 
   const form = useForm<LinkedInProfileFormData>({
     resolver: zodResolver(linkedInProfileSchema),
@@ -64,7 +64,7 @@ export function LinkedInProfileForm({ email }: LinkedInProfileFormProps) {
     remove: removeWorkExperience,
   } = useFieldArray({
     control: form.control,
-    name: "workExperiences",
+    name: 'workExperiences',
   });
 
   const {
@@ -73,7 +73,7 @@ export function LinkedInProfileForm({ email }: LinkedInProfileFormProps) {
     remove: removeEducation,
   } = useFieldArray({
     control: form.control,
-    name: "education",
+    name: 'education',
   });
 
   const onSubmit: SubmitHandler<LinkedInProfileFormData> = (data) => {
@@ -85,17 +85,17 @@ export function LinkedInProfileForm({ email }: LinkedInProfileFormProps) {
     startTransition(async () => {
       const { status } = await updateProfileWithId(data);
 
-      if (status !== "success") {
+      if (status !== 'success') {
         toast({
-          title: "Something went wrong.",
-          description: "Your profile was not updated. Please try again.",
-          variant: "destructive",
+          title: 'Something went wrong.',
+          description: 'Your profile was not updated. Please try again.',
+          variant: 'destructive',
         });
       } else {
         updateProfile(data);
         toast({
-          description: "Your profile has been updated.",
-          className: "bg-green-500 text-white font-semibold",
+          description: 'Your profile has been updated.',
+          className: 'bg-green-500 text-white font-semibold',
         });
       }
     });
@@ -283,10 +283,10 @@ export function LinkedInProfileForm({ email }: LinkedInProfileFormProps) {
                     type="button"
                     onClick={() =>
                       appendWorkExperience({
-                        title: "",
-                        company: "",
-                        date: "",
-                        description: "",
+                        title: '',
+                        company: '',
+                        date: '',
+                        description: '',
                       })
                     }
                     className="mt-2"
@@ -370,9 +370,9 @@ export function LinkedInProfileForm({ email }: LinkedInProfileFormProps) {
                     type="button"
                     onClick={() =>
                       appendEducation({
-                        name: "",
-                        degree: "",
-                        date: "",
+                        name: '',
+                        degree: '',
+                        date: '',
                       })
                     }
                     className="mt-2"
@@ -388,7 +388,7 @@ export function LinkedInProfileForm({ email }: LinkedInProfileFormProps) {
               {isPending && (
                 <Icons.spinner className="mr-2 size-4 animate-spin" />
               )}
-              <span>{isPending ? "Saving" : "Save"}</span>
+              <span>{isPending ? 'Saving' : 'Save'}</span>
             </Button>
           </CardFooter>
         </Card>
