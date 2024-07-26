@@ -24,6 +24,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Label } from '../ui/label';
 import Logo from '../shared/logo';
+import { pricingData } from '@/config/subscriptions';
 
 const features = [
   'Your own custom domain (e.g., yourname.com)',
@@ -122,11 +123,11 @@ export default function UpgradeCards({
                 animate={{ scale: [1, 1.05, 1] }}
                 transition={{ duration: 2, repeat: Infinity }}
               >
-                <p className="text-2xl font-bold text-purple-950 mb-2">
-                  <span className="line-through text-purple-400 text-xl mr-2">
-                    $59/yr
+                <p className="text-2xl font-bold text-emerald-500 mb-2">
+                  <span className="line-through text-gray-400 text-xl mr-2">
+                    ${pricingData[1].prices.monthly}/yr
                   </span>
-                  $39/yr
+                  ${pricingData[1].prices.yearly}/yr
                 </p>
                 <p className="text-md text-purple-700 font-semibold">
                   Limited Time Offer - Don&apos;t Miss Out!
