@@ -1,12 +1,12 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { publishWebsite } from "@/actions/publish-website";
-import { useUser } from "@clerk/nextjs";
-import Confetti from "react-confetti";
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { publishWebsite } from '@/actions/publish-website';
+import { useUser } from '@clerk/nextjs';
+import Confetti from 'react-confetti';
 
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
@@ -15,14 +15,14 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { toast } from "@/components/ui/use-toast";
-import { env } from "@/env.mjs"
-import { useSigninModal } from "@/hooks/use-signin-modal";
+} from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { toast } from '@/components/ui/use-toast';
+import { env } from '@/env.mjs';
+import { useSignupModal } from '@/hooks/use-signup-modal';
 
-const url = env.NEXT_PUBLIC_APP_URL
+const url = env.NEXT_PUBLIC_APP_URL;
 
 interface PublishDialogProps {
   email: string;
@@ -30,12 +30,12 @@ interface PublishDialogProps {
 }
 
 export function PublishDialog({ email, selectedTemplate }: PublishDialogProps) {
-  const [domainName, setDomainName] = useState("");
+  const [domainName, setDomainName] = useState('');
   const [isPublishing, setIsPublishing] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
   const [open, setOpen] = useState(false);
-  const signUpModal = useSigninModal();
-  
+  const signUpModal = useSignupModal();
+
   const { isSignedIn } = useUser(); // Use the useUser hook to get user info
   const router = useRouter();
 
@@ -51,30 +51,30 @@ export function PublishDialog({ email, selectedTemplate }: PublishDialogProps) {
         const result = await publishWebsite(
           email,
           domainName,
-          selectedTemplate,
+          selectedTemplate
         );
 
-        if (result.status === "success") {
+        if (result.status === 'success') {
           setOpen(false);
           setShowConfetti(true);
           toast({
-            title: "Success",
+            title: 'Success',
             description: `Your page has been published at ${url}/${domainName} 🎉`,
-            className: "bg-green-500 text-white font-mono",
+            className: 'bg-green-500 text-white font-mono',
           });
           setTimeout(() => setShowConfetti(false), 5000); // Hide confetti after 5 seconds
         } else {
           toast({
-            title: "Error",
+            title: 'Error',
             description: result.error,
-            variant: "destructive",
+            variant: 'destructive',
           });
         }
       } catch (error) {
         toast({
-          title: "Error",
-          description: "Failed to publish your page. Please try again.",
-          variant: "destructive",
+          title: 'Error',
+          description: 'Failed to publish your page. Please try again.',
+          variant: 'destructive',
         });
       } finally {
         setIsPublishing(false);
@@ -83,7 +83,7 @@ export function PublishDialog({ email, selectedTemplate }: PublishDialogProps) {
   };
 
   const handleSignupRedirect = () => {
-    router.push("/signup");
+    router.push('/signup');
   };
 
   return (
@@ -101,7 +101,7 @@ export function PublishDialog({ email, selectedTemplate }: PublishDialogProps) {
               You&apos;re almost there!
             </DialogTitle>
             <DialogDescription className="font-mono text-sm">
-              Choose a domain name for your page. It will be accessible at{" "}
+              Choose a domain name for your page. It will be accessible at{' '}
               <strong>linkify.com/your_domain</strong>
             </DialogDescription>
           </DialogHeader>
@@ -125,7 +125,7 @@ export function PublishDialog({ email, selectedTemplate }: PublishDialogProps) {
               disabled={isPublishing}
               className="bg-purple-950 hover:bg-purple-700 text-white font-mono font-bold px-4 py-2 rounded-lg"
             >
-              {isPublishing ? "Publishing..." : "Publish"}
+              {isPublishing ? 'Publishing...' : 'Publish'}
             </Button>
           </DialogFooter>
         </DialogContent>
