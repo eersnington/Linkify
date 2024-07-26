@@ -10,7 +10,7 @@ interface LayoutProps {
 export default function OnboardLayout({ children }: LayoutProps) {
   return (
     <div className="flex min-h-screen flex-col bg-white">
-      <header className="lg:flex items-center justify-between p-4 hidden">
+      {/* <header className="lg:flex items-center justify-between p-4 hidden">
         <Link
           href="/"
           className="flex items-center text-lg font-bold text-purple-950"
@@ -18,7 +18,7 @@ export default function OnboardLayout({ children }: LayoutProps) {
           <Logo className="mr-2 rounded-lg" />
           Linkify
         </Link>
-      </header>
+      </header> */}
       <Suspense fallback="...">
         <main className="flex-1 flex flex-col items-center justify-center text-purple-950">
           <LinkedInDataProvider>{children}</LinkedInDataProvider>

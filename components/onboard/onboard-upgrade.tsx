@@ -1,16 +1,20 @@
 'use client';
 
-import { useState } from 'react';
-import { motion } from 'framer-motion';
-import { ArrowRight, Sparkles, Star } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { motion, useAnimation } from 'framer-motion';
+import { ArrowRight, Sparkles, Check, Star } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardFooter,
+} from '@/components/ui/card';
 import { useLinkedInData } from '@/context/linkedin-data-context';
-
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -20,12 +24,20 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
 const features = [
-  'Custom domain',
-  'Premium templates',
-  'Visitor statistics',
-  'Priority support',
-  'AI content generation',
-  'And more',
+  'Your own custom domain (e.g., yourname.com)',
+  'Access to premium templates',
+  'Website visitor statistics',
+  'Priority customer support',
+  'AI-powered content generation',
+  'And much more',
+];
+
+const images = [
+  '/images/templates/Basic.png',
+  '/images/templates/Creative.png',
+  '/images/templates/Modern.png',
+  '/images/templates/Minimalist.png',
+  '/images/templates/Professional.png',
 ];
 
 export default function UpgradeCards({
@@ -36,6 +48,14 @@ export default function UpgradeCards({
   const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
   const { linkedInProfile } = useLinkedInData();
+  const controls = useAnimation();
+
+  useEffect(() => {
+    controls.start({
+      y: [0, -10, 0],
+      transition: { duration: 2, repeat: Infinity, ease: 'easeInOut' },
+    });
+  }, [controls]);
 
   if (!linkedInProfile) {
     router.push('/onboard');
@@ -45,111 +65,127 @@ export default function UpgradeCards({
   const { firstName, lastName } = linkedInProfile;
 
   return (
-    <div className="min-h-screen w-full flex">
-      {/* Left side - White background with character */}
+    <div className="min-h-screen w-full bg-gradient-to-br from-slate-900 to-gray-900 p-8 flex flex-col items-center justify-center">
       <motion.div
-        initial={{ opacity: 0, x: -50 }}
-        animate={{ opacity: 1, x: 0 }}
+        className="flex justify-center items-center mb-12"
+        initial={{ opacity: 0, y: 50 }}
+        animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="w-1/2 bg-white flex items-center justify-center p-8"
       >
-        <Image
-          src="/images/web-design.svg"
-          alt="Character holding a website"
-          width={400}
-          height={400}
-        />
+        {images.map((image, idx) => (
+          <motion.div
+            key={`image${idx}`}
+            style={{
+              rotate: Math.random() * 20 - 10,
+            }}
+            whileHover={{
+              scale: 1.1,
+              rotate: 0,
+              zIndex: 100,
+            }}
+            whileTap={{
+              scale: 1.1,
+              rotate: 0,
+              zIndex: 100,
+            }}
+            className="rounded-xl -mr-4 mt-4 p-1 bg-white dark:bg-neutral-800 dark:border-neutral-700 border border-purple-500 flex-shrink-0 overflow-hidden shadow-lg"
+          >
+            <Image
+              src={image}
+              alt={`Template preview ${idx + 1}`}
+              width="200"
+              height="200"
+              className="rounded-lg h-24 w-24 md:h-48 md:w-48 object-cover flex-shrink-0"
+            />
+          </motion.div>
+        ))}
       </motion.div>
 
-      {/* Right side - Purple background with upgrade card */}
       <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
+        initial={{ opacity: 0, scale: 0.9 }}
+        animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.5 }}
-        className="w-1/2 bg-purple-600 p-8 flex items-center justify-center"
       >
-        <motion.div
-          initial={{ scale: 0.9, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-          className="max-w-md w-full"
-        >
-          <Card className="bg-white shadow-2xl rounded-lg overflow-hidden">
-            <CardHeader className="bg-purple-700 text-white text-center py-6">
-              <motion.div
-                initial={{ y: -20, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{ duration: 0.5, delay: 0.3 }}
-              >
-                <CardTitle className="text-3xl font-bold mb-2 flex items-center justify-center">
-                  Go Pro <Sparkles className="ml-2 text-yellow-300" />
-                </CardTitle>
-                <p className="text-purple-200">Upgrade to Premium</p>
-              </motion.div>
-            </CardHeader>
-            <CardContent className="p-6">
-              <motion.ul
-                className="space-y-3 mb-6"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.4, staggerChildren: 0.1 }}
-              >
-                {features.map((feature, index) => (
-                  <motion.li
-                    key={index}
-                    className="flex items-center text-gray-700"
-                    initial={{ x: -20, opacity: 0 }}
-                    animate={{ x: 0, opacity: 1 }}
-                  >
-                    <Star className="text-yellow-400 mr-2 h-5 w-5" />
-                    {feature}
-                  </motion.li>
-                ))}
-              </motion.ul>
-              <motion.div
-                className="text-center mb-6"
-                initial={{ y: 20, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{ duration: 0.5, delay: 0.6 }}
-              >
-                <p className="text-3xl font-bold text-purple-700 mb-1">
-                  $39<span className="text-lg font-normal">/year</span>
-                </p>
-                <p className="text-sm text-gray-500">
-                  30-day money-back guarantee*
-                </p>
-              </motion.div>
+        <Card className="mx-auto w-full max-w-2xl border-2 border-purple-500 drop-shadow-2xl">
+          <CardHeader className="text-purple-950">
+            <motion.div animate={controls}>
+              <CardTitle className="text-3xl font-bold flex items-center justify-center space-x-2">
+                <Star className="text-yellow-500" />
+                <span className="text-gradient_indigo-purple font-bold">
+                  Unleash Your Professional Potential
+                </span>
+                <Star className="text-yellow-500" />
+              </CardTitle>
+            </motion.div>
+            <p className="text-center text-purple-700 font-semibold">
+              Elevate Your Career with Premium Features
+            </p>
+          </CardHeader>
+          <CardContent className="p-6">
+            <ul className="space-y-3 mb-6">
+              {features.map((feature, index) => (
+                <motion.li
+                  key={index}
+                  className="flex items-center text-gray-700"
+                  initial={{ x: -20, opacity: 0 }}
+                  animate={{ x: 0, opacity: 1 }}
+                  transition={{ delay: 0.1 * index }}
+                >
+                  <Check className="text-yellow-500 mr-2 h-5 w-5" />
+                  {feature}
+                </motion.li>
+              ))}
+            </ul>
+            <motion.div
+              className="text-center mb-6"
+              initial={{ scale: 1 }}
+              animate={{ scale: [1, 1.05, 1] }}
+              transition={{ duration: 2, repeat: Infinity }}
+            >
+              <p className="text-3xl font-bold text-purple-700 mb-2">
+                <span className="line-through text-gray-400 text-xl mr-2">
+                  $59/yr
+                </span>
+                $39/yr
+              </p>
+              <p className="text-lg text-purple-600 font-semibold">
+                Limited Time Offer - Don&apos;t Miss Out!
+              </p>
+              <p className="text-sm text-gray-500 mt-2">
+                30-day money-back guarantee*
+              </p>
+            </motion.div>
+          </CardContent>
+          <CardFooter>
+            <div className="flex w-full justify-center">
               <Dialog open={isOpen} onOpenChange={setIsOpen}>
                 <DialogTrigger asChild>
-                  <Button
-                    className="w-full py-2 bg-yellow-400 hover:bg-yellow-500 text-purple-700 font-semibold shadow-md"
-                    size="lg"
-                  >
-                    Upgrade Now <ArrowRight className="ml-2" />
+                  <Button className="bg-yellow-500 hover:bg-yellow-600 text-purple-950 font-bold py-3 px-8 rounded-full shadow-lg transform transition duration-300 hover:scale-105">
+                    Upgrade Now & Boost Your Career{' '}
+                    <ArrowRight className="ml-2" />
                   </Button>
                 </DialogTrigger>
                 <DialogContent>
                   <DialogHeader>
-                    <DialogTitle>Payment Details</DialogTitle>
-                    <DialogDescription>
-                      Enter your payment information to upgrade.
-                    </DialogDescription>
+                    <DialogTitle>Complete Your Upgrade</DialogTitle>
                   </DialogHeader>
                   {/* Add your payment form here */}
                 </DialogContent>
               </Dialog>
-              <Link
-                href={`/signup?email=${emailAddress}&firstName=${firstName}&lastName=${lastName}`}
-                className="block w-full text-center text-sm text-gray-500 mt-4 hover:underline"
-              >
-                Maybe later
-              </Link>
-              <p className="text-xs text-gray-400 mt-6 text-center">
-                *Domain cost (approx. $10) is non-refundable.
-              </p>
-            </CardContent>
-          </Card>
-        </motion.div>
+            </div>
+          </CardFooter>
+          <div className="text-center pb-4">
+            <Link
+              href={`/signup?email=${emailAddress}&firstName=${firstName}&lastName=${lastName}`}
+              className="text-sm text-purple-600 hover:underline"
+            >
+              I&apos;ll stick with the basic plan for now
+            </Link>
+            <p className="text-xs text-gray-400 mt-2">
+              *The cost of your domain (approx. $10) is non-refundable.
+            </p>
+          </div>
+        </Card>
       </motion.div>
     </div>
   );
