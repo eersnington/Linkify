@@ -10,7 +10,7 @@ interface LayoutProps {
 export default function OnboardLayout({ children }: LayoutProps) {
   return (
     <div className="flex min-h-screen flex-col bg-white">
-      <header className="flex items-center justify-between p-4">
+      <header className="lg:flex items-center justify-between p-4 hidden">
         <Link
           href="/"
           className="flex items-center text-lg font-bold text-purple-950"
