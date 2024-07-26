@@ -1,19 +1,19 @@
-"use client";
+'use client';
 
-import { SignInModal } from "@/components/layout/sign-in-modal";
-import { useMounted } from "@/hooks/use-mounted";
+import { SignUpModal } from '@/components/layout/sign-up-modal';
+import { useMounted } from '@/hooks/use-mounted';
 
 export const ModalProvider = () => {
-  const mounted = useMounted()
+  const mounted = useMounted();
 
   if (!mounted) {
     return null;
   }
 
-return (
-  <>
-    <SignInModal />
-    {/* add your own modals here... */}
-  </>
-);
+  return (
+    <>
+      <SignUpModal />
+      {/* add your own modals here... */}
+    </>
+  );
 };
