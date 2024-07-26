@@ -14,6 +14,7 @@ import {
 } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { cn } from '@/lib/utils';
 
 interface DemoSidebarProps {
   email: string;
@@ -24,46 +25,53 @@ export function DemoSidebar({ email }: DemoSidebarProps) {
   const router = useRouter();
 
   return (
-    <div className="flex h-full flex-col rounded-lg border bg-white p-4 shadow-lg">
+    <div className="flex flex-col rounded-lg border bg-white p-4 shadow-lg h-full">
       <Label className="my-4 flex justify-center text-lg font-semibold">
         Select a Template
       </Label>
-      <ScrollArea className="h-full">
-        {templates.map((template, index) => (
-          <Card
-            key={index}
-            className={`mb-4 ${template.isPremium ? 'opacity-50' : ''}`}
-          >
-            <CardHeader>
-              <CardTitle className="flex items-center justify-between">
-                {template.name}
-                {template.isPremium && (
-                  <Badge className="flex items-center gap-1 bg-gradient-to-r from-gray-400 to-gray-600 px-2 py-1">
-                    Premium
-                  </Badge>
-                )}
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <Image
-                src={template.image}
-                alt={template.name}
-                width={200}
-                height={200}
-                className="mx-auto mb-4 rounded-lg shadow-lg"
-              />
-            </CardContent>
-            <CardFooter>
-              <Button
-                className="w-full bg-purple-600 hover:bg-purple-700"
-                disabled={template.isPremium}
-                onClick={() => setSelectedTemplate(index)}
-              >
-                {selectedTemplate === index ? 'Selected' : 'Select'}
-              </Button>
-            </CardFooter>
-          </Card>
-        ))}
+      <ScrollArea className="flex-grow">
+        <div className="grid grid-cols-1 gap-4">
+          {templates.map((template, index) => (
+            <Card
+              key={index}
+              className={`${template.isPremium ? 'opacity-50' : ''} overflow-hidden`}
+            >
+              <CardHeader className="p-4">
+                <div className="flex flex-row justify-between items-center">
+                  <CardTitle className="text-base">{template.name}</CardTitle>
+                  {template.isPremium && (
+                    <Badge className="text-xs px-2 py-0.5 bg-gradient-to-r from-yellow-400 to-amber-600">
+                      Premium
+                    </Badge>
+                  )}
+                </div>
+              </CardHeader>
+              <CardContent className="p-4">
+                <div className="relative w-full pt-[56.25%]">
+                  <Image
+                    src={template.image}
+                    alt={template.name}
+                    layout="fill"
+                    objectFit="cover"
+                    className="rounded-lg shadow-lg"
+                  />
+                </div>
+              </CardContent>
+              <CardFooter className="p-4">
+                <Button
+                  className={cn('w-full text-sm py-2', {
+                    'bg-purple-500 text-white': selectedTemplate === index,
+                    'bg-purple-700 text-black': selectedTemplate !== index,
+                  })}
+                  disabled={template.isPremium}
+                  onClick={() => setSelectedTemplate(index)}
+                >
+                  {selectedTemplate === index ? 'Selected' : 'Select'}
+                </Button>
+              </CardFooter>
+            </Card>
+          ))}
+        </div>
       </ScrollArea>
     </div>
   );
