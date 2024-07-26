@@ -7,8 +7,8 @@ interface DashboardLayoutProps {
 
 export default async function PageLayout({ children }: DashboardLayoutProps) {
   return (
-    <div className="flex h-screen flex-col">
-      <div className="flex-1 overflow-hidden">
+    <div className="flex h-screen w-full">
+      <div className="flex-1 w-full">
         <ThemeTemplateProvider>
           <LinkedInDataProvider>{children}</LinkedInDataProvider>
         </ThemeTemplateProvider>
