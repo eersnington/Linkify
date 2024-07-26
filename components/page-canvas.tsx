@@ -20,7 +20,11 @@ const PageCanvas = () => {
   }
 
   if (!linkedInProfile) {
-    return router.push('/');
+    return (
+      <div className="w-full">
+        LinkedIn Profile is not loaded. Please start the onboarding again
+      </div>
+    );
   }
 
   const SelectedTemplateComponent = templates[selectedTemplate]?.component;
