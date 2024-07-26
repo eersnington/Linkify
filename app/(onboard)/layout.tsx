@@ -1,7 +1,7 @@
-import { Suspense } from "react";
-import Link from "next/link";
-
-import Logo from "@/components/shared/logo";
+import { Suspense } from 'react';
+import Link from 'next/link';
+import Logo from '@/components/shared/logo';
+import { LinkedInDataProvider } from '@/context/linkedin-data-context';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -9,19 +9,21 @@ interface LayoutProps {
 
 export default function OnboardLayout({ children }: LayoutProps) {
   return (
-    <div className="flex min-h-screen flex-col bg-gradient-to-r from-indigo-700 via-indigo-600 to-indigo-700">
+    <div className="flex min-h-screen flex-col bg-white">
+      <header className="flex items-center justify-between p-4">
+        <Link
+          href="/"
+          className="flex items-center text-lg font-bold text-purple-950"
+        >
+          <Logo className="mr-2 rounded-lg" />
+          Linkify
+        </Link>
+      </header>
       <Suspense fallback="...">
-        <header className="flex items-center p-4">
-          <Link
-            href="/"
-            className="flex items-center text-lg font-bold text-white"
-          >
-            <Logo className="mr-2 rounded-lg" />
-            Linkify
-          </Link>
-        </header>
+        <main className="flex-1 flex flex-col items-center justify-center text-purple-950">
+          <LinkedInDataProvider>{children}</LinkedInDataProvider>
+        </main>
       </Suspense>
-      <main className="flex-1">{children}</main>
     </div>
   );
 }

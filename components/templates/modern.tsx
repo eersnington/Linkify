@@ -8,14 +8,16 @@ import { LinkedInProfile as TemplateProps } from "@/types/linkedin";
 import { cn } from "@/lib/utils";
 import { dm_display, pf_display } from "@/app/fonts";
 
-export function ModernTemplate({
-  fullName,
-  title,
-  description,
-  photoUrl,
-  workExperiences,
-  education,
-}: TemplateProps) {
+export function ModernTemplate({ profile }: { profile: TemplateProps }) {
+  const {
+    firstName,
+    lastName,
+    title,
+    description,
+    photoUrl,
+    workExperiences,
+    education,
+  } = profile;
   return (
     <div className="min-h-screen bg-gray-900 text-white">
       <div className="mx-auto max-w-screen-xl px-4 py-16 sm:px-6 lg:px-8">
@@ -33,7 +35,7 @@ export function ModernTemplate({
                   dm_display.className,
                 )}
               >
-                {fullName}
+                {firstName + ' ' + lastName}
               </h1>
               <p className={cn("text-4xl text-blue-300", pf_display.className)}>
                 {title}
@@ -41,7 +43,7 @@ export function ModernTemplate({
             </div>
             <Image
               src={photoUrl}
-              alt={fullName}
+              alt={firstName + ' ' + lastName}
               width={150}
               height={150}
               className="size-64 rounded-full border-4 border-blue-500"

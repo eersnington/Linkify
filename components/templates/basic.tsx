@@ -1,19 +1,21 @@
-"use client";
+'use client';
 
-import Image from "next/image";
-import { motion } from "framer-motion";
-import { Briefcase, ChevronDown, GraduationCap } from "lucide-react";
+import Image from 'next/image';
+import { motion } from 'framer-motion';
+import { Briefcase, ChevronDown, GraduationCap } from 'lucide-react';
 
-import { LinkedInProfile as TemplateProps } from "@/types/linkedin";
+import { LinkedInProfile as TemplateProps } from '@/types/linkedin';
 
-export function BasicTemplate({
-  fullName,
-  photoUrl,
-  title,
-  description,
-  workExperiences,
-  education,
-}: TemplateProps) {
+export function BasicTemplate({ profile }: { profile: TemplateProps }) {
+  const {
+    firstName,
+    lastName,
+    title,
+    description,
+    photoUrl,
+    workExperiences,
+    education,
+  } = profile;
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -30,13 +32,13 @@ export function BasicTemplate({
         >
           <Image
             src={photoUrl}
-            alt={fullName}
+            alt={firstName + ' ' + lastName}
             width={200}
             height={200}
             className="mx-auto mb-4 rounded-full shadow-lg"
           />
           <div className="mb-2 text-4xl font-bold text-gray-800">
-            {fullName}
+            {firstName + ' ' + lastName}
           </div>
           <div className="mb-2 text-xl font-semibold text-gray-600">
             {title}

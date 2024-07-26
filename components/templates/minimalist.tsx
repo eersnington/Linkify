@@ -1,20 +1,22 @@
-"use client";
+'use client';
 
-import Image from "next/image";
-import { motion } from "framer-motion";
+import Image from 'next/image';
+import { motion } from 'framer-motion';
 
-import { LinkedInProfile as TemplateProps } from "@/types/linkedin";
-import { cn } from "@/lib/utils";
-import { dm_display, pf_display } from "@/app/fonts";
+import { LinkedInProfile as TemplateProps } from '@/types/linkedin';
+import { cn } from '@/lib/utils';
+import { dm_display, pf_display } from '@/app/fonts';
 
-export function MinimalistTemplate({
-  fullName,
-  title,
-  description,
-  photoUrl,
-  workExperiences,
-  education,
-}: TemplateProps) {
+export function MinimalistTemplate({ profile }: { profile: TemplateProps }) {
+  const {
+    firstName,
+    lastName,
+    title,
+    description,
+    photoUrl,
+    workExperiences,
+    education,
+  } = profile;
   return (
     <div className="min-h-screen bg-white text-slate-800">
       <div className="mx-auto max-w-3xl px-4 py-16 sm:px-6 lg:px-8">
@@ -26,15 +28,15 @@ export function MinimalistTemplate({
         >
           <Image
             src={photoUrl}
-            alt={fullName}
+            alt={firstName + ' ' + lastName}
             width={120}
             height={120}
             className="mx-auto mb-6 rounded-full"
           />
-          <h1 className={cn("mb-2 text-4xl font-bold", dm_display.className)}>
-            {fullName}
+          <h1 className={cn('mb-2 text-4xl font-bold', dm_display.className)}>
+            {firstName + ' ' + lastName}
           </h1>
-          <p className={cn("text-xl text-emerald-500", pf_display.className)}>
+          <p className={cn('text-xl text-emerald-500', pf_display.className)}>
             {title}
           </p>
         </motion.header>

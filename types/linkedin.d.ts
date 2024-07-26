@@ -12,10 +12,15 @@ export type Education = {
 };
 
 export type LinkedInProfile = {
-  fullName: string;
+  firstName: string;
+  lastName: string;
+  photoUrl: string;
   title: string;
   description: string;
-  photoUrl: string;
+  linkedInUrl: string;
+  certifications: any;
   workExperiences: any;
+  recommendations: any;
   education: any;
+  skills: any;
 };

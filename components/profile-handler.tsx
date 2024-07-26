@@ -1,19 +1,27 @@
 // components/ProfileDataHandler.tsx
-"use client";
+'use client';
 
 import { useEffect } from 'react';
 import { setLocalStorage } from '@/lib/utils';
-import { LinkedInProfileFormData } from "@/lib/validations/linkedin-profile";
+import { LinkedInProfileFormData } from '@/lib/validations/linkedin-profile';
+import { LinkedInProfileProvider } from '@/context/linkedin-profile-context';
 
 interface ProfileDataHandlerProps {
-    profileData: LinkedInProfileFormData;
-    children: React.ReactNode;
+  profileData: LinkedInProfileFormData;
+  children: React.ReactNode;
 }
 
-export default function ProfileDataHandler({ profileData, children }: ProfileDataHandlerProps) {
-    useEffect(() => {
-        setLocalStorage('linkedInProfile', profileData);
-    }, [profileData]);
+export default function ProfileDataHandler({
+  profileData,
+  children,
+}: ProfileDataHandlerProps) {
+  useEffect(() => {
+    setLocalStorage('linkedInProfile', profileData);
+  }, [profileData]);
 
-    return <>{children}</>;
+  return (
+    <LinkedInProfileProvider initialProfile={data}>
+      {children}
+    </LinkedInProfileProvider>
+  );
 }

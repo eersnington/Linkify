@@ -1,29 +1,31 @@
-"use client";
+'use client';
 
-import Image from "next/image";
-import { motion } from "framer-motion";
+import Image from 'next/image';
+import { motion } from 'framer-motion';
 import {
   Briefcase,
   ChevronDown,
   GraduationCap,
   Handshake,
   Star,
-} from "lucide-react";
+} from 'lucide-react';
 
-import { LinkedInProfile as TemplateProps } from "@/types/linkedin";
-import { cn } from "@/lib/utils";
-import { dm_display, pf_display } from "@/app/fonts";
+import { LinkedInProfile as TemplateProps } from '@/types/linkedin';
+import { cn } from '@/lib/utils';
+import { dm_display, pf_display } from '@/app/fonts';
 
-import { Badge } from "../ui/badge";
+import { Badge } from '../ui/badge';
 
-export function CreativeTemplate({
-  fullName,
-  title,
-  description,
-  photoUrl,
-  workExperiences,
-  education,
-}: TemplateProps) {
+export function CreativeTemplate({ profile }: { profile: TemplateProps }) {
+  const {
+    firstName,
+    lastName,
+    title,
+    description,
+    photoUrl,
+    workExperiences,
+    education,
+  } = profile;
   return (
     <div className="min-h-screen bg-[#f5e6d3] p-8">
       <motion.div
@@ -41,20 +43,20 @@ export function CreativeTemplate({
               transition={{ delay: 0.2, duration: 0.5 }}
             >
               <Badge className="mb-4 w-fit rounded-full bg-[#d4bc94] px-4 py-2 font-mono text-lg font-semibold text-[#5c4d3c] hover:bg-[#bc9f6c]">
-                {"👋 "} Hello world
+                {'👋 '} Hello world
               </Badge>
               <div
                 className={cn(
-                  "mb-2 text-6xl font-bold text-[#5c4d3c]",
-                  dm_display.className,
+                  'mb-2 text-6xl font-bold text-[#5c4d3c]',
+                  dm_display.className
                 )}
               >
-                {fullName}
+                {firstName + ' ' + lastName}
               </div>
               <div
                 className={cn(
-                  "mb-4 text-3xl font-medium text-[#7d6852]",
-                  pf_display.className,
+                  'mb-4 text-3xl font-medium text-[#7d6852]',
+                  pf_display.className
                 )}
               >
                 {title}
@@ -70,7 +72,7 @@ export function CreativeTemplate({
               <div className="absolute inset-0 origin-top-right skew-x-6 bg-[#d4bc94]"></div>
               <Image
                 src={photoUrl}
-                alt={fullName}
+                alt={firstName + ' ' + lastName}
                 width={600}
                 height={600}
                 className="relative z-10 size-full object-cover"

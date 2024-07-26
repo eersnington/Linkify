@@ -2,19 +2,19 @@
 
 import { useThemeTemplate } from '@/context/editor-sidebar-context';
 
-import { DashboardHeader } from './dashboard/header';
-import { DashboardShell } from './dashboard/shell';
-import PageCanvas from './page-canvas';
-import { PublishDialog } from './publish-dialog';
-import { DemoSidebar } from './onboard/onboard-sidebar';
 import { useLinkedInData } from '@/context/linkedin-data-context';
+import { DemoSidebar } from './onboard-sidebar';
+import { DashboardShell } from '../dashboard/shell';
+import { DashboardHeader } from '../dashboard/header';
+import { PublishDialog } from '../publish-dialog';
+import { DemoCanvas } from './onboard-canvas';
 
 interface PageEditorProps {
   email: string;
 }
 
-export default function PageEditor({ email }: PageEditorProps) {
-  const { selectedTemplate } = useThemeTemplate();
+export default function OnboardEditor({ email }: PageEditorProps) {
+    const { selectedTemplate } = useThemeTemplate();
 
   return (
     <>
@@ -27,7 +27,7 @@ export default function PageEditor({ email }: PageEditorProps) {
             <PublishDialog email={email} selectedTemplate={selectedTemplate} />
           </DashboardHeader>
           <div className="h-[calc(100%-4rem)] overflow-auto p-4">
-            <PageCanvas />
+            <DemoCanvas />
           </div>
         </DashboardShell>
       </main>

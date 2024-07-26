@@ -1,12 +1,12 @@
-"use client";
+'use client';
 
-import Image from "next/image";
-import { useRouter } from "next/navigation";
+import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import {
   templates,
   themes,
   useThemeTemplate,
-} from "@/context/editor-sidebar-context";
+} from '@/context/editor-sidebar-context';
 import {
   Blocks,
   Crown,
@@ -14,18 +14,18 @@ import {
   Palette,
   Sparkles,
   Zap,
-} from "lucide-react";
+} from 'lucide-react';
 
-import { cn } from "@/lib/utils";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { cn } from '@/lib/utils';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import {
   Card,
   CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
+} from '@/components/ui/card';
 import {
   Dialog,
   DialogContent,
@@ -34,12 +34,12 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
-import { Label } from "@/components/ui/label";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+} from '@/components/ui/dialog';
+import { Label } from '@/components/ui/label';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
-import { LinkedInProfileForm } from "../forms/linkedin-update-form";
+import { LinkedInProfileForm } from '../forms/linkedin-update-form';
 
 interface PageSidebarProps {
   email: string;
@@ -147,7 +147,7 @@ export function PageSidebar({ email }: PageSidebarProps) {
                     <Button
                       type="submit"
                       className="bg-green-700 hover:bg-green-600"
-                      onClick={() => router.push("/pricing")}
+                      onClick={() => router.push('/pricing')}
                     >
                       Subscribe Now
                     </Button>
@@ -160,8 +160,8 @@ export function PageSidebar({ email }: PageSidebarProps) {
                 onClick={() => setSelectedTheme(index)}
               >
                 {selectedTemplate === index
-                  ? "Applied"
-                  : "Select this template"}
+                  ? 'Applied'
+                  : 'Select this template'}
               </Button>
             )}
           </CardFooter>
@@ -183,7 +183,7 @@ export function PageSidebar({ email }: PageSidebarProps) {
           <CardHeader>
             <CardTitle>{theme.name}</CardTitle>
             <CardDescription>
-              <Badge className={cn(`${theme.color}`, "size-16 rounded-lg")} />
+              <Badge className={cn(`${theme.color}`, 'size-16 rounded-lg')} />
             </CardDescription>
           </CardHeader>
           <CardFooter>
@@ -191,7 +191,7 @@ export function PageSidebar({ email }: PageSidebarProps) {
               className="bg-slate-800 hover:bg-purple-600"
               onClick={() => setSelectedTheme(index)}
             >
-              {selectedTheme === index ? "Applied" : "Select this theme"}
+              {selectedTheme === index ? 'Applied' : 'Select this theme'}
             </Button>
           </CardFooter>
         </Card>

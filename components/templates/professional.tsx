@@ -1,21 +1,23 @@
-"use client";
+'use client';
 
-import Image from "next/image";
-import { motion } from "framer-motion";
-import { Briefcase, Download, GraduationCap, Mail } from "lucide-react";
+import Image from 'next/image';
+import { motion } from 'framer-motion';
+import { Briefcase, Download, GraduationCap, Mail } from 'lucide-react';
 
-import { LinkedInProfile as TemplateProps } from "@/types/linkedin";
-import { cn } from "@/lib/utils";
-import { dm_display, pf_display } from "@/app/fonts";
+import { LinkedInProfile as TemplateProps } from '@/types/linkedin';
+import { cn } from '@/lib/utils';
+import { dm_display, pf_display } from '@/app/fonts';
 
-export function ProfessionalTemplate({
-  fullName,
-  title,
-  description,
-  photoUrl,
-  workExperiences,
-  education,
-}: TemplateProps) {
+export function ProfessionalTemplate({ profile }: { profile: TemplateProps }) {
+  const {
+    firstName,
+    lastName,
+    title,
+    description,
+    photoUrl,
+    workExperiences,
+    education,
+  } = profile;
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="bg-blue-700 py-16 text-white">
@@ -23,15 +25,15 @@ export function ProfessionalTemplate({
           <div className="flex flex-col items-center justify-between md:flex-row">
             <div className="mb-8 md:mb-0">
               <h1
-                className={cn("mb-2 text-4xl font-bold", dm_display.className)}
+                className={cn('mb-2 text-4xl font-bold', dm_display.className)}
               >
-                {fullName}
+                {firstName + ' ' + lastName}
               </h1>
-              <p className={cn("text-xl", pf_display.className)}>{title}</p>
+              <p className={cn('text-xl', pf_display.className)}>{title}</p>
             </div>
             <Image
               src={photoUrl}
-              alt={fullName}
+              alt={firstName + ' ' + lastName}
               width={150}
               height={150}
               className="rounded-full border-4 border-white shadow-lg"
