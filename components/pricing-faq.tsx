@@ -3,10 +3,10 @@ import {
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "@/components/ui/accordion";
-import { pricingFaqData } from "@/config/subscriptions";
+} from '@/components/ui/accordion';
+import { pricingFaqData } from '@/config/subscriptions';
 
-import { HeaderSection } from "./shared/header-section";
+import { HeaderSection } from './shared/header-section';
 
 export function PricingFaq() {
   return (
