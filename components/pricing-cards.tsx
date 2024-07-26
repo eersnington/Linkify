@@ -1,20 +1,20 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { motion } from "framer-motion";
-import Link from "next/link";
-import { UserSubscriptionPlan } from "@/types";
+import { useState } from 'react';
+import { motion } from 'framer-motion';
+import Link from 'next/link';
+import { UserSubscriptionPlan } from '@/types';
 
-import { paymentSupport, pricingData } from "@/config/subscriptions";
-import { cn } from "@/lib/utils";
-import { Button, buttonVariants } from "@/components/ui/button";
-import { BillingFormButton } from "@/components/forms/billing-form-button";
-import { Icons } from "@/components/shared/icons";
+import { paymentSupport, pricingData } from '@/config/subscriptions';
+import { cn } from '@/lib/utils';
+import { Button, buttonVariants } from '@/components/ui/button';
+import { BillingFormButton } from '@/components/forms/billing-form-button';
+import { Icons } from '@/components/shared/icons';
 
-import { SubscriptionPlan } from "../types/index";
-import { ToggleGroup, ToggleGroupItem } from "./ui/toggle-group";
-import { useRouter } from "next/navigation";
-import { useSigninModal } from "@/hooks/use-signin-modal";
+import { SubscriptionPlan } from '../types/index';
+import { ToggleGroup, ToggleGroupItem } from './ui/toggle-group';
+import { useRouter } from 'next/navigation';
+import { useSignupModal } from '@/hooks/use-signup-modal';
 
 interface PricingCardsProps {
   userId?: string;
@@ -22,21 +22,22 @@ interface PricingCardsProps {
 }
 
 export function PricingCards({ userId, subscriptionPlan }: PricingCardsProps) {
-  const isYearlyDefault = !subscriptionPlan?.stripeCustomerId || subscriptionPlan.interval === "year";
+  const isYearlyDefault =
+    !subscriptionPlan?.stripeCustomerId || subscriptionPlan.interval === 'year';
   const [isYearly, setIsYearly] = useState<boolean>(isYearlyDefault);
   const router = useRouter();
-  const signUpModal = useSigninModal();
+  const signUpModal = useSignupModal();
 
   const toggleBilling = () => {
     setIsYearly(!isYearly);
   };
 
-  const freePlan = pricingData.find((plan) => plan.title === "Standard");
-  const paidPlan = pricingData.find((plan) => plan.title === "Premium");
+  const freePlan = pricingData.find((plan) => plan.title === 'Standard');
+  const paidPlan = pricingData.find((plan) => plan.title === 'Premium');
 
   const titleVariants = {
     hidden: { opacity: 0, y: -50 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.5 } }
+    visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
   };
 
   const containerVariants = {
@@ -45,19 +46,19 @@ export function PricingCards({ userId, subscriptionPlan }: PricingCardsProps) {
       transition: {
         staggerChildren: 0.3,
         delayChildren: 0.2,
-      }
-    }
+      },
+    },
   };
 
   const cardVariants = {
     hidden: { opacity: 0, y: 50 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.5 } }
+    visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
   };
 
   const PricingCard = ({
     offer,
     isPaid,
-    delay
+    delay,
   }: {
     offer: SubscriptionPlan;
     isPaid: boolean;
@@ -66,8 +67,10 @@ export function PricingCards({ userId, subscriptionPlan }: PricingCardsProps) {
     return (
       <motion.div
         className={cn(
-          "relative flex w-full max-w-2xl flex-col overflow-hidden rounded-3xl shadow-lg",
-          isPaid ? "bg-purple-500 text-white" : "bg-white text-purple-950 border border-purple-200"
+          'relative flex w-full max-w-2xl flex-col overflow-hidden rounded-3xl shadow-lg',
+          isPaid
+            ? 'bg-purple-500 text-white'
+            : 'bg-white text-purple-950 border border-purple-200'
         )}
         key={offer.title}
         variants={cardVariants}
@@ -92,7 +95,7 @@ export function PricingCards({ userId, subscriptionPlan }: PricingCardsProps) {
                     `${offer.prices.monthly}`
                   )
                 ) : (
-                  "Free"
+                  'Free'
                 )}
               </div>
               {isPaid && (
@@ -106,12 +109,10 @@ export function PricingCards({ userId, subscriptionPlan }: PricingCardsProps) {
             <div className="text-left text-lg">
               {isYearly
                 ? `${offer.prices.yearly * 12} will be charged when annual`
-                : "when charged monthly"}
+                : 'when charged monthly'}
             </div>
           ) : (
-            <div className="text-left text-lg">
-              Lifetime Free
-            </div>
+            <div className="text-left text-lg">Lifetime Free</div>
           )}
         </div>
 
@@ -119,23 +120,28 @@ export function PricingCards({ userId, subscriptionPlan }: PricingCardsProps) {
           <ul className="space-y-4 text-left text-lg font-medium leading-normal">
             {offer.benefits.map((feature) => (
               <li className="flex items-start gap-x-4" key={feature}>
-                <Icons.check className={cn("size-6 shrink-0 font-semibold", isPaid ? "text-white" : "text-purple-500")} />
+                <Icons.check
+                  className={cn(
+                    'size-6 shrink-0 font-semibold',
+                    isPaid ? 'text-white' : 'text-purple-500'
+                  )}
+                />
                 <p>{feature}</p>
               </li>
             ))}
           </ul>
 
           {userId && subscriptionPlan ? (
-            offer.title === "Standard" ? (
+            offer.title === 'Standard' ? (
               <Link
                 href="/dashboard"
                 className={cn(
                   buttonVariants({
-                    variant: "outline",
-                    size: "lg",
-                    rounded: "full",
+                    variant: 'outline',
+                    size: 'lg',
+                    rounded: 'full',
                   }),
-                  "w-full bg-purple-500 text-sm font-semibold text-white"
+                  'w-full bg-purple-500 text-sm font-semibold text-white'
                 )}
               >
                 Go to dashboard
@@ -149,14 +155,16 @@ export function PricingCards({ userId, subscriptionPlan }: PricingCardsProps) {
             )
           ) : (
             <Button
-              variant={"outline"}
+              variant={'outline'}
               size="lg"
               onClick={() => {
                 signUpModal.onOpen();
               }}
               className={cn(
-                "text-base font-semibold rounded-full",
-                isPaid ? "bg-white text-purple-500 hover:bg-purple-100" : "bg-purple-500 text-white hover:bg-purple-600"
+                'text-base font-semibold rounded-full',
+                isPaid
+                  ? 'bg-white text-purple-500 hover:bg-purple-100'
+                  : 'bg-purple-500 text-white hover:bg-purple-600'
               )}
             >
               Get Started
@@ -169,23 +177,25 @@ export function PricingCards({ userId, subscriptionPlan }: PricingCardsProps) {
 
   return (
     <section className="container flex flex-col items-center text-center">
-      <motion.h1 
+      <motion.h1
         className="font-heading text-3xl md:text-6xl text-purple-950"
         variants={titleVariants}
         initial="hidden"
         animate="visible"
       >
-        {"Pricing"}
+        {'Pricing'}
       </motion.h1>
 
-      <motion.div className="mb-4 mt-10 flex items-center gap-5"
-      variants={titleVariants}
+      <motion.div
+        className="mb-4 mt-10 flex items-center gap-5"
+        variants={titleVariants}
         initial="hidden"
-        animate="visible">
+        animate="visible"
+      >
         <ToggleGroup
           type="single"
           size="sm"
-          defaultValue={isYearly ? "annually" : "monthly"}
+          defaultValue={isYearly ? 'annually' : 'monthly'}
           onValueChange={toggleBilling}
           aria-label="toggle-year"
           className="h-9 overflow-hidden rounded-lg border border-purple-500 bg-background p-1 *:h-7 *:text-muted-foreground"
@@ -207,7 +217,7 @@ export function PricingCards({ userId, subscriptionPlan }: PricingCardsProps) {
         </ToggleGroup>
       </motion.div>
 
-      <motion.div 
+      <motion.div
         className="mx-auto grid max-w-7xl gap-12 bg-inherit py-8 md:grid-cols-2"
         variants={containerVariants}
         initial="hidden"
@@ -218,13 +228,13 @@ export function PricingCards({ userId, subscriptionPlan }: PricingCardsProps) {
       </motion.div>
 
       <p className="mt-3 text-balance text-center text-base text-purple-700">
-        Email{" "}
+        Email{' '}
         <a
           className="font-medium text-primary hover:underline"
           href={`mailto:${paymentSupport.email}`}
         >
           {paymentSupport.email}
-        </a>{" "}
+        </a>{' '}
         for to contact our support team.
         <br />
         <strong>{paymentSupport.message2} </strong>
