@@ -100,7 +100,7 @@ export function PricingCards({ userId, subscriptionPlan }: PricingCardsProps) {
               </div>
               {isPaid && (
                 <div className="-mb-1 ml-3 text-left text-xl font-medium">
-                  <div>/month</div>
+                  <div>/year</div>
                 </div>
               )}
             </div>
@@ -108,7 +108,7 @@ export function PricingCards({ userId, subscriptionPlan }: PricingCardsProps) {
           {isPaid ? (
             <div className="text-left text-lg">
               {isYearly
-                ? `${offer.prices.yearly * 12} will be charged when annual`
+                ? `Unleash Your Professional Potential` // I need another text here as the prices are just yearly now
                 : 'when charged monthly'}
             </div>
           ) : (
@@ -186,7 +186,7 @@ export function PricingCards({ userId, subscriptionPlan }: PricingCardsProps) {
         {'Pricing'}
       </motion.h1>
 
-      <motion.div
+      {/* <motion.div
         className="mb-4 mt-10 flex items-center gap-5"
         variants={titleVariants}
         initial="hidden"
@@ -215,7 +215,7 @@ export function PricingCards({ userId, subscriptionPlan }: PricingCardsProps) {
             Monthly
           </ToggleGroupItem>
         </ToggleGroup>
-      </motion.div>
+      </motion.div> */}
 
       <motion.div
         className="mx-auto grid max-w-7xl gap-12 bg-inherit py-8 md:grid-cols-2"

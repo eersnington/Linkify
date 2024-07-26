@@ -13,14 +13,27 @@ export default function SignUpPage({
     email: string;
     firstName: string;
     lastName: string;
+    redirect?: string;
   };
 }) {
-  const { email, firstName, lastName } = searchParams;
+  const { email, firstName, lastName, redirect } = searchParams;
 
   const initialValues = {
     emailAddress: email,
     firstName: firstName,
     lastName: lastName,
   };
+
+  console.log(redirect);
+
+  if (redirect) {
+    return (
+      <SignUp
+        initialValues={initialValues}
+        forceRedirectUrl={'/dashboard/billing'}
+      />
+    );
+  }
+
   return <SignUp initialValues={initialValues} />;
 }

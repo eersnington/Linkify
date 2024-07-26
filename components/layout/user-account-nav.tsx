@@ -1,9 +1,10 @@
-"use client";
+'use client';
 
-import Link from "next/link";
-import { UserButton } from "@clerk/nextjs";
-import { CreditCard, LayoutDashboard, LogOut, Settings } from "lucide-react";
+import Link from 'next/link';
+import { UserButton } from '@clerk/nextjs';
+import { CreditCard, LayoutDashboard, LogOut, Settings } from 'lucide-react';
 import { useClerk } from '@clerk/nextjs';
+import Image from 'next/image';
 
 import {
   DropdownMenu,
@@ -11,7 +12,7 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+} from '@/components/ui/dropdown-menu';
 
 interface UserProps {
   name: string;
@@ -21,11 +22,16 @@ interface UserProps {
 export function UserAccountNav({ user }: { user: UserProps }) {
   const { signOut } = useClerk();
 
-
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
-        <UserButton />
+        <Image
+          src={'/images/avatar.svg'}
+          alt="User avatar"
+          width={32}
+          height={32}
+          className="w-8 h-8 rounded-md"
+        />
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         <div className="flex items-center justify-start gap-2 p-2">
@@ -64,8 +70,10 @@ export function UserAccountNav({ user }: { user: UserProps }) {
           </Link>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem className="cursor-pointer"
-          onClick={() => signOut({ redirectUrl: '/' })}>
+        <DropdownMenuItem
+          className="cursor-pointer"
+          onClick={() => signOut({ redirectUrl: '/' })}
+        >
           Sign out
         </DropdownMenuItem>
       </DropdownMenuContent>
