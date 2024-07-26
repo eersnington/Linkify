@@ -1,11 +1,11 @@
 // app/[userDomain]/page.tsx
 
-import { notFound } from "next/navigation";
+import { notFound } from 'next/navigation';
 
-import UserPageContent from "./_component/user-page-content";
-import { prisma } from "@/lib/db";
-import { getStoredProfile } from "@/actions/get-linkedin-profile";
-import { ThemeTemplateProvider } from "@/context/editor-sidebar-context";
+import UserPageContent from './_component/user-page-content';
+import { prisma } from '@/lib/db';
+import { getStoredProfile } from '@/actions/fetch-linkedin copy';
+import { ThemeTemplateProvider } from '@/context/editor-sidebar-context';
 
 export async function generateMetadata({
   params,
@@ -16,11 +16,11 @@ export async function generateMetadata({
     where: { domainName: params.userDomain },
   });
 
-  console.log(website)
+  console.log(website);
 
   if (!website) {
     return {
-      title: "Page Not Found",
+      title: 'Page Not Found',
     };
   }
 
@@ -56,7 +56,9 @@ export default async function UserPage({
     notFound();
   }
 
-  return <ThemeTemplateProvider>
-    <UserPageContent profile={profile} templateId={website.template} />
-  </ThemeTemplateProvider>;
+  return (
+    <ThemeTemplateProvider>
+      <UserPageContent profile={profile} templateId={website.template} />
+    </ThemeTemplateProvider>
+  );
 }
