@@ -1,10 +1,11 @@
-import { redirect } from "next/navigation";
-import { currentUser } from "@clerk/nextjs/server";
+import { redirect } from 'next/navigation';
+import { currentUser } from '@clerk/nextjs/server';
 
-import { dashboardConfig } from "@/config/dashboard";
-import { DashboardNav } from "@/components/layout/nav";
-import { NavBar } from "@/components/layout/navbar";
-import { SiteFooter } from "@/components/layout/site-footer";
+import { dashboardConfig } from '@/config/dashboard';
+import { DashboardNav } from '@/components/layout/nav';
+import { NavBar } from '@/components/layout/navbar';
+import { SiteFooter } from '@/components/layout/site-footer';
+import { getUserSubscriptionPlan } from '@/lib/subscription';
 
 interface DashboardLayoutProps {
   children?: React.ReactNode;
@@ -16,12 +17,18 @@ export default async function DashboardLayout({
   const user = await currentUser();
 
   if (!user) {
-    redirect("/signin");
+    redirect('/signin');
   }
+
+  const userSubscriptionPlan = await getUserSubscriptionPlan(user.id);
 
   return (
     <div className="flex min-h-screen flex-col space-y-6">
-      <NavBar items={dashboardConfig.mainNav} scroll={false} />
+      <NavBar
+        items={dashboardConfig.mainNav}
+        scroll={false}
+        stripe={userSubscriptionPlan}
+      />
       <div className="container grid flex-1 gap-12 md:grid-cols-[200px_1fr]">
         <aside className="hidden w-[200px] flex-col md:flex">
           <DashboardNav items={dashboardConfig.sidebarNav} />

@@ -1,12 +1,12 @@
 // @ts-nocheck
 // TODO: Fix this when we turn strict mode on.
-import { UserSubscriptionPlan } from "types";
-import { pricingData } from "@/config/subscriptions";
-import { prisma } from "@/lib/db";
-import { stripe } from "@/lib/stripe";
+import { UserSubscriptionPlan } from 'types';
+import { pricingData } from '@/config/subscriptions';
+import { prisma } from '@/lib/db';
+import { stripe } from '@/lib/stripe';
 
 export async function getUserSubscriptionPlan(
-  userId: string,
+  userId: string
 ): Promise<UserSubscriptionPlan> {
   const user = await prisma.user.findFirst({
     where: {
@@ -20,8 +20,11 @@ export async function getUserSubscriptionPlan(
     },
   });
 
+  console.log(user);
+  console.log(userId);
+
   if (!user) {
-    throw new Error("User not found");
+    throw new Error('User not found');
   }
 
   // Check if user is on a paid plan.
@@ -40,16 +43,16 @@ export async function getUserSubscriptionPlan(
 
   const interval = isPaid
     ? userPlan?.stripeIds.monthly === user.stripePriceId
-      ? "month"
+      ? 'month'
       : userPlan?.stripeIds.yearly === user.stripePriceId
-        ? "year"
+        ? 'year'
         : null
     : null;
 
   let isCanceled = false;
   if (isPaid && user.stripeSubscriptionId) {
     const stripePlan = await stripe.subscriptions.retrieve(
-      user.stripeSubscriptionId,
+      user.stripeSubscriptionId
     );
     isCanceled = stripePlan.cancel_at_period_end;
   }

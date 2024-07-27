@@ -141,7 +141,7 @@ export default function UpgradeCards({
               <Dialog open={isOpen} onOpenChange={setIsOpen}>
                 <DialogTrigger asChild>
                   <Button
-                    className="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-6 rounded-lg shadow-md transform transition duration-300 hover:scale-105"
+                    className="bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-2 px-6 rounded-lg shadow-md transform transition duration-300 hover:scale-105"
                     onClick={() => {
                       router.push(
                         `/signup?email=${emailAddress}&firstName=${firstName}&lastName=${lastName}&redirect=billing`
@@ -154,7 +154,7 @@ export default function UpgradeCards({
                 </DialogTrigger>
                 <DialogContent>
                   <DialogHeader>
-                    <DialogTitle>Complete Your Upgrade</DialogTitle>
+                    <DialogTitle>Sign Up to Complete your Upgrade</DialogTitle>
                   </DialogHeader>
                   {/* Add your payment form here */}
                 </DialogContent>

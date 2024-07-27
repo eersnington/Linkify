@@ -11,12 +11,14 @@ import { Button, buttonVariants } from '@/components/ui/button';
 import { Icons } from '../shared/icons';
 import { MainNav } from './main-nav';
 import { UserAccountNav } from './user-account-nav';
+import { UpgradeButton } from '../upgrade-button';
 
 interface NavBarProps {
   items?: MainNavItem[];
   children?: React.ReactNode;
   rightElements?: React.ReactNode;
   scroll?: boolean;
+  stripe?: any;
 }
 
 export function NavBar({
@@ -24,6 +26,7 @@ export function NavBar({
   children,
   rightElements,
   scroll = false,
+  stripe,
 }: NavBarProps) {
   const scrolled = useScroll(50);
   const { isLoaded, isSignedIn, user } = useUser();
@@ -32,6 +35,8 @@ export function NavBar({
     name: user?.fullName || '',
     email: user?.emailAddresses[0]?.emailAddress || '',
   };
+
+  const { isPaid } = stripe;
 
   return (
     <header
@@ -46,7 +51,10 @@ export function NavBar({
           {rightElements}
 
           {isSignedIn ? (
-            <UserAccountNav user={userObj} />
+            <>
+              {!isPaid && <UpgradeButton />}
+              <UserAccountNav user={userObj} />
+            </>
           ) : (
             <Link
               href="/signin"

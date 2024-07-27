@@ -24,16 +24,5 @@ export default function SignUpPage({
     lastName: lastName,
   };
 
-  console.log(redirect);
-
-  if (redirect) {
-    return (
-      <SignUp
-        initialValues={initialValues}
-        forceRedirectUrl={'/dashboard/billing'}
-      />
-    );
-  }
-
   return <SignUp initialValues={initialValues} />;
 }
