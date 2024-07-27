@@ -24,5 +24,25 @@ export default function SignUpPage({
     lastName: lastName,
   };
 
-  return <SignUp initialValues={initialValues} />;
+  console.log(redirect);
+
+  if (redirect === 'billing') {
+    console.log('Billing Redirect!');
+    return (
+      <SignUp
+        initialValues={initialValues}
+        redirectUrl={'/dashboard/checkout'} //just testing this | I know that it's deprecated
+        forceRedirectUrl={'/dashboard/checkout'}
+        signInForceRedirectUrl={'/dashboard/checkout'}
+      />
+    );
+  }
+
+  console.log('Normal Redirect!');
+  return (
+    <SignUp
+      initialValues={initialValues}
+      forceRedirectUrl={'/dashboard/billing'}
+    />
+  );
 }
