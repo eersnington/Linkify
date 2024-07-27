@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import { useTransition } from "react";
-import { openCustomerPortal } from "@/actions/open-customer-portal";
+import { useTransition } from 'react';
+import { openCustomerPortal } from '@/actions/open-customer-portal';
 
-import { Button } from "@/components/ui/button";
-import { Icons } from "@/components/shared/icons";
+import { Button } from '@/components/ui/button';
+import { Icons } from '@/components/shared/icons';
 
 interface CustomerPortalButtonProps {
   userStripeId: string;
@@ -20,13 +20,17 @@ export function CustomerPortalButton({
     startTransition(async () => await generateUserStripeSession());
 
   return (
-    <Button disabled={isPending} onClick={stripeSessionAction}>
+    <Button
+      disabled={isPending}
+      onClick={stripeSessionAction}
+      className="bg-green-500 font-semibold text-white rounded-lg"
+    >
       {isPending ? (
         <>
           <Icons.spinner className="mr-2 size-4 animate-spin" /> Loading...
         </>
       ) : (
-        "Open Customer Portal"
+        'Open Customer Portal'
       )}
     </Button>
   );
