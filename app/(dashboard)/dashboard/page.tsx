@@ -19,7 +19,10 @@ export default async function DashboardPage() {
 
   return (
     <DashboardShell>
-      <DashboardHeader heading="Dashboard" text="Check your analytics here" />
+      <DashboardHeader
+        heading="Dashboard"
+        text="View your Web Analytics here"
+      />{' '}
       <div className="grid gap-4">
         <PageViewsChart />
         <div className="grid gap-4 md:grid-cols-2">
