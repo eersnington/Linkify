@@ -13,9 +13,10 @@ import {
 import { Button, buttonVariants } from './ui/button';
 
 import { Sparkles, Crown, Zap } from 'lucide-react';
-import router from 'next/router';
+import { useRouter } from 'next/navigation';
 
 export function UpgradeButton() {
+  const router = useRouter();
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -69,7 +70,7 @@ export function UpgradeButton() {
           <Button
             type="submit"
             className="bg-purple-600 hover:bg-purple-700"
-            onClick={() => router.push('/dashboard/billing')}
+            onClick={() => router.push('/dashboard/checkout')}
           >
             Subscribe Now
           </Button>
