@@ -15,6 +15,7 @@ import {
 import { Label } from '@/components/ui/label';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { cn } from '@/lib/utils';
+import { Crown } from 'lucide-react';
 
 interface DemoSidebarProps {
   email: string;
@@ -41,7 +42,7 @@ export function DemoSidebar({ email }: DemoSidebarProps) {
                   <CardTitle className="text-base">{template.name}</CardTitle>
                   {template.isPremium && (
                     <Badge className="text-xs px-2 py-0.5 bg-gradient-to-r from-yellow-400 to-amber-600">
-                      Premium
+                      <Crown size={14} className="mr-2" /> Premium
                     </Badge>
                   )}
                 </div>
