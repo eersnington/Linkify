@@ -3,13 +3,9 @@
 import { redirect } from 'next/navigation';
 import { currentUser } from '@clerk/nextjs/server';
 
-import { Button } from '@/components/ui/button';
-import { DashboardHeader } from '@/components/dashboard/header';
-import { DashboardShell } from '@/components/dashboard/shell';
-import { PageSidebar } from '@/components/layout/page-sidebar';
-import PageCanvas from '@/components/page-canvas';
-import PageEditor from '@/components/page-editor';
+import PageEditor from '@/components/mypage/page-editor';
 import { LinkedInDataProvider } from '@/context/linkedin-data-context';
+import { getUserSubscriptionPlan } from '@/lib/subscription';
 
 export const metadata = {
   title: 'My Page',
@@ -23,12 +19,12 @@ export default async function MyPage() {
     redirect('/login');
   }
 
-  const email = user.emailAddresses[0].emailAddress;
+  const userSubscriptionPlan = await getUserSubscriptionPlan(user.id);
 
   return (
     <LinkedInDataProvider>
       <div className="flex h-full flex-1 bg-purple-950 p-4">
-        <PageEditor email={email} />
+        <PageEditor isUserPremium={userSubscriptionPlan.isPaid} />
       </div>
     </LinkedInDataProvider>
   );
