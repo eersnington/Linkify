@@ -1,36 +1,31 @@
-import { redirect } from "next/navigation";
-import { currentUser } from "@clerk/nextjs/server";
-
-import { Button } from "@/components/ui/button";
-import { DashboardHeader } from "@/components/dashboard/header";
-import { DashboardShell } from "@/components/dashboard/shell";
-import { EmptyPlaceholder } from "@/components/shared/empty-placeholder";
+import { currentUser } from '@clerk/nextjs/server';
+import { redirect } from 'next/navigation';
+import { DashboardHeader } from '@/components/dashboard/header';
+import { DashboardShell } from '@/components/dashboard/shell';
+import { PageViewsChart } from '@/components/charts/page-view-chart';
+import { TopCountriesChart } from '@/components/charts/top-countries-chart';
+import { TopPagesChart } from '@/components/charts/top-page-chart';
 
 export const metadata = {
-  title: "Dashboard",
+  title: 'Dashboard',
 };
 
 export default async function DashboardPage() {
   const user = await currentUser();
 
   if (!user) {
-    redirect("/login");
+    redirect('/login');
   }
 
   return (
     <DashboardShell>
-      <DashboardHeader heading="Dashboard" text="Check your analytics here">
-        <Button>Fake button</Button>
-      </DashboardHeader>
-      <div>
-        <EmptyPlaceholder>
-          <EmptyPlaceholder.Icon name="post" />
-          <EmptyPlaceholder.Title>No content created</EmptyPlaceholder.Title>
-          <EmptyPlaceholder.Description>
-            You don&apos;t have any content yet. Start creating content.
-          </EmptyPlaceholder.Description>
-          <Button variant="outline">Fake button</Button>
-        </EmptyPlaceholder>
+      <DashboardHeader heading="Dashboard" text="Check your analytics here" />
+      <div className="grid gap-4">
+        <PageViewsChart />
+        <div className="grid gap-4 md:grid-cols-2">
+          <TopPagesChart />
+          <TopCountriesChart />
+        </div>
       </div>
     </DashboardShell>
   );
