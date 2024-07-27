@@ -20,9 +20,6 @@ export async function getUserSubscriptionPlan(
     },
   });
 
-  console.log(user);
-  console.log(userId);
-
   if (!user) {
     throw new Error('User not found');
   }
