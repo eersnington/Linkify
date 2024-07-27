@@ -7,7 +7,7 @@ import { Webhook } from 'svix';
 
 import { prisma } from '@/lib/db';
 
-export const maxDuration = 20;
+export const maxDuration = 30;
 
 export async function POST(req: Request) {
   const WEBHOOK_SECRET = process.env.CLERK_WEBHOOK_SECRET;
@@ -57,36 +57,46 @@ export async function POST(req: Request) {
 
   try {
     const { id } = payload?.data;
-    console.log('✅', payload);
+    // console.log('✅', payload); // Uncomment to see the payload
 
     console.log(payload.type);
 
     if (payload.type === 'user.deleted') {
       // action for deleting user
-
       console.log('Action: Deleting user - ', id);
 
       const user = await prisma.user.findFirst({
         where: { id: id },
-      });
+      }); // to get the email of the user
 
       console.log('Awaiting user deletion');
       await prisma.user.delete({
-        where: { id: id },
+        where: { email: user?.email },
       });
 
       const user_email = user?.email;
 
       console.log('Awaiting website deletion');
-      await prisma.website.deleteMany({
+      const website = await prisma.website.findFirst({
         where: { userEmail: user_email },
       });
+
+      if (website) {
+        await prisma.website.delete({
+          where: { userEmail: user_email },
+        });
+      }
 
       console.log('Awaiting LinkedIn profile deletion');
-      await prisma.linkedInProfile.delete({
+      const linkedin = await prisma.linkedInProfile.findFirst({
         where: { userEmail: user_email },
       });
 
+      if (linkedin) {
+        await prisma.linkedInProfile.delete({
+          where: { userEmail: user_email },
+        });
+      }
       return new NextResponse('User deleted from database successfully', {
         status: 200,
       });
