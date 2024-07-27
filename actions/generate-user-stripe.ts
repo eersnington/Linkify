@@ -1,30 +1,30 @@
-"use server";
+'use server';
 
-import { redirect } from "next/navigation";
-import { currentUser } from "@clerk/nextjs/server";
+import { redirect } from 'next/navigation';
+import { currentUser } from '@clerk/nextjs/server';
 
-import { stripe } from "@/lib/stripe";
-import { getUserSubscriptionPlan } from "@/lib/subscription";
-import { absoluteUrl } from "@/lib/utils";
+import { stripe } from '@/lib/stripe';
+import { getUserSubscriptionPlan } from '@/lib/subscription';
+import { absoluteUrl } from '@/lib/utils';
 
 export type responseAction = {
-  status: "success" | "error";
+  status: 'success' | 'error';
   stripeUrl?: string;
 };
 
-// const billingUrl = absoluteUrl("/dashboard/billing")
-const billingUrl = absoluteUrl("/pricing");
+const billingUrl = absoluteUrl('/dashboard/billing');
+// const billingUrl = absoluteUrl("/pricing");
 
 export async function generateUserStripe(
-  priceId: string,
+  priceId: string
 ): Promise<responseAction> {
-  let redirectUrl: string = "";
+  let redirectUrl: string = '';
 
   try {
     const session = await currentUser();
 
     if (!session || !session?.emailAddresses[0]?.emailAddress) {
-      throw new Error("Unauthorized");
+      throw new Error('Unauthorized');
     }
 
     const subscriptionPlan = await getUserSubscriptionPlan(session.id);
@@ -42,9 +42,9 @@ export async function generateUserStripe(
       const stripeSession = await stripe.checkout.sessions.create({
         success_url: billingUrl,
         cancel_url: billingUrl,
-        payment_method_types: ["card"],
-        mode: "subscription",
-        billing_address_collection: "auto",
+        payment_method_types: ['card'],
+        mode: 'subscription',
+        billing_address_collection: 'auto',
         customer_email: session.emailAddresses[0].emailAddress,
         line_items: [
           {
@@ -61,7 +61,7 @@ export async function generateUserStripe(
     }
   } catch (error) {
     console.log(error);
-    throw new Error("Failed to generate user stripe session");
+    throw new Error('Failed to generate user stripe session');
   }
 
   // no revalidatePath because redirect
