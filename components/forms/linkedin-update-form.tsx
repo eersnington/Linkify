@@ -2,7 +2,7 @@
 
 import { useUser } from '@clerk/nextjs';
 import { useTransition } from 'react';
-import { updateLinkedInProfile } from '@/actions/get-linkedin-profile';
+import { updateLinkedInProfile } from '@/actions/fetch-linkedin copy';
 import { useLinkedInProfile } from '@/context/linkedin-profile-context';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Plus, Trash2 } from 'lucide-react';
