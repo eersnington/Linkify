@@ -20,6 +20,7 @@ import { useLinkedInData } from '@/context/linkedin-data-context';
 import { Upload } from 'lucide-react';
 import { useState } from 'react';
 import { processCV } from '@/actions/process-cv';
+import Link from 'next/link';
 
 const OnboardCard = ({
   profile,
@@ -34,6 +35,12 @@ const OnboardCard = ({
 
   const { firstName, lastName, photoUrl } = profile;
 
+  const linkedInProfile = {
+    id: 'anonymous',
+    userEmail: email,
+    ...profile,
+  };
+
   const handleCVUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
@@ -46,10 +53,16 @@ const OnboardCard = ({
 
       try {
         const result = await processCV(formData);
+
         console.log(result);
         if (result.data) {
+          const cvProfile = {
+            id: 'anonymous',
+            userEmail: email,
+            ...result.data,
+          };
           console.log('Data saved');
-          updateLinkedInProfile(result.data);
+          updateLinkedInProfile(cvProfile);
           router.push('/onboard/mypage?email=' + email);
         } else {
           // Handle error
@@ -112,7 +125,7 @@ const OnboardCard = ({
           </div>
         </div>
       </CardContent>
-      <CardFooter>
+      <CardFooter className="flex-col">
         <div className="flex w-full justify-center gap-14">
           <Button
             variant="outline"
@@ -126,13 +139,23 @@ const OnboardCard = ({
           <Button
             className="bg-yellow-500"
             onClick={() => {
-              updateLinkedInProfile(profile);
+              console.log(linkedInProfile);
+              updateLinkedInProfile(linkedInProfile);
               router.push('/onboard/mypage?email=' + email);
             }}
           >
             Yes
           </Button>
         </div>
+        {
+          // on hover underline text
+        }{' '}
+        <Link
+          href="/onboard/questions"
+          className="text-sm text-slate-600 hover:underline  my-4"
+        >
+          I don&apos;t have a LinkedIn account
+        </Link>
       </CardFooter>
     </Card>
   );
