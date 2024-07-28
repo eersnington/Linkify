@@ -35,6 +35,7 @@ const formVariants = {
 export function HeroLanding() {
   const firstLineWords = ['Create', 'a', 'stunning', 'personal'];
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [isTransitioning, setIsTransitioning] = useState(false);
   const images = [
     '/images/templates/Basic.png',
     '/images/templates/Creative.png',
@@ -45,8 +46,12 @@ export function HeroLanding() {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentImageIndex((prevIndex) => (prevIndex + 1) % images.length);
-    }, 4000); // Change image every 4 seconds
+      setIsTransitioning(true);
+      setTimeout(() => {
+        setCurrentImageIndex((prevIndex) => (prevIndex + 1) % images.length);
+        setIsTransitioning(false);
+      }, 500);
+    }, 4000);
 
     return () => clearInterval(interval);
   }, [images.length]);
@@ -137,8 +142,7 @@ export function HeroLanding() {
             <motion.div
               key={currentImageIndex}
               initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
+              animate={{ opacity: isTransitioning ? 0 : 1 }}
               transition={{ duration: 0.5 }}
             >
               <Image

@@ -69,3 +69,9 @@ model Website {
 
   @@map(name: "website")
 }
+
+model CV {
+  email    String @id
+  filedata Bytes
+  createdAt DateTime @default(now())
+}
