@@ -63,7 +63,7 @@ export function PublishDialog({ email, selectedTemplate }: PublishDialogProps) {
             description: `Link: ${url}/${domainName}`,
             className: 'bg-green-500 text-white font-mono',
           });
-          setTimeout(() => setShowConfetti(false), 5000); // Hide confetti after 5 seconds
+          setTimeout(() => setShowConfetti(false), 7000); // Hide confetti after 5 seconds
         } else {
           toast({
             title: 'Error',
