@@ -1,6 +1,7 @@
 'use client';
-import { createContext, useContext, useState, useEffect } from 'react';
-import { LinkedInProfile } from '@/types/linkedin';
+
+import React, { createContext, useContext, useState, useEffect } from 'react';
+import { LinkedInProfile } from '@prisma/client';
 
 type DataContextType = {
   linkedInProfile: LinkedInProfile | null;
@@ -40,7 +41,9 @@ export function LinkedInDataProvider({
 export function useLinkedInData() {
   const context = useContext(DataContext);
   if (context === undefined) {
-    throw new Error('useLinkedInData must be used within a DataProvider');
+    throw new Error(
+      'useLinkedInData must be used within a LinkedInDataProvider'
+    );
   }
   return context;
 }
