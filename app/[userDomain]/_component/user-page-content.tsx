@@ -1,18 +1,12 @@
-"use client";
+'use client';
 
 // app/[userDomain]/UserPageContent.tsx
-import React from "react";
-import { useThemeTemplate } from "@/context/editor-sidebar-context";
+import React from 'react';
+import { useThemeTemplate } from '@/context/editor-sidebar-context';
+import { LinkedInProfile } from '@prisma/client';
 
 interface UserPageContentProps {
-  profile: {
-    fullName: string;
-    photoUrl: string;
-    title: string;
-    description: string;
-    workExperiences: any[];
-    education: any[];
-  };
+  profile: LinkedInProfile;
   templateId: number;
 }
 
@@ -31,12 +25,10 @@ export default function UserPageContent({
     <div className="min-h-screen w-full">
       <main className="w-full">
         <SelectedTemplateComponent
-          fullName={profile.fullName}
-          photoUrl={profile.photoUrl}
-          title={profile.title}
-          description={profile.description}
-          workExperiences={profile.workExperiences}
-          education={profile.education}
+          profile={{
+            ...profile,
+            recommendations: [{ id: 1, text: 'Great work!' }],
+          }}
         />
       </main>
     </div>

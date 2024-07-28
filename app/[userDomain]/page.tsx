@@ -4,7 +4,6 @@ import { notFound } from 'next/navigation';
 
 import UserPageContent from './_component/user-page-content';
 import { prisma } from '@/lib/db';
-import { getStoredProfile } from '@/actions/fetch-linkedin copy';
 import { ThemeTemplateProvider } from '@/context/editor-sidebar-context';
 
 export async function generateMetadata({
@@ -50,15 +49,20 @@ export default async function UserPage({
     notFound();
   }
 
-  const { data: profile } = await getStoredProfile(website.userEmail);
+  const linkedinProfile = await prisma.linkedInProfile.findUnique({
+    where: { userEmail: website.userEmail },
+  });
 
-  if (!profile) {
+  if (!linkedinProfile) {
     notFound();
   }
 
   return (
     <ThemeTemplateProvider>
-      <UserPageContent profile={profile} templateId={website.template} />
+      <UserPageContent
+        profile={linkedinProfile}
+        templateId={website.template}
+      />
     </ThemeTemplateProvider>
   );
 }

@@ -36,6 +36,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
+import { LinkedInProfileForm } from '../forms/linkedin-update-form';
 
 interface PageSidebarProps {
   isUserPremium: boolean;
@@ -185,7 +186,7 @@ export function PageSidebar({ isUserPremium }: PageSidebarProps) {
               </TabsContent>
               <TabsContent value="theme">{renderThemeCards()}</TabsContent>
               <TabsContent value="blocks">
-                {/* TODO: Implement Form Later */}
+                <LinkedInProfileForm />
               </TabsContent>
             </div>
           </ScrollArea>

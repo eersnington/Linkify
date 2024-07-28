@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { Briefcase, ChevronDown, GraduationCap } from 'lucide-react';
 
-import { LinkedInProfile as TemplateProps } from '@/types/linkedin';
+import { LinkedInProfile as TemplateProps } from '@prisma/client';
 
 export function BasicTemplate({ profile }: { profile: TemplateProps }) {
   const {

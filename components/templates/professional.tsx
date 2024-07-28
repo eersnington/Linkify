@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { Briefcase, Download, GraduationCap, Mail } from 'lucide-react';
 
-import { LinkedInProfile as TemplateProps } from '@/types/linkedin';
+import { LinkedInProfile as TemplateProps } from '@prisma/client';
 import { cn } from '@/lib/utils';
 import { dm_display, pf_display } from '@/app/fonts';
 
