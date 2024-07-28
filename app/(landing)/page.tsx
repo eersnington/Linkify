@@ -1,4 +1,3 @@
-import { FeatureSection } from '@/components/sections/components/features';
 import { HeroLanding } from '@/components/sections/hero-landing';
 import { ThreeSteps } from '@/components/sections/three-steps';
 
