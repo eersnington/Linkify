@@ -1,15 +1,14 @@
 'use client';
-
 import { useUser } from '@clerk/nextjs';
 import { useTransition } from 'react';
-import { updateLinkedInProfile } from '@/actions/fetch-linkedin copy';
-import { useLinkedInProfile } from '@/context/linkedin-profile-context';
+import { updateLinkedInProfile } from '@/actions/update-linkedin';
+import { useLinkedInData } from '@/context/linkedin-data-context';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Plus, Trash2 } from 'lucide-react';
 import { SubmitHandler, useFieldArray, useForm } from 'react-hook-form';
 
 import {
-  linkedInProfileSchema,
+  linkedInProfileFormSchema,
   type LinkedInProfileFormData,
 } from '@/lib/validations/linkedin-profile';
 import {
@@ -41,21 +40,26 @@ import { toast } from '@/components/ui/use-toast';
 import { Icons } from '@/components/shared/icons';
 import { useSignupModal } from '@/hooks/use-signup-modal';
 
-interface LinkedInProfileFormProps {
-  email: string;
-}
-
-export function LinkedInProfileForm({ email }: LinkedInProfileFormProps) {
+export function LinkedInProfileForm() {
   const [isPending, startTransition] = useTransition();
-  const updateProfileWithId = updateLinkedInProfile.bind(null, email);
-  const { profile, updateProfile } = useLinkedInProfile();
+  const { linkedInProfile, updateLinkedInProfile: updateProfileContext } =
+    useLinkedInData();
   const { isSignedIn, user } = useUser();
+
+  const userId = user?.id || 'anonymous';
+  const userEmail = user?.emailAddresses[0].emailAddress || 'example@email.com';
 
   const signUpModal = useSignupModal();
 
+  // Transform linkedInProfile to match the expected type
+  // @ts-ignore
+  const defaultValues: LinkedInProfileFormData = {
+    ...linkedInProfile,
+  };
+
   const form = useForm<LinkedInProfileFormData>({
-    resolver: zodResolver(linkedInProfileSchema),
-    defaultValues: profile,
+    resolver: zodResolver(linkedInProfileFormSchema),
+    defaultValues,
   });
 
   const {
@@ -77,24 +81,35 @@ export function LinkedInProfileForm({ email }: LinkedInProfileFormProps) {
   });
 
   const onSubmit: SubmitHandler<LinkedInProfileFormData> = (data) => {
-    if (!isSignedIn || user?.emailAddresses[0].emailAddress !== email) {
+    if (!linkedInProfile) {
       signUpModal.onOpen();
       return;
     }
-
     startTransition(async () => {
-      const { status } = await updateProfileWithId(data);
+      const { status, message } = await updateLinkedInProfile(userEmail, {
+        id: userId,
+        userEmail: userEmail,
+        linkedInUrl: linkedInProfile.linkedInUrl,
+        certifications: linkedInProfile.certifications,
+        // recommendations: linkedInProfile.recommendations,
+        skills: linkedInProfile.skills,
+        ...data,
+      });
 
       if (status !== 'success') {
         toast({
           title: 'Something went wrong.',
-          description: 'Your profile was not updated. Please try again.',
+          description:
+            message || 'Your profile was not updated. Please try again.',
           variant: 'destructive',
         });
       } else {
-        updateProfile(data);
+        updateProfileContext({
+          ...linkedInProfile,
+          ...data,
+        });
         toast({
-          description: 'Your profile has been updated.',
+          description: message || 'Your profile has been updated.',
           className: 'bg-green-500 text-white font-semibold',
         });
       }
@@ -113,23 +128,32 @@ export function LinkedInProfileForm({ email }: LinkedInProfileFormProps) {
           </CardHeader>
           <CardContent>
             <Accordion type="single" collapsible className="w-full">
-              {/* 
-                Personal Information
-                - Full Name
-                - Title
-                - Description
-                - Photo URL
-              */}
               <AccordionItem value="personal-info">
                 <AccordionTrigger>Personal Information</AccordionTrigger>
                 <AccordionContent className="max-h-[60vh] overflow-y-auto">
                   <div className="grid gap-4 sm:grid-cols-2">
                     <FormField
                       control={form.control}
-                      name="fullName"
+                      name="firstName"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Full Name</FormLabel>
+                          <FormLabel>First Name</FormLabel>
+                          <FormControl>
+                            <Input
+                              className="w-full max-w-[400px]"
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="lastName"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Last Name</FormLabel>
                           <FormControl>
                             <Input
                               className="w-full max-w-[400px]"
@@ -191,13 +215,7 @@ export function LinkedInProfileForm({ email }: LinkedInProfileFormProps) {
                   </div>
                 </AccordionContent>
               </AccordionItem>
-              {/*
-                Work Experience
-                - Title
-                - Company Name
-                - Date
-                - Description
-              */}
+
               <AccordionItem value="work-experience">
                 <AccordionTrigger>Work Experience</AccordionTrigger>
                 <AccordionContent className="max-h-[60vh] overflow-y-auto">
@@ -225,7 +243,7 @@ export function LinkedInProfileForm({ email }: LinkedInProfileFormProps) {
                           name={`workExperiences.${index}.company`}
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>Company Name</FormLabel>
+                              <FormLabel>Company</FormLabel>
                               <FormControl>
                                 <Input
                                   className="w-full max-w-[400px]"
@@ -271,16 +289,18 @@ export function LinkedInProfileForm({ email }: LinkedInProfileFormProps) {
                       </div>
                       <Button
                         type="button"
-                        onClick={() => removeWorkExperience(index)}
                         variant="destructive"
-                        className="mt-2"
+                        className="mt-4"
+                        onClick={() => removeWorkExperience(index)}
                       >
-                        <Trash2 className="mr-2 size-4" /> Remove
+                        <Trash2 className="mr-2 h-4 w-4" />
+                        Remove
                       </Button>
                     </div>
                   ))}
                   <Button
                     type="button"
+                    variant="outline"
                     onClick={() =>
                       appendWorkExperience({
                         title: '',
@@ -289,18 +309,13 @@ export function LinkedInProfileForm({ email }: LinkedInProfileFormProps) {
                         description: '',
                       })
                     }
-                    className="mt-2"
                   >
-                    <Plus className="mr-2 size-4" /> Add Work Experience
+                    <Plus className="mr-2 h-4 w-4" />
+                    Add Work Experience
                   </Button>
                 </AccordionContent>
               </AccordionItem>
-              {/*
-                Education
-                - School Name
-                - Degree Name
-                - Date
-              */}
+
               <AccordionItem value="education">
                 <AccordionTrigger>Education</AccordionTrigger>
                 <AccordionContent className="max-h-[60vh] overflow-y-auto">
@@ -312,7 +327,7 @@ export function LinkedInProfileForm({ email }: LinkedInProfileFormProps) {
                           name={`education.${index}.name`}
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>School Name</FormLabel>
+                              <FormLabel>Institution Name</FormLabel>
                               <FormControl>
                                 <Input
                                   className="w-full max-w-[400px]"
@@ -328,7 +343,7 @@ export function LinkedInProfileForm({ email }: LinkedInProfileFormProps) {
                           name={`education.${index}.degree`}
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>Degree Name</FormLabel>
+                              <FormLabel>Degree</FormLabel>
                               <FormControl>
                                 <Input
                                   className="w-full max-w-[400px]"
@@ -358,16 +373,18 @@ export function LinkedInProfileForm({ email }: LinkedInProfileFormProps) {
                       </div>
                       <Button
                         type="button"
-                        onClick={() => removeEducation(index)}
                         variant="destructive"
-                        className="mt-2"
+                        className="mt-4"
+                        onClick={() => removeEducation(index)}
                       >
-                        <Trash2 className="mr-2 size-4" /> Remove
+                        <Trash2 className="mr-2 h-4 w-4" />
+                        Remove
                       </Button>
                     </div>
                   ))}
                   <Button
                     type="button"
+                    variant="outline"
                     onClick={() =>
                       appendEducation({
                         name: '',
@@ -375,20 +392,24 @@ export function LinkedInProfileForm({ email }: LinkedInProfileFormProps) {
                         date: '',
                       })
                     }
-                    className="mt-2"
                   >
-                    <Plus className="mr-2 size-4" /> Add Education
+                    <Plus className="mr-2 h-4 w-4" />
+                    Add Education
                   </Button>
                 </AccordionContent>
               </AccordionItem>
             </Accordion>
           </CardContent>
-          <CardFooter>
-            <Button type="submit" disabled={isPending}>
+          <CardFooter className="flex justify-end">
+            <Button
+              type="submit"
+              disabled={isPending}
+              className="flex items-center"
+            >
               {isPending && (
-                <Icons.spinner className="mr-2 size-4 animate-spin" />
+                <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
               )}
-              <span>{isPending ? 'Saving' : 'Save'}</span>
+              Save
             </Button>
           </CardFooter>
         </Card>
