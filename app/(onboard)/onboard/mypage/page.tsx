@@ -3,8 +3,7 @@
 export const maxDuration = 30;
 
 import { redirect } from 'next/navigation';
-import { getStoredProfile } from '@/actions/fetch-linkedin copy';
-import { LinkedInProfileProvider } from '@/context/linkedin-profile-context';
+
 
 import PageEditor from '@/components/mypage/page-editor';
 import OnboardEditor from '@/components/onboard/onboard-editor';
