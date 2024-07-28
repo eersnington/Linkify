@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { motion, useAnimation } from 'framer-motion';
-import { ArrowRight, Check, Star } from 'lucide-react';
+import { ArrowRight, Check, Loader2, Star } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -25,6 +25,7 @@ import Link from 'next/link';
 import { Label } from '../ui/label';
 import Logo from '../shared/logo';
 import { pricingData } from '@/config/subscriptions';
+import { DialogDescription } from '@radix-ui/react-dialog';
 
 const features = [
   'Your own custom domain (e.g., yourname.com)',
@@ -155,8 +156,26 @@ export default function UpgradeCards({
                 <DialogContent>
                   <DialogHeader>
                     <DialogTitle>Sign Up to Complete your Upgrade</DialogTitle>
+                    <DialogDescription>
+                      <motion.div
+                        animate={{
+                          scale: [1, 1.1, 1],
+                          rotate: [0, 180, 360],
+                        }}
+                        transition={{
+                          duration: 2,
+                          repeat: Infinity,
+                          ease: 'easeInOut',
+                        }}
+                        className="flex justify-center"
+                      >
+                        <Loader2 className="h-12 w-12 text-purple-600" />
+                      </motion.div>
+                      <p className="mt-4 text-gray-600 font-semibold">
+                        Preparing your professional journey...
+                      </p>
+                    </DialogDescription>
                   </DialogHeader>
-                  {/* Add your payment form here */}
                 </DialogContent>
               </Dialog>
             </CardFooter>
