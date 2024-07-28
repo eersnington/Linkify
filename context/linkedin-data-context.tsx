@@ -25,6 +25,7 @@ export function LinkedInDataProvider({
   }, []);
 
   const updateLinkedInProfile = (profile: LinkedInProfile) => {
+    console.log('Updating LinkedIn profile:', profile);
     setLinkedInProfile(profile);
     localStorage.setItem('linkedInProfile', JSON.stringify(profile));
   };
