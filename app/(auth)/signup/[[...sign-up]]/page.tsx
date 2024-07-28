@@ -40,9 +40,6 @@ export default function SignUpPage({
 
   console.log('Normal Redirect!');
   return (
-    <SignUp
-      initialValues={initialValues}
-      forceRedirectUrl={'/dashboard/billing'}
-    />
+    <SignUp initialValues={initialValues} forceRedirectUrl={'/dashboard'} />
   );
 }
