@@ -45,12 +45,8 @@ export function HeroLanding() {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setTimeout(() => {
-        setCurrentImageIndex(
-          (prevIndex) => (prevIndex + 1) % (images.length - 1)
-        );
-      }, 500); // 500ms delay for exit animation
-    }, 3500); // Total time for each image (3000ms display + 500ms transition)
+      setCurrentImageIndex((prevIndex) => (prevIndex + 1) % images.length);
+    }, 4000); // Change image every 4 seconds
 
     return () => clearInterval(interval);
   }, [images.length]);
