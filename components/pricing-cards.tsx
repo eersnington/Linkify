@@ -15,6 +15,7 @@ import { SubscriptionPlan } from '../types/index';
 import { ToggleGroup, ToggleGroupItem } from './ui/toggle-group';
 import { useRouter } from 'next/navigation';
 import { useSignupModal } from '@/hooks/use-signup-modal';
+import { CheckCircle } from 'lucide-react';
 
 interface PricingCardsProps {
   userId?: string;
@@ -178,13 +179,22 @@ export function PricingCards({ userId, subscriptionPlan }: PricingCardsProps) {
   return (
     <section className="container flex flex-col items-center text-center">
       <motion.h1
-        className="font-heading text-3xl md:text-6xl text-purple-950"
+        className="font-heading text-3xl md:text-6xl bg-gradient-to-r from-purple-600 to-indigo-600 text-transparent bg-clip-text"
         variants={titleVariants}
         initial="hidden"
         animate="visible"
       >
         {'Pricing'}
       </motion.h1>
+      <motion.p
+        className="font-heading text-lg md:text-2xl bg-gradient-to-r from-purple-400 to-pink-400 text-transparent bg-clip-text mt-6 flex items-center"
+        variants={titleVariants}
+        initial="hidden"
+        animate="visible"
+      >
+        {'30 days money back guarantee'}{' '}
+        <CheckCircle className="ml-2 text-purple-500" />
+      </motion.p>
 
       {/* <motion.div
         className="mb-4 mt-10 flex items-center gap-5"
