@@ -29,6 +29,10 @@ const config = {
     },
     extend: {
       colors: {
+        peach: {
+          400: '#ffdab9',
+          500: '#ffcba4',
+        },
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',
