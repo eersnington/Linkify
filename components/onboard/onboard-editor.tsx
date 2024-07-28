@@ -52,7 +52,7 @@ export default function OnboardEditor({ email }: PageEditorProps) {
               </Sheet>
               <Button
                 variant={'default'}
-                onClick={() => router.push('/onboard/upgrade?email=' + email)}
+                onClick={() => router.push('/upgrade?email=' + email)}
                 className="bg-purple-700 text-white"
               >
                 Continue
