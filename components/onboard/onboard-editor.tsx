@@ -1,16 +1,16 @@
+// components/onboard-editor.tsx
 'use client';
-
 import { useState } from 'react';
 import { useThemeTemplate } from '@/context/editor-sidebar-context';
 import { DemoSidebar } from './onboard-sidebar';
 import { DashboardShell } from '../dashboard/shell';
 import { DashboardHeader } from '../dashboard/header';
 import { useRouter } from 'next/navigation';
-
 import { DemoCanvas } from './onboard-canvas';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { Pencil } from 'lucide-react';
+import { EnhanceContentButton } from '../ehance-button';
 
 interface PageEditorProps {
   email: string;
@@ -50,6 +50,7 @@ export default function OnboardEditor({ email }: PageEditorProps) {
                   <DemoSidebar email={email} />
                 </SheetContent>
               </Sheet>
+              <EnhanceContentButton />
               <Button
                 variant={'default'}
                 onClick={() => router.push('/upgrade?email=' + email)}
