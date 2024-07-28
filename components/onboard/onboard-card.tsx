@@ -17,6 +17,9 @@ import { Badge } from '@/components/ui/badge';
 import { LinkedInLogoIcon } from '@radix-ui/react-icons';
 import { LinkedInProfile } from '@/types/linkedin';
 import { useLinkedInData } from '@/context/linkedin-data-context';
+import { Upload } from 'lucide-react';
+import { useState } from 'react';
+import { processCV } from '@/actions/process-cv';
 
 const OnboardCard = ({
   profile,
@@ -27,9 +30,38 @@ const OnboardCard = ({
 }) => {
   const router = useRouter();
   const { updateLinkedInProfile } = useLinkedInData();
+  const [isProcessing, setIsProcessing] = useState(false);
 
   const { firstName, lastName, photoUrl } = profile;
-  updateLinkedInProfile(profile);
+
+  const handleCVUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      setIsProcessing(true);
+      const formData = new FormData();
+      formData.append('cv', file);
+      formData.append('email', email);
+
+      console.log('Uploading CV...');
+
+      try {
+        const result = await processCV(formData);
+        console.log(result);
+        if (result.data) {
+          console.log('Data saved');
+          updateLinkedInProfile(result.data);
+          router.push('/onboard/mypage?email=' + email);
+        } else {
+          // Handle error
+          console.error(result.error);
+        }
+      } catch (error) {
+        console.error('Error processing CV:', error);
+      } finally {
+        setIsProcessing(false);
+      }
+    }
+  };
 
   return (
     <Card className="mx-auto w-full max-w-md border-2 border-purple-700 drop-shadow-xl">
@@ -59,6 +91,26 @@ const OnboardCard = ({
             </Label>
           </div>
         </div>
+        <div className="mt-4">
+          <Label className="text-lg text-purple-950">Or upload your CV:</Label>
+          <div className="mt-2">
+            <input
+              type="file"
+              accept=".pdf"
+              onChange={handleCVUpload}
+              className="hidden"
+              id="cv-upload"
+              disabled={isProcessing}
+            />
+            <label
+              htmlFor="cv-upload"
+              className="flex items-center justify-center px-4 py-2 border border-purple-700 rounded-md cursor-pointer hover:bg-purple-100"
+            >
+              <Upload className="mr-2" />
+              {isProcessing ? 'Processing...' : 'Upload CV'}
+            </label>
+          </div>
+        </div>
       </CardContent>
       <CardFooter>
         <div className="flex w-full justify-center gap-14">
@@ -74,6 +126,7 @@ const OnboardCard = ({
           <Button
             className="bg-yellow-500"
             onClick={() => {
+              updateLinkedInProfile(profile);
               router.push('/onboard/mypage?email=' + email);
             }}
           >
