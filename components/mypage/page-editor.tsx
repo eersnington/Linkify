@@ -25,12 +25,10 @@ export default function PageEditor({ isUserPremium }: PageEditorProps) {
 
   const email = user?.emailAddresses[0].emailAddress || 'example@email.com';
 
-  console.log('User premium status: ', isUserPremium);
-
   return (
     <div className="flex h-full w-full">
       <aside className="hidden lg:block w-1/4 overflow-auto ml-4 my-4">
-        <PageSidebar isUserPremium={true} />
+        <PageSidebar isUserPremium={isUserPremium} />
       </aside>
       <main className="w-full lg:w-3/4 flex-1 overflow-hidden mx-4 my-4 ">
         <DashboardShell className="h-full rounded-lg bg-slate-50 p-4">
