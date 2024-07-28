@@ -1,11 +1,20 @@
 'use client';
 
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { CTAForm } from '../forms/cta-email-form';
 import { LayoutTemplate, Sparkles } from 'lucide-react';
 import { LinkedInLogoIcon } from '@radix-ui/react-icons';
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from '@/components/ui/carousel';
+import Autoplay from "embla-carousel-autoplay"
+
 
 const wordVariants = {
   hidden: { opacity: 0, x: -20 },
@@ -35,7 +44,6 @@ const formVariants = {
 export function HeroLanding() {
   const firstLineWords = ['Create', 'a', 'stunning', 'personal'];
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const [isTransitioning, setIsTransitioning] = useState(false);
   const images = [
     '/images/templates/Basic.png',
     '/images/templates/Creative.png',
@@ -46,11 +54,7 @@ export function HeroLanding() {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setIsTransitioning(true);
-      setTimeout(() => {
-        setCurrentImageIndex((prevIndex) => (prevIndex + 1) % images.length);
-        setIsTransitioning(false);
-      }, 500);
+      setCurrentImageIndex((prevIndex) => (prevIndex + 1) % images.length);
     }, 4000);
 
     return () => clearInterval(interval);
@@ -131,30 +135,72 @@ export function HeroLanding() {
           <CTAForm />
         </motion.div>
 
-        {/* Image */}
-        <motion.div
-          className="w-full max-w-4xl mx-auto self-end overflow-hidden rounded-lg shadow-xl"
-          initial={{ opacity: 0, y: 50 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 1.1 }}
-        >
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={currentImageIndex}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: isTransitioning ? 0 : 1 }}
-              transition={{ duration: 0.5 }}
+        {/* Images Layout */}
+        <div className="flex justify-between items-center w-full max-w-7xl mx-auto self-end space-x-4">
+          {/* LinkedIn Profile Image */}
+          <motion.div
+            className="w-2/5 rounded-lg shadow-xl"
+            initial={{ opacity: 0, x: -50 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5, delay: 1.1 }}
+          >
+            <Image
+              src="/images/linkedin-profile.png"
+              alt="LinkedIn Profile"
+              width={800}
+              height={600}
+              className="w-full h-auto rounded-lg"
+              style={{ maxWidth: '100%', height: 'auto' }}
+            />
+          </motion.div>
+
+          {/* Arrow in the middle */}
+          <motion.div
+            className="w-1/5 flex items-center justify-center"
+            initial={{ opacity: 0, scale: 0.5 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5, delay: 1.3 }}
+          >
+            <Image
+              src="/images/hand-drawn-arrow.jpg"
+              alt="Hand-drawn arrow"
+              width={200}
+              height={200}
+              className="w-3/4 h-auto"
+              style={{ maxWidth: '100%', height: 'auto' }}
+            />
+          </motion.div>
+
+          {/* Template Slideshow */}
+          <motion.div
+            className="w-2/5 rounded-lg shadow-xl"
+            initial={{ opacity: 0, x: 50 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5, delay: 1.1 }}
+          >
+            <Carousel
+              opts={{
+                align: 'start',
+                loop: true,
+              }}
             >
-              <Image
-                src={images[currentImageIndex]}
-                alt="Template preview"
-                width={800}
-                height={400}
-                className="w-full rounded-lg"
-              />
-            </motion.div>
-          </AnimatePresence>
-        </motion.div>
+              <CarouselContent>
+                {images.map((image, index) => (
+                  <CarouselItem key={index}>
+                    <Image
+                      src={image}
+                      alt={`Template preview ${index + 1}`}
+                      width={800}
+                      height={600}
+                      className="rounded-lg"
+                      style={{ maxWidth: '100%', height: 'auto' }}
+                    />
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+            </Carousel>
+          </motion.div>
+        </div>
       </div>
     </section>
   );
