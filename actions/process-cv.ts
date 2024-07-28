@@ -1,44 +1,34 @@
 // actions/process-cv.ts
 'use server';
 
-import { prisma } from '@/lib/db';
 import { LinkedInProfile } from '@/types/linkedin';
 import PDFParser from 'pdf2json';
 import { Buffer } from 'buffer';
-import { z } from 'zod';
 import { generateObject } from 'ai';
 import { anthropic } from '@ai-sdk/anthropic';
 
-const LinkedInProfileSchema = z.object({
-  firstName: z.string(),
-  lastName: z.string(),
-  photoUrl: z.string(),
-  title: z.string(),
-  description: z.string(),
-  linkedInUrl: z.string(),
-  certifications: z.array(z.string()),
-  workExperiences: z.array(
-    z.object({
-      company: z.string(),
-      position: z.string(),
-      duration: z.string(),
-    })
-  ),
-  recommendations: z.array(
-    z.object({
-      author: z.string(),
-      text: z.string(),
-    })
-  ),
-  education: z.array(
-    z.object({
-      institution: z.string(),
-      degree: z.string(),
-      year: z.string(),
-    })
-  ),
-  skills: z.array(z.string()),
-});
+import { createOpenAI } from '@ai-sdk/openai';
+import { AILinkedInProfileSchema } from '@/lib/validations/linkedin-profile';
+
+function getModel() {
+  const groqAPIKey = process.env.GROQ_API_KEY;
+  const anthropicAPIKey = process.env.ANTHROPIC_API_KEY;
+
+  const anthropicModel = anthropic('claude-3-sonnet-20240229');
+
+  if (groqAPIKey) {
+    const groqModel = createOpenAI({
+      baseURL: 'https://api.groq.com/openai/v1',
+      apiKey: groqAPIKey,
+    });
+
+    console.log('Using Groq model');
+    return groqModel('llama3-groq-70b-8192-tool-use-preview');
+  } else {
+    console.log('Using Anthropic model');
+    return anthropicModel;
+  }
+}
 
 export async function processCV(
   formData: FormData
@@ -64,6 +54,8 @@ export async function processCV(
     // Call Claude API for processing
     const aiResponse = await callClaudeAPI(fileContent, email);
 
+    console.log(aiResponse);
+
     return { success: true, data: aiResponse };
   } catch (error) {
     console.error('Error processing CV:', error);
@@ -71,24 +63,24 @@ export async function processCV(
   }
 }
 
-async function storeFileInSupabase(file: File, email: string) {
-  const buffer = await file.arrayBuffer();
-  const fileData = Buffer.from(buffer);
+// async function storeFileInSupabase(file: File, email: string) {
+//   const buffer = await file.arrayBuffer();
+//   const fileData = Buffer.from(buffer);
 
-  try {
-    const result = await prisma.cV.create({
-      data: {
-        email,
-        filedata: fileData,
-      },
-    });
+//   try {
+//     const result = await prisma.cV.create({
+//       data: {
+//         email,
+//         filedata: fileData,
+//       },
+//     });
 
-    return result;
-  } catch (error) {
-    console.error('Error storing file in Supabase:', error);
-    return null;
-  }
-}
+//     return result;
+//   } catch (error) {
+//     console.error('Error storing file in Supabase:', error);
+//     return null;
+//   }
+// }
 
 async function readPDFContent(file: File): Promise<string> {
   const fileBuffer = Buffer.from(await file.arrayBuffer());
@@ -114,13 +106,13 @@ async function callClaudeAPI(
   fileContent: string,
   email: string
 ): Promise<LinkedInProfile> {
-  const model = anthropic('claude-3-sonnet-20240229');
+  const model = getModel();
 
   try {
     const { object } = await generateObject({
       model,
-      schema: LinkedInProfileSchema,
-      prompt: `Parse the following CV text and generate a LinkedIn profile for the email ${email}:\n\n${fileContent}`,
+      schema: AILinkedInProfileSchema,
+      prompt: `As a professional resume analyzer, your primary objective is to fully comprehend the user's query of a CV resume and extract information in a structured format. Infer from the text provide a description, title, and everything. Don't miss out any details. Let the photo url be '/images/portraits/man_1.jpeg'\n\n${fileContent}.`,
     });
 
     return object as LinkedInProfile;
