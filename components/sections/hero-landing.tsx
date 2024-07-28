@@ -13,8 +13,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from '@/components/ui/carousel';
-import Autoplay from "embla-carousel-autoplay"
-
+import Autoplay from 'embla-carousel-autoplay';
 
 const wordVariants = {
   hidden: { opacity: 0, x: -20 },
@@ -136,10 +135,10 @@ export function HeroLanding() {
         </motion.div>
 
         {/* Images Layout */}
-        <div className="flex justify-between items-center w-full max-w-7xl mx-auto self-end space-x-4">
+        <div className="flex justify-between items-center w-full space-x-4">
           {/* LinkedIn Profile Image */}
           <motion.div
-            className="w-2/5 rounded-lg shadow-xl"
+            className="rounded-lg shadow-xl"
             initial={{ opacity: 0, x: -50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5, delay: 1.1 }}
@@ -149,14 +148,13 @@ export function HeroLanding() {
               alt="LinkedIn Profile"
               width={800}
               height={600}
-              className="w-full h-auto rounded-lg"
-              style={{ maxWidth: '100%', height: 'auto' }}
+              className="w-full h-full rounded-lg"
             />
           </motion.div>
 
           {/* Arrow in the middle */}
           <motion.div
-            className="w-1/5 flex items-center justify-center"
+            className="flex items-center justify-center"
             initial={{ opacity: 0, scale: 0.5 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5, delay: 1.3 }}
@@ -166,42 +164,51 @@ export function HeroLanding() {
               alt="Hand-drawn arrow"
               width={200}
               height={200}
-              className="w-3/4 h-auto"
-              style={{ maxWidth: '100%', height: 'auto' }}
             />
           </motion.div>
 
           {/* Template Slideshow */}
-          <motion.div
-            className="w-2/5 rounded-lg shadow-xl"
-            initial={{ opacity: 0, x: 50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5, delay: 1.1 }}
-          >
-            <Carousel
-              opts={{
-                align: 'start',
-                loop: true,
-              }}
-            >
-              <CarouselContent>
-                {images.map((image, index) => (
-                  <CarouselItem key={index}>
-                    <Image
-                      src={image}
-                      alt={`Template preview ${index + 1}`}
-                      width={800}
-                      height={600}
-                      className="rounded-lg"
-                      style={{ maxWidth: '100%', height: 'auto' }}
-                    />
-                  </CarouselItem>
-                ))}
-              </CarouselContent>
-            </Carousel>
-          </motion.div>
+
+          <CarouselComponent images={images} />
         </div>
       </div>
     </section>
   );
 }
+
+const CarouselComponent = ({ images }: { images: string[] }) => {
+  return (
+    <motion.div
+      className="rounded-lg shadow-xl"
+      initial={{ opacity: 0, x: 50 }}
+      animate={{ opacity: 1, x: 0 }}
+      transition={{ duration: 0.5, delay: 1.1 }}
+    >
+      <Carousel
+        plugins={[
+          Autoplay({
+            delay: 3500,
+          }),
+        ]}
+        opts={{
+          align: 'start',
+          loop: true,
+        }}
+      >
+        <CarouselContent>
+          {images.map((image, index) => (
+            <CarouselItem key={index}>
+              <Image
+                src={image}
+                alt={`Template preview ${index + 1}`}
+                width={800}
+                height={600}
+                className="rounded-lg"
+              />
+            </CarouselItem>
+          ))}
+        </CarouselContent>
+      </Carousel>
+    </motion.div>
+  );
+};
