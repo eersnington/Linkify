@@ -2,9 +2,9 @@
 
 import axios from 'axios';
 import { env } from '@/env.mjs';
-import { LinkedInProfile } from '@/types/linkedin';
 import { ctaFormSchema } from '@/lib/validations/user';
 import { sample_linkedin_response } from '@/lib/sample-response';
+import { LinkedInProfile } from '@prisma/client';
 
 const TEST_MODE = true;
 
@@ -82,7 +82,7 @@ const processLinkedInData = (response: any) => {
   const certifications = response.certifications?.certificationHistory?.map(
     (cert: any) => ({
       name: cert.name,
-      degree: cert.name,
+      organization: cert.organizationName,
       date: cert.issuedDate,
     })
   ) || [defaultData];
@@ -96,18 +96,18 @@ const processLinkedInData = (response: any) => {
     })
   ) || [defaultData];
 
-  const recommendations =
-    response.recommendations?.recommendationHistory?.length > 0
-      ? response.recommendations.recommendationHistory
-      : [
-          {
-            recommendation: 'N/A',
-            recommendationDate: { month: 1, year: 2000 },
-            recommenderFirstName: 'N/A',
-            recommenderLastName: 'N/A',
-            recommenderTitle: 'N/A',
-          },
-        ];
+  // const recommendations =
+  //   response.recommendations?.recommendationHistory?.length > 0
+  //     ? response.recommendations.recommendationHistory
+  //     : [
+  //         {
+  //           recommendation: 'N/A',
+  //           recommendationDate: { month: 1, year: 2000 },
+  //           recommenderFirstName: 'N/A',
+  //           recommenderLastName: 'N/A',
+  //           recommenderTitle: 'N/A',
+  //         },
+  //       ];
 
   const education = response.schools?.educationHistory?.map((edu: any) => ({
     name: edu.schoolName,
@@ -126,7 +126,7 @@ const processLinkedInData = (response: any) => {
     linkedInUrl,
     certifications,
     workExperiences,
-    recommendations,
+    // recommendations,
     education,
     skills,
   };
@@ -155,12 +155,14 @@ export async function fetchLinkedInProfile(data: FormData) {
     linkedInUrl,
     certifications,
     workExperiences,
-    recommendations,
+    // recommendations,
     education,
     skills,
   } = processLinkedInData(response); // sample_linkedin_response || response;
 
   const linkedInProfile: LinkedInProfile = {
+    id: 'anonymous',
+    userEmail: email,
     firstName,
     lastName,
     photoUrl,
@@ -169,7 +171,7 @@ export async function fetchLinkedInProfile(data: FormData) {
     linkedInUrl,
     certifications,
     workExperiences,
-    recommendations,
+    // recommendations,
     education,
     skills,
   };
