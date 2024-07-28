@@ -39,18 +39,19 @@ model LinkedInProfile {
   userEmail         String  @unique @map(name: "user_email")
   user User @relation(fields: [userEmail], references: [email], onDelete: Cascade)
 
-  fullName          String
+  firstName          String
+  lastName           String
   title             String
   description       String
 
   linkedInUrl       String
   photoUrl          String
 
-  certifications    Json
-  workExperiences   Json
-  recommendations   Json
+  certifications    Json[]
+  workExperiences   Json[]
+  // recommendations   Json[]
 
-  education         Json
+  education         Json[]
   skills            String[]
 
   @@map(name: "linkedin_profiles")
@@ -68,10 +69,4 @@ model Website {
   updatedAt  DateTime @updatedAt
 
   @@map(name: "website")
-}
-
-model CV {
-  email    String @id
-  filedata Bytes
-  createdAt DateTime @default(now())
 }
