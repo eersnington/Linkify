@@ -12,7 +12,7 @@ import { LinkedInLogoIcon } from '@radix-ui/react-icons';
 
 export default function Loading() {
   return (
-    <div className="flex flex-col items-center justify-center space-y-12 px-4 text-center">
+    <div className="flex flex-col h-screen items-center justify-center space-y-12 px-4 text-center">
       <div className="w-full max-w-md">
         <Card className="mx-auto w-full max-w-md border-2 border-purple-700 drop-shadow-xl">
           <CardHeader className="text-purple-950">
