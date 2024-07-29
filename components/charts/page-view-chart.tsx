@@ -16,15 +16,21 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from '@/components/ui/chart';
+import { format, subDays } from 'date-fns';
 
-const chartData = [
-  { month: 'January', pageViews: 246 },
-  { month: 'February', pageViews: 185 },
-  { month: 'March', pageViews: 56 },
-  { month: 'April', pageViews: 178 },
-  { month: 'May', pageViews: 247 },
-  { month: 'June', pageViews: 431 },
-];
+// Function to generate the last 7 days dynamically
+const getLast7Days = () => {
+  const today = new Date();
+  return Array.from({ length: 7 }, (_, i) => {
+    const date = subDays(today, i);
+    return format(date, 'MMM dd'); // Abbreviated month and day
+  }).reverse();
+};
+
+const chartData = getLast7Days().map((date, index) => ({
+  day: date,
+  pageViews: [154, 185, 191, 178, 247, 230, 340][index], // Example data; keep views the same
+}));
 
 const chartConfig = {
   pageViews: {
@@ -37,9 +43,9 @@ export function PageViewsChart() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Page Views Over Time</CardTitle>
+        <CardTitle>Page Views Over the Last 7 Days</CardTitle>
         <CardDescription>
-          Showing total page views for the last 6 months
+          Showing total page views for the last 7 days
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -51,11 +57,12 @@ export function PageViewsChart() {
           >
             <CartesianGrid vertical={false} />
             <XAxis
-              dataKey="month"
+              dataKey="day"
               tickLine={false}
               axisLine={false}
               tickMargin={8}
-              tickFormatter={(value) => value.slice(0, 3)}
+              tickFormatter={(value) => value} // Show full date
+              interval={0} // Ensure all ticks are shown
             />
             <ChartTooltip
               cursor={false}
@@ -78,7 +85,7 @@ export function PageViewsChart() {
               Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
             </div>
             <div className="flex items-center gap-2 leading-none text-muted-foreground">
-              January - June 2024
+              Last 7 Days
             </div>
           </div>
         </div>

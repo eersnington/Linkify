@@ -12,6 +12,7 @@ import { Icons } from '../shared/icons';
 import { MainNav } from './main-nav';
 import { UserAccountNav } from './user-account-nav';
 import { UpgradeButton } from '../upgrade-button';
+import { Sparkles } from 'lucide-react';
 
 interface NavBarProps {
   items?: MainNavItem[];
@@ -52,7 +53,14 @@ export function NavBar({
 
           {isSignedIn ? (
             <>
-              {!isPaid && <UpgradeButton />}
+              {!isPaid ? (
+                <UpgradeButton />
+              ) : (
+                <Button className={'bg-gradient_indigo-purple'}>
+                  <Sparkles className="text-yellow-500 h-4 w-4 mr-2" />
+                  Premium Member
+                </Button>
+              )}
               <UserAccountNav user={userObj} />
             </>
           ) : (

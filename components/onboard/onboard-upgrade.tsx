@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useTransition } from 'react';
 import { motion, useAnimation } from 'framer-motion';
 import { ArrowRight, Check, Loader2, Star } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -26,6 +26,8 @@ import { Label } from '../ui/label';
 import Logo from '../shared/logo';
 import { pricingData } from '@/config/subscriptions';
 import { DialogDescription } from '@radix-ui/react-dialog';
+import { generateUserStripe } from '@/actions/generate-user-stripe';
+import { generateStripeCheckoutForUnsignedUser } from '@/actions/onboard-checkout';
 
 const features = [
   'Your own custom domain (e.g., yourname.com)',
@@ -42,6 +44,7 @@ export default function UpgradeCards({
   emailAddress: string;
 }) {
   const [isOpen, setIsOpen] = useState(false);
+  const [upgrading, setUpgrading] = useState(false);
   const router = useRouter();
   const { linkedInProfile } = useLinkedInData();
   const controls = useAnimation();
@@ -59,6 +62,36 @@ export default function UpgradeCards({
   }
 
   const { firstName, lastName } = linkedInProfile;
+
+  const handleUpgradeClick = async () => {
+    setUpgrading(true);
+    const priceId = pricingData[1].stripeIds.yearly;
+
+    if (!priceId) {
+      throw new Error('Price ID is required');
+    }
+
+    try {
+      const result = await generateStripeCheckoutForUnsignedUser(
+        emailAddress,
+        firstName,
+        lastName,
+        priceId
+      );
+      if (result.status === 'success' && result.stripeUrl) {
+        window.location.href = result.stripeUrl;
+      } else {
+        // Handle error
+        console.error('Failed to create Stripe checkout session');
+        setIsOpen(true); // Open the dialog to show an error message
+      }
+    } catch (error) {
+      console.error('Error during upgrade process:', error);
+      setIsOpen(true); // Open the dialog to show an error message
+    } finally {
+      setUpgrading(false);
+    }
+  };
 
   return (
     <div className="min-h-screen w-full bg-gray-50 p-8 flex items-center justify-center">
@@ -143,19 +176,24 @@ export default function UpgradeCards({
                 <DialogTrigger asChild>
                   <Button
                     className="bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-2 px-6 rounded-lg shadow-md transform transition duration-300 hover:scale-105"
-                    onClick={() => {
-                      router.push(
-                        `/signup?email=${emailAddress}&firstName=${firstName}&lastName=${lastName}&redirect=billing`
-                      );
-                    }}
+                    onClick={handleUpgradeClick}
+                    disabled={upgrading}
                   >
-                    Upgrade Now & Boost Your Career{' '}
-                    <ArrowRight className="ml-2" />
+                    {upgrading ? (
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    ) : (
+                      <>
+                        Upgrade Now & Boost Your Career{' '}
+                        <ArrowRight className="ml-2" />
+                      </>
+                    )}
                   </Button>
                 </DialogTrigger>
                 <DialogContent>
                   <DialogHeader>
-                    <DialogTitle>Sign Up to Complete your Upgrade</DialogTitle>
+                    <DialogTitle>
+                      Creating a Session for your Upgrade
+                    </DialogTitle>
                     <DialogDescription>
                       <motion.div
                         animate={{
