@@ -46,16 +46,22 @@ export default async function UserPage({
   });
 
   if (!website) {
+    console.log('Website not found');
     notFound();
   }
+
+  console.log("website found")
 
   const linkedinProfile = await prisma.linkedInProfile.findUnique({
     where: { userEmail: website.userEmail },
   });
 
   if (!linkedinProfile) {
+    console.log('LinkedIn profile not found');
     notFound();
   }
+
+  
 
   return (
     <ThemeTemplateProvider>
