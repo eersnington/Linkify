@@ -57,16 +57,33 @@ model LinkedInProfile {
   @@map(name: "linkedin_profiles")
 }
 
+model PageView {
+  id         String   @id @default(cuid())
+  page       String
+  referrer   String
+  userAgent  String
+  country    String
+  timestamp  DateTime @default(now())
+
+  website    Website  @relation(fields: [websiteId], references: [id], onDelete: Cascade)
+  websiteId  String
+
+  @@index([websiteId])
+  @@map(name: "page_view")
+}
+
 model Website {
   id         String   @id @default(cuid())
-  userEmail     String @unique @map(name: "user_email")
-  firstName     String? @default("")
-  user User @relation(fields: [userEmail], references: [email], onDelete: Cascade)
+  userEmail  String   @unique @map(name: "user_email")
+  firstName  String?  @default("")
+  user       User     @relation(fields: [userEmail], references: [email], onDelete: Cascade)
 
   domainName String   @unique
   template   Int
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
+
+  pageViews  PageView[]
 
   @@map(name: "website")
 }
