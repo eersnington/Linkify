@@ -6,7 +6,7 @@ import { ctaFormSchema } from '@/lib/validations/user';
 import { sample_linkedin_response } from '@/lib/sample-response';
 import { LinkedInProfile } from '@prisma/client';
 
-const TEST_MODE = true;
+const TEST_MODE = false;
 
 export type FormData = {
   email: string;

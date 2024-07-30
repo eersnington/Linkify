@@ -15,6 +15,7 @@ import {
 } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import Link from 'next/link';
+import UploadCVButton from '@/components/upload-cv-button';
 
 export const metadata: Metadata = {
   title: 'Onboard',
@@ -60,13 +61,14 @@ export default async function OnboardPage({
             </div>
           </CardContent>
           <CardFooter>
-            <div className="flex w-full justify-center gap-14">
+            <div className="flex flex-col w-full justify-center gap-2">
               <Link
                 href={'/'}
                 className="bg-yellow-500 rounded-lg text-base hover:bg-purple-700 text-white px-4 py-2 font-bold"
               >
                 {'Try Again?'}
               </Link>
+              <UploadCVButton email={email} />
             </div>
           </CardFooter>
         </Card>

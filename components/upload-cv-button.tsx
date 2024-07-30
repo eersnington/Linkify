@@ -3,14 +3,20 @@ import { processCV } from '@/actions/process-cv';
 import { useLinkedInData } from '@/context/linkedin-data-context';
 import { useUser } from '@clerk/nextjs';
 import { useState } from 'react';
-import { Label } from './ui/label';
+import { useRouter } from 'next/navigation';
 import { Upload } from 'lucide-react';
 
-export default function UploadCVButton() {
+interface Props {
+  email?: string;
+}
+
+export default function UploadCVButton({ email }: Props) {
   const [isProcessing, setIsProcessing] = useState(false);
   const { updateLinkedInProfile } = useLinkedInData();
+  const router = useRouter();
 
   const { user } = useUser();
+  const userEmail = email || user?.emailAddresses[0].emailAddress;
 
   const handleCVUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -18,7 +24,7 @@ export default function UploadCVButton() {
       setIsProcessing(true);
       const formData = new FormData();
       formData.append('cv', file);
-      formData.append('email', user?.emailAddresses[0].emailAddress || '');
+      formData.append('email', userEmail || '');
 
       console.log('Uploading CV...');
 
@@ -34,6 +40,9 @@ export default function UploadCVButton() {
           };
           console.log('Data saved');
           updateLinkedInProfile(cvProfile);
+          if (email) {
+            router.push('/onboard/mypage?email=' + email);
+          }
         } else {
           // Handle error
           console.error(result.error);
