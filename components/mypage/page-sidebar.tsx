@@ -37,6 +37,7 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 import { LinkedInProfileForm } from '../forms/linkedin-update-form';
+import UploadCVButton from '../upload-cv-button';
 
 interface PageSidebarProps {
   isUserPremium: boolean;
@@ -187,6 +188,7 @@ export function PageSidebar({ isUserPremium }: PageSidebarProps) {
               <TabsContent value="theme">{renderThemeCards()}</TabsContent>
               <TabsContent value="blocks">
                 <LinkedInProfileForm />
+                <UploadCVButton />
               </TabsContent>
             </div>
           </ScrollArea>
