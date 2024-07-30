@@ -117,7 +117,7 @@ export function PublishDialog({ email, selectedTemplate }: PublishDialogProps) {
             </DialogTitle>
             <DialogDescription className="font-mono text-sm">
               Choose a domain name for your page. It will be accessible at{' '}
-              <strong>linkify.com/your_domain</strong>
+              <strong>{`${url}/your_name`}</strong>
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
