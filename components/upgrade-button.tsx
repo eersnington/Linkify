@@ -14,8 +14,11 @@ import { Button, buttonVariants } from './ui/button';
 
 import { Sparkles, Crown, Zap } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 
 export function UpgradeButton() {
+  const [isClicked, setClicked] = useState(false);
+
   const router = useRouter();
   return (
     <Dialog>
@@ -70,9 +73,13 @@ export function UpgradeButton() {
           <Button
             type="submit"
             className="bg-purple-600 hover:bg-purple-700"
-            onClick={() => router.push('/dashboard/checkout')}
+            disabled={isClicked}
+            onClick={() => {
+              setClicked(true);
+              router.push('/dashboard/checkout');
+            }}
           >
-            Subscribe Now
+            {isClicked ? 'Processing...' : 'Upgrade Now'}
           </Button>
         </DialogFooter>
       </DialogContent>
