@@ -1,3 +1,4 @@
+// api/analytics/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
 
@@ -12,7 +13,7 @@ export async function POST(request: NextRequest) {
     country,
     userDomain,
   });
-
+ 
   try {
     const cleanedPage = page.startsWith('/') ? page.substring(1) : page;
 
