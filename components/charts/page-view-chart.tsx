@@ -1,7 +1,14 @@
 'use client';
 
 import * as React from 'react';
-import { Area, AreaChart, CartesianGrid, XAxis } from 'recharts';
+import {
+  Area,
+  AreaChart,
+  CartesianGrid,
+  XAxis,
+  YAxis,
+  ResponsiveContainer,
+} from 'recharts';
 import {
   Card,
   CardContent,
@@ -24,66 +31,132 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { useQuery } from 'react-query'; // Ensure react-query is installed
+import { getPageviews } from '@/actions/analytics-dashboard';
 
-const chartConfig = {
-  visitors: {
-    label: 'Visitors',
-  },
-  desktop: {
-    label: 'Desktop',
-    color: 'hsl(var(--chart-1))',
-  },
-  mobile: {
-    label: 'Mobile',
+interface PageView {
+  id: string;
+  page: string;
+  referrer: string;
+  userAgent: string;
+  country: string;
+  timestamp: Date;
+  websiteId: string;
+}
+
+const chartConfig: ChartConfig = {
+  pageViews: {
+    label: 'Page Views',
     color: 'hsl(var(--chart-2))',
   },
-} satisfies ChartConfig;
+};
 
-export function PageViewsChart() {
-  const [timeRange, setTimeRange] = React.useState('90d');
-  const { data, error, isLoading } = useQuery(
-    ['pageviews', '/your-page-path'],
-    () => fetchPageviews('/your-page-path')
-  );
+export function PageViewsChart({ path }: { path: string }) {
+  const [timeRange, setTimeRange] = React.useState('1d');
+  const [pageviewsData, setPageviewsData] = React.useState<
+    Array<{ date: string; count: number }>
+  >([]);
+  const [isLoading, setIsLoading] = React.useState(true);
+  const [error, setError] = React.useState<string | null>(null);
 
-  if (isLoading) return <p>Loading...</p>;
-  if (error) return <p>Error fetching pageviews: {error.message}</p>;
-
-  const pageviewsData = data ?? [];
-
-  const transformData = (data: any[]) => {
-    // Transform data to match chartData format
-    const dateCounts = data.reduce((acc: any, view: any) => {
-      const date = new Date(view.timestamp).toISOString().split('T')[0];
-      if (!acc[date]) {
-        acc[date] = { date, desktop: 0, mobile: 0 };
+  React.useEffect(() => {
+    async function fetchData() {
+      setIsLoading(true);
+      setError(null);
+      try {
+        const data = await getPageviews({ path });
+        const transformedData = transformData(data, timeRange);
+        setPageviewsData(transformedData);
+      } catch (err) {
+        setError('Failed to fetch pageviews');
+        console.error(err);
+      } finally {
+        setIsLoading(false);
       }
-      if (view.userAgent.includes('Mobile')) {
-        acc[date].mobile += 1;
+    }
+
+    fetchData();
+  }, [path, timeRange]);
+
+  const transformData = (
+    data: PageView[],
+    range: string
+  ): Array<{ date: string; count: number }> => {
+    const now = new Date();
+    let startDate = new Date(now);
+    let interval: 'hour' | 'day';
+
+    switch (range) {
+      case '1d':
+        startDate.setHours(now.getHours() - 24);
+        interval = 'hour';
+        break;
+      case '7d':
+        startDate.setDate(now.getDate() - 7);
+        interval = 'day';
+        break;
+      case '30d':
+      default:
+        startDate.setDate(now.getDate() - 30);
+        interval = 'day';
+        break;
+    }
+
+    const filteredData = data.filter(
+      (item) => new Date(item.timestamp) >= startDate
+    );
+
+    const groupedData: { [key: string]: { date: string; count: number } } = {};
+
+    // Initialize all intervals with 0 count
+    let current = new Date(startDate);
+    while (current <= now) {
+      const key =
+        interval === 'hour'
+          ? current.toISOString().slice(0, 13) + ':00:00.000Z' // Add time component for hours
+          : current.toISOString().split('T')[0];
+      groupedData[key] = { date: key, count: 0 };
+      if (interval === 'hour') {
+        current.setHours(current.getHours() + 1);
       } else {
-        acc[date].desktop += 1;
+        current.setDate(current.getDate() + 1);
       }
-      return acc;
-    }, {});
+    }
 
-    return Object.values(dateCounts);
+    // Count page views
+    filteredData.forEach((item) => {
+      const date = new Date(item.timestamp);
+      const key =
+        interval === 'hour'
+          ? date.toISOString().slice(0, 13) + ':00:00.000Z' // Add time component for hours
+          : date.toISOString().split('T')[0];
+      if (groupedData[key]) {
+        groupedData[key].count++;
+      }
+    });
+
+    return Object.values(groupedData).sort(
+      (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
+    );
   };
 
-  const transformedData = transformData(pageviewsData);
-
-  const filteredData = transformedData.filter((item) => {
-    const date = new Date(item.date);
-    const now = new Date();
-    let daysToSubtract = 90;
-    if (timeRange === '30d') {
-      daysToSubtract = 30;
-    } else if (timeRange === '7d') {
-      daysToSubtract = 7;
+  const formatXAxis = (tickItem: string): string => {
+    const date = new Date(tickItem);
+    switch (timeRange) {
+      case '1d':
+        return date.toLocaleTimeString([], {
+          hour: '2-digit',
+          minute: '2-digit',
+        });
+      case '7d':
+      case '30d':
+        return date.toLocaleDateString([], { month: 'short', day: 'numeric' });
+      default:
+        return tickItem;
     }
-    now.setDate(now.getDate() - daysToSubtract);
-    return date >= now;
-  });
+  };
+
+  if (isLoading) return <p>Loading...</p>;
+  if (error) return <p>Error fetching pageviews: {error}</p>;
 
   return (
     <Card>
@@ -95,19 +168,19 @@ export function PageViewsChart() {
         <Select value={timeRange} onValueChange={setTimeRange}>
           <SelectTrigger
             className="w-[160px] rounded-lg sm:ml-auto"
-            aria-label="Select a value"
+            aria-label="Select a time range"
           >
-            <SelectValue placeholder="Last 3 months" />
+            <SelectValue placeholder="Last 30 days" />
           </SelectTrigger>
           <SelectContent className="rounded-xl">
-            <SelectItem value="90d" className="rounded-lg">
-              Last 3 months
-            </SelectItem>
-            <SelectItem value="30d" className="rounded-lg">
-              Last 30 days
+            <SelectItem value="1d" className="rounded-lg">
+              Last 24 hours
             </SelectItem>
             <SelectItem value="7d" className="rounded-lg">
               Last 7 days
+            </SelectItem>
+            <SelectItem value="30d" className="rounded-lg">
+              Last 30 days
             </SelectItem>
           </SelectContent>
         </Select>
@@ -117,78 +190,55 @@ export function PageViewsChart() {
           config={chartConfig}
           className="aspect-auto h-[250px] w-full"
         >
-          <AreaChart data={filteredData}>
-            <defs>
-              <linearGradient id="fillDesktop" x1="0" y1="0" x2="0" y2="1">
-                <stop
-                  offset="5%"
-                  stopColor="var(--color-desktop)"
-                  stopOpacity={0.8}
-                />
-                <stop
-                  offset="95%"
-                  stopColor="var(--color-desktop)"
-                  stopOpacity={0.1}
-                />
-              </linearGradient>
-              <linearGradient id="fillMobile" x1="0" y1="0" x2="0" y2="1">
-                <stop
-                  offset="5%"
-                  stopColor="var(--color-mobile)"
-                  stopOpacity={0.8}
-                />
-                <stop
-                  offset="95%"
-                  stopColor="var(--color-mobile)"
-                  stopOpacity={0.1}
-                />
-              </linearGradient>
-            </defs>
-            <CartesianGrid vertical={false} />
-            <XAxis
-              dataKey="date"
-              tickLine={false}
-              axisLine={false}
-              tickMargin={8}
-              minTickGap={32}
-              tickFormatter={(value) => {
-                const date = new Date(value);
-                return date.toLocaleDateString('en-US', {
-                  month: 'short',
-                  day: 'numeric',
-                });
-              }}
-            />
-            <ChartTooltip
-              cursor={false}
-              content={
-                <ChartTooltipContent
-                  labelFormatter={(value) => {
-                    return new Date(value).toLocaleDateString('en-US', {
-                      month: 'short',
-                      day: 'numeric',
-                    });
-                  }}
-                  indicator="dot"
-                />
-              }
-            />
-            <Area
-              dataKey="mobile"
-              type="natural"
-              fill="url(#fillMobile)"
-              stroke="var(--color-mobile)"
-              stackId="a"
-            />
-            <Area
-              dataKey="desktop"
-              type="natural"
-              fill="url(#fillDesktop)"
-              stroke="var(--color-desktop)"
-              stackId="a"
-            />
-            <ChartLegend content={<ChartLegendContent />} />
-          </AreaChart>
+          <ResponsiveContainer width="100%" height="100%">
+            <AreaChart data={pageviewsData}>
+              <defs>
+                <linearGradient id="fillPageViews" x1="0" y1="0" x2="0" y2="1">
+                  <stop
+                    offset="5%"
+                    stopColor="var(--color-pageViews)"
+                    stopOpacity={0.8}
+                  />
+                  <stop
+                    offset="95%"
+                    stopColor="var(--color-pageViews)"
+                    stopOpacity={0.1}
+                  />
+                </linearGradient>
+              </defs>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis
+                dataKey="date"
+                tickFormatter={formatXAxis}
+                interval="preserveStartEnd"
+                minTickGap={30}
+              />
+              <YAxis />
+              <ChartTooltip
+                content={
+                  <ChartTooltipContent
+                    labelFormatter={(value) =>
+                      new Date(value).toLocaleString([], {
+                        month: 'short',
+                        day: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit',
+                      })
+                    }
+                  />
+                }
+              />
+
+              <Area
+                type="monotone"
+                dataKey="count"
+                stroke="var(--color-pageViews)"
+                fillOpacity={1}
+                fill="url(#fillPageViews)"
+              />
+              <ChartLegend content={<ChartLegendContent />} />
+            </AreaChart>
+          </ResponsiveContainer>
         </ChartContainer>
       </CardContent>
     </Card>
