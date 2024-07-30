@@ -22,6 +22,8 @@ import { toast } from '@/components/ui/use-toast';
 import { env } from '@/env.mjs';
 import { useSignupModal } from '@/hooks/use-signup-modal';
 import { BookCheck } from 'lucide-react';
+import { useLinkedInData } from '@/context/linkedin-data-context';
+import { updateLinkedInProfile } from '@/actions/update-linkedin';
 
 const url = env.NEXT_PUBLIC_APP_URL;
 
@@ -36,6 +38,7 @@ export function PublishDialog({ email, selectedTemplate }: PublishDialogProps) {
   const [showConfetti, setShowConfetti] = useState(false);
   const [open, setOpen] = useState(false);
   const signUpModal = useSignupModal();
+  const { linkedInProfile } = useLinkedInData();
 
   const { isSignedIn } = useUser(); // Use the useUser hook to get user info
   const router = useRouter();
@@ -49,6 +52,17 @@ export function PublishDialog({ email, selectedTemplate }: PublishDialogProps) {
     } else {
       setIsPublishing(true);
       try {
+        if (!linkedInProfile) {
+          toast({
+            title: 'Error',
+            description:
+              'You have no profile data. Please fetch your LinkedIn profile or upload your CV.',
+            variant: 'destructive',
+          });
+        } else {
+          await updateLinkedInProfile(email, linkedInProfile);
+        }
+
         const result = await publishWebsite(
           email,
           domainName,
