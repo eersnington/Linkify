@@ -5,6 +5,8 @@ import { notFound } from 'next/navigation';
 import UserPageContent from './_component/user-page-content';
 import { prisma } from '@/lib/db';
 import { ThemeTemplateProvider } from '@/context/editor-sidebar-context';
+import AnalyticsTracker from '@/components/analytics';
+import NotFoundScreen from '@/components/notfound';
 
 export async function generateMetadata({
   params,
@@ -47,10 +49,10 @@ export default async function UserPage({
 
   if (!website) {
     console.log('Website not found');
-    notFound();
+    return <NotFoundScreen />;
   }
 
-  console.log("website found")
+  console.log('website found');
 
   const linkedinProfile = await prisma.linkedInProfile.findUnique({
     where: { userEmail: website.userEmail },
@@ -58,13 +60,12 @@ export default async function UserPage({
 
   if (!linkedinProfile) {
     console.log('LinkedIn profile not found');
-    notFound();
+    return <NotFoundScreen />;
   }
-
-  
 
   return (
     <ThemeTemplateProvider>
+      <AnalyticsTracker />
       <UserPageContent
         profile={linkedinProfile}
         templateId={website.template}
