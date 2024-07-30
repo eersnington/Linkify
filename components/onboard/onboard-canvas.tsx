@@ -16,11 +16,16 @@ export function DemoCanvas() {
     return <div>LinkedIn profile not found</div>;
   }
 
+  const processsedProfile = {
+    ...linkedInProfile,
+    recommendations: [],
+  };
+
   return (
     <ScrollArea className="rounded-md p-4 shadow-lg">
       {SelectedTemplateComponent && (
-        <SelectedTemplateComponent profile={linkedInProfile} />
+        <SelectedTemplateComponent profile={processsedProfile} />
       )}
     </ScrollArea>
   );
-} 
+}

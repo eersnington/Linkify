@@ -29,10 +29,15 @@ export default async function OnboardPage({
     return redirect('/onboard/error?email=' + emailStr);
   }
 
+  const processedData = {
+    ...data,
+    recommendations: [],
+  };
+
   return (
     <div className="flex flex-col items-center justify-center space-y-12 px-4 text-center">
       <div className="w-full max-w-md">
-        <OnboardCard email={emailStr} profile={data} />
+        <OnboardCard email={emailStr} profile={processedData} />
       </div>
     </div>
   );

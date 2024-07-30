@@ -86,10 +86,15 @@ export function PageCanvas() {
 
   const SelectedTemplateComponent = templates[selectedTemplate]?.component;
 
+  const processsedProfile = {
+    ...linkedInProfile,
+    recommendations: [],
+  };
+
   return (
     <ScrollArea className="rounded-md p-4 shadow-lg">
       {SelectedTemplateComponent && (
-        <SelectedTemplateComponent profile={linkedInProfile} />
+        <SelectedTemplateComponent profile={processsedProfile} />
       )}
     </ScrollArea>
   );
