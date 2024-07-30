@@ -3,8 +3,6 @@ import { redirect } from 'next/navigation';
 import { DashboardHeader } from '@/components/dashboard/header';
 import { DashboardShell } from '@/components/dashboard/shell';
 import { PageViewsChart } from '@/components/charts/page-view-chart';
-import { TopCountriesChart } from '@/components/charts/top-countries-chart';
-import { TopPagesChart } from '@/components/charts/top-page-chart';
 import { prisma } from '@/lib/db';
 import Link from 'next/link';
 
