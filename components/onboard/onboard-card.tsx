@@ -152,7 +152,7 @@ const OnboardCard = ({
         }{' '}
         <Link
           href="/onboard/questions"
-          className="text-sm text-slate-600 hover:underline  my-4"
+          className="hidden text-sm text-slate-600 hover:underline my-4"
         >
           I don&apos;t have a LinkedIn account
         </Link>

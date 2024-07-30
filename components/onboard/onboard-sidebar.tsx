@@ -16,6 +16,12 @@ import { Label } from '@/components/ui/label';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { cn } from '@/lib/utils';
 import { Crown } from 'lucide-react';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
 
 interface DemoSidebarProps {
   email: string;
@@ -33,44 +39,58 @@ export function DemoSidebar({ email }: DemoSidebarProps) {
       <ScrollArea className="flex-grow">
         <div className="grid grid-cols-1 gap-4">
           {templates.map((template, index) => (
-            <Card
-              key={index}
-              className={`${template.isPremium ? 'opacity-50' : ''} overflow-hidden`}
-            >
-              <CardHeader className="p-4">
-                <div className="flex flex-row justify-between items-center">
-                  <CardTitle className="text-base">{template.name}</CardTitle>
-                  {template.isPremium && (
-                    <Badge className="text-xs px-2 py-0.5 bg-gradient-to-r from-yellow-400 to-amber-600">
-                      <Crown size={14} className="mr-2" /> Premium
-                    </Badge>
-                  )}
-                </div>
-              </CardHeader>
-              <CardContent className="p-4">
-                <div className="relative w-full pt-[56.25%]">
-                  <Image
-                    src={template.image}
-                    alt={template.name}
-                    layout="fill"
-                    objectFit="cover"
-                    className="rounded-lg shadow-lg"
-                  />
-                </div>
-              </CardContent>
-              <CardFooter className="p-4">
-                <Button
-                  className={cn('w-full text-sm py-2', {
-                    'bg-purple-500 text-white': selectedTemplate === index,
-                    'bg-purple-700 text-black': selectedTemplate !== index,
-                  })}
-                  disabled={template.isPremium}
-                  onClick={() => setSelectedTemplate(index)}
-                >
-                  {selectedTemplate === index ? 'Selected' : 'Select'}
-                </Button>
-              </CardFooter>
-            </Card>
+            <TooltipProvider key={index}>
+              <Tooltip>
+                <TooltipTrigger>
+                  <Card
+                    className={`${template.isPremium ? 'opacity-50' : ''} overflow-hidden cursor-pointer`}
+                  >
+                    <CardHeader className="p-4">
+                      <div className="flex flex-row justify-between items-center">
+                        <CardTitle className="text-base">
+                          {template.name}
+                        </CardTitle>
+                        {template.isPremium && (
+                          <Badge className="text-xs px-2 py-0.5 bg-gradient-to-r from-yellow-400 to-amber-600">
+                            <Crown size={14} className="mr-2" /> Premium
+                          </Badge>
+                        )}
+                      </div>
+                    </CardHeader>
+                    <CardContent className="p-4">
+                      <div className="relative w-full pt-[56.25%]">
+                        <Image
+                          src={template.image}
+                          alt={template.name}
+                          layout="fill"
+                          objectFit="cover"
+                          className="rounded-lg shadow-lg"
+                        />
+                      </div>
+                    </CardContent>
+                    <CardFooter className="p-4">
+                      <Button
+                        className={cn('w-full text-sm py-2', {
+                          'bg-purple-500 text-white':
+                            selectedTemplate === index,
+                          'bg-purple-700 text-black':
+                            selectedTemplate !== index,
+                        })}
+                        disabled={template.isPremium}
+                        onClick={() => setSelectedTemplate(index)}
+                      >
+                        {selectedTemplate === index ? 'Selected' : 'Select'}
+                      </Button>
+                    </CardFooter>
+                  </Card>
+                </TooltipTrigger>
+                {template.isPremium && (
+                  <TooltipContent>
+                    <p>This is a premium template.</p>
+                  </TooltipContent>
+                )}
+              </Tooltip>
+            </TooltipProvider>
           ))}
         </div>
       </ScrollArea>

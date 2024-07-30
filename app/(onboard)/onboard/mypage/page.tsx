@@ -4,8 +4,6 @@ export const maxDuration = 30;
 
 import { redirect } from 'next/navigation';
 
-
-import PageEditor from '@/components/mypage/page-editor';
 import OnboardEditor from '@/components/onboard/onboard-editor';
 
 export const metadata = {
