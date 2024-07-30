@@ -4,7 +4,6 @@
 import React from 'react';
 import { useThemeTemplate } from '@/context/editor-sidebar-context';
 import { LinkedInProfile } from '@prisma/client';
-import AnalyticsTracker from '@/components/analytics';
 
 interface UserPageContentProps {
   profile: LinkedInProfile;
@@ -24,7 +23,6 @@ export default function UserPageContent({
 
   return (
     <div className="min-h-screen w-full">
-      <AnalyticsTracker />
       <main className="w-full">
         <SelectedTemplateComponent
           profile={{
