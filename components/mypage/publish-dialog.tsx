@@ -5,6 +5,8 @@ import { useRouter } from 'next/navigation';
 import { publishWebsite } from '@/actions/publish-website';
 import { useUser } from '@clerk/nextjs';
 import Confetti from 'react-confetti';
+import { motion } from 'framer-motion';
+import { CheckCircle, BookCheck, ExternalLink } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -21,9 +23,9 @@ import { Label } from '@/components/ui/label';
 import { toast } from '@/components/ui/use-toast';
 import { env } from '@/env.mjs';
 import { useSignupModal } from '@/hooks/use-signup-modal';
-import { BookCheck } from 'lucide-react';
 import { useLinkedInData } from '@/context/linkedin-data-context';
 import { updateLinkedInProfile } from '@/actions/update-linkedin';
+import Link from 'next/link';
 
 const url = env.NEXT_PUBLIC_APP_URL;
 
@@ -37,16 +39,16 @@ export function PublishDialog({ email, selectedTemplate }: PublishDialogProps) {
   const [isPublishing, setIsPublishing] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
   const [open, setOpen] = useState(false);
+  const [successDialogOpen, setSuccessDialogOpen] = useState(false);
   const signUpModal = useSignupModal();
   const { linkedInProfile } = useLinkedInData();
 
-  const { isSignedIn } = useUser(); // Use the useUser hook to get user info
+  const { isSignedIn } = useUser();
   const router = useRouter();
 
   const handlePublish = async () => {
     if (!isSignedIn) {
       setOpen(false);
-
       signUpModal.onOpen();
       return;
     } else {
@@ -77,7 +79,8 @@ export function PublishDialog({ email, selectedTemplate }: PublishDialogProps) {
             description: `Link: ${url}/${domainName}`,
             className: 'bg-green-500 text-white font-mono',
           });
-          setTimeout(() => setShowConfetti(false), 7000); // Hide confetti after 5 seconds
+          setTimeout(() => setShowConfetti(false), 7000); // Hide confetti after 7 seconds
+          setSuccessDialogOpen(true); // Open the success dialog
         } else {
           toast({
             title: 'Error',
@@ -139,6 +142,42 @@ export function PublishDialog({ email, selectedTemplate }: PublishDialogProps) {
             >
               <BookCheck className="mr-2" />
               {isPublishing ? 'Publishing...' : 'Publish'}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Success Dialog */}
+      <Dialog open={successDialogOpen} onOpenChange={setSuccessDialogOpen}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ duration: 0.5 }}
+            >
+              <CheckCircle className="text-green-500 w-12 h-12 mx-auto" />
+            </motion.div>
+            <DialogTitle className="text-center text-xl font-bold">
+              Congratulations! 🎉
+            </DialogTitle>
+            <DialogDescription className="text-center font-mono text-sm">
+              Your domain <strong>{domainName}</strong> is now live at:
+              <br />
+              <Link
+                href={`${url}/${domainName}`}
+                className="text-blue-500 hover:underline flex items-center justify-center mt-2"
+              >
+                {url}/{domainName} <ExternalLink className="ml-1" />
+              </Link>
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button
+              onClick={() => setSuccessDialogOpen(false)}
+              className="bg-blue-500 text-white font-mono font-bold px-4 py-2 rounded-lg"
+            >
+              Close
             </Button>
           </DialogFooter>
         </DialogContent>
