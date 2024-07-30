@@ -12,6 +12,7 @@ import { DashboardShell } from '../dashboard/shell';
 import { PublishDialog } from './publish-dialog';
 import { PageCanvas } from './page-canvas';
 import { PageSidebar } from './page-sidebar';
+import { EnhanceContentButton } from '../ehance-button';
 
 interface PageEditorProps {
   isUserPremium: boolean;
@@ -53,6 +54,7 @@ export default function PageEditor({ isUserPremium }: PageEditorProps) {
                   <PageSidebar isUserPremium={isUserPremium} />
                 </SheetContent>
               </Sheet>
+              <EnhanceContentButton />
               <PublishDialog
                 email={email}
                 selectedTemplate={selectedTemplate}
