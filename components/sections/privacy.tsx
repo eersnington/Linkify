@@ -1,6 +1,6 @@
 'use client';
 import { cn } from '@/lib/utils';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { BentoGrid, BentoGridItem } from '../ui/bento-grid';
 import {
   IconBoxAlignRightFilled,
@@ -9,9 +9,9 @@ import {
   IconSignature,
   IconTableColumn,
 } from '@tabler/icons-react';
-import { motion } from 'framer-motion';
+import { motion, useMotionTemplate, useMotionValue } from 'framer-motion';
 import Image from 'next/image';
-import { CheckCircle } from 'lucide-react';
+import { CheckCircle, LockKeyhole, ShieldCheck } from 'lucide-react';
 import { LockClosedIcon } from '@radix-ui/react-icons';
 
 export function BentoPrivacy() {
@@ -80,67 +80,132 @@ const SkeletonOne = () => {
     },
   };
 
+  let mouseX = useMotionValue(0);
+  let mouseY = useMotionValue(0);
+
+  const [randomString, setRandomString] = useState('');
+
+  useEffect(() => {
+    let str = generateRandomString(1500);
+    setRandomString(str);
+  }, []);
+
+  function onMouseMove({ currentTarget, clientX, clientY }: any) {
+    let { left, top } = currentTarget.getBoundingClientRect();
+    mouseX.set(clientX - left);
+    mouseY.set(clientY - top);
+
+    const str = generateRandomString(1500);
+    setRandomString(str);
+  }
+
   return (
     <motion.div
       initial="initial"
       whileHover="animate"
       className="flex flex-1 w-full h-full min-h-[6rem] bg-purple-900/20 flex-col space-y-2"
     >
-      <motion.div
-        variants={variants}
-        className="flex flex-row rounded-full border border-purple-500/50 p-2 items-center space-x-2 bg-purple-950"
+      <div
+        onMouseMove={onMouseMove}
+        className="group/card relative flex items-center justify-center w-full h-full bg-transparent"
       >
-        <div className="h-6 w-6 rounded-full bg-gradient-to-r from-purple-400 to-purple-600 flex-shrink-0" />
-        <div className="w-full bg-purple-800 h-4 rounded-full" />
-      </motion.div>
-      <motion.div
-        variants={variantsSecond}
-        className="flex flex-row rounded-full border border-purple-500/50 p-2 items-center space-x-2 w-3/4 ml-auto bg-purple-950"
-      >
-        <div className="w-full bg-purple-800 h-4 rounded-full" />
-        <div className="h-6 w-6 rounded-full bg-gradient-to-r from-purple-400 to-purple-600 flex-shrink-0" />
-      </motion.div>
-      <motion.div
-        variants={variants}
-        className="flex flex-row rounded-full border border-purple-500/50 p-2 items-center space-x-2 bg-purple-950"
-      >
-        <div className="h-6 w-6 rounded-full bg-gradient-to-r from-purple-400 to-purple-600 flex-shrink-0" />
-        <div className="w-full bg-purple-800 h-4 rounded-full" />
-      </motion.div>
+        <CardPattern
+          mouseX={mouseX}
+          mouseY={mouseY}
+          randomString={randomString}
+        />
+        <div className="relative z-10 flex items-center justify-center">
+          <ShieldCheck className="w-24 h-24 text-purple-600 bg-purple-950 rounded-full p-4" />
+        </div>
+      </div>
     </motion.div>
   );
 };
 
+export function CardPattern({ mouseX, mouseY, randomString }: any) {
+  let maskImage = useMotionTemplate`radial-gradient(250px at ${mouseX}px ${mouseY}px, white, transparent)`;
+  let style = { maskImage, WebkitMaskImage: maskImage };
+
+  return (
+    <div className="pointer-events-none absolute inset-0">
+      <div className="absolute inset-0 rounded-2xl [mask-image:linear-gradient(white,transparent)] group-hover/card:opacity-50"></div>
+      <motion.div
+        className="absolute inset-0 rounded-2xl bg-gradient-to-r from-purple-400 to-purple-600 opacity-100 group-hover/card:opacity-100 backdrop-blur-xl transition duration-500"
+        style={style}
+      />
+      <motion.div
+        className="absolute inset-0 rounded-2xl opacity-100 mix-blend-overlay group-hover/card:opacity-100"
+        style={style}
+      >
+        <motion.p
+          className="absolute inset-x-0 text-xs h-full break-words whitespace-pre-wrap text-white font-mono font-bold transition duration-500 group-hover/card:bg-gradient-to-r group-hover/card:from-purple-400 group-hover/card:to-purple-600"
+          animate={{
+            x: [0, 10, -10, 0], // X-axis movement
+            y: [0, 10, -10, 0], // Y-axis movement
+          }}
+          transition={{
+            duration: 4,
+            ease: 'easeInOut',
+            repeat: Infinity,
+          }}
+        >
+          {randomString}
+        </motion.p>
+      </motion.div>
+    </div>
+  );
+}
+
+const characters =
+  'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+export const generateRandomString = (length: number) => {
+  let result = '';
+  for (let i = 0; i < length; i++) {
+    result += characters.charAt(Math.floor(Math.random() * characters.length));
+  }
+  return result;
+};
+
 const SkeletonTwo = () => {
-  const variants = {
-    initial: { width: 0 },
+  const circleVariants = {
+    initial: { scale: 0, opacity: 0 },
     animate: {
-      width: '100%',
-      transition: { duration: 0.2 },
-    },
-    hover: {
-      width: ['0%', '100%'],
-      transition: { duration: 2 },
+      scale: 1,
+      opacity: [0, 0.5, 0],
+      transition: {
+        repeat: Infinity,
+        duration: 4,
+        ease: 'easeInOut',
+      },
     },
   };
-  const arr = new Array(6).fill(0);
+
   return (
-    <motion.div
-      initial="initial"
-      animate="animate"
-      whileHover="hover"
-      className="flex flex-1 w-full h-full min-h-[6rem] bg-purple-900/20 flex-col space-y-2"
-    >
-      {arr.map((_, i) => (
+    <motion.div className="flex flex-1 w-full h-full min-h-[6rem] bg-purple-900/20 items-center justify-center relative overflow-hidden">
+      {[0, 1, 2, 3, 4].map((index) => (
         <motion.div
-          key={'skeleton-two' + i}
-          variants={variants}
+          key={index}
+          className="absolute rounded-full"
           style={{
-            maxWidth: Math.random() * (100 - 40) + 40 + '%',
+            width: `${20 + index * 20}%`,
+            height: `${20 + index * 20}%`,
+            background: 'linear-gradient(to right, #a855f7, #6366f1)',
           }}
-          className="flex flex-row rounded-full border border-purple-500/50 p-2 items-center space-x-2 bg-purple-800 w-full h-4"
-        ></motion.div>
+          variants={circleVariants}
+          initial="initial"
+          animate="animate"
+          transition={{
+            delay: index * 0.8,
+          }}
+        />
       ))}
+      <motion.div
+        className="relative z-10 bg-purple-950 p-4 rounded-full"
+        whileHover={{ scale: 1.1 }}
+        transition={{ type: 'spring', stiffness: 400, damping: 10 }}
+      >
+        <LockKeyhole className="w-14 h-14 text-purple-500" />
+      </motion.div>
     </motion.div>
   );
 };
