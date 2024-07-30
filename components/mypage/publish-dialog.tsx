@@ -166,6 +166,7 @@ export function PublishDialog({ email, selectedTemplate }: PublishDialogProps) {
               <br />
               <Link
                 href={`${url}/${domainName}`}
+                target="_blank"
                 className="text-blue-500 hover:underline flex items-center justify-center mt-2"
               >
                 {url}/{domainName} <ExternalLink className="ml-1" />
