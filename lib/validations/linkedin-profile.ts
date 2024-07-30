@@ -19,7 +19,7 @@ export const linkedInProfileFormSchema = z.object({
   lastName: z.string().min(1, 'Last name is required'),
   title: z.string().min(1, 'Title is required'),
   description: z.string().min(1, 'Description is required'),
-  photoUrl: z.string().url('Invalid URL'),
+  photoUrl: z.string(),
   workExperiences: z.array(workExperienceFormSchema),
   education: z.array(educationFormSchema),
 });
