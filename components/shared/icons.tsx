@@ -28,7 +28,8 @@ import {
   Trash,
   User,
   X,
-} from "lucide-react";
+  Link,
+} from 'lucide-react';
 
 export type Icon = LucideIcon;
 
@@ -80,6 +81,7 @@ export const Icons = {
   ),
   help: HelpCircle,
   laptop: Laptop,
+  link: Link,
   media: Image,
   moon: Moon,
   page: File,

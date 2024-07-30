@@ -23,19 +23,16 @@ async function searchDomain(domain: string): Promise<Domain | null> {
     const response = await axios.get('https://api.dynadot.com/api3.json', {
       params,
     });
-    console.log(
-      `API Response for ${domain}:`,
-      JSON.stringify(response.data, null, 2)
-    );
 
     if (
       response.data?.SearchResponse?.ResponseCode === '0' &&
       response.data.SearchResponse.SearchResults?.length > 0
     ) {
       const result = response.data.SearchResponse.SearchResults[0];
+
       return {
         name: result.DomainName,
-        available: result.Available.toLowerCase() === 'yes',
+        available: result.Available === 'yes',
         price: result.Price,
       };
     }
@@ -54,6 +51,17 @@ export async function getDomains(keyword: string) {
 
   if (!keyword) {
     return { error: 'Please enter a keyword' };
+  }
+
+  keyword = keyword.trim().toLowerCase();
+
+  const isValidKeyword = (keyword: string) => {
+    const regex = /^[a-z0-9]+(-[a-z0-9]+)*$/;
+    return regex.test(keyword);
+  };
+
+  if (!isValidKeyword(keyword)) {
+    return { error: 'Invalid keyword for a domain' };
   }
 
   const tlds = ['com', 'net', 'me', 'co.uk'];

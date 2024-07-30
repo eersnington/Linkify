@@ -1,4 +1,6 @@
-import { useState, useEffect } from 'react';
+'use client';
+
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { getDomains } from '@/actions/dynabot-api';
 import { Input } from './ui/input';
@@ -15,9 +17,11 @@ export default function DomainAvailability() {
   const [keyword, setKeyword] = useState('');
   const [domains, setDomains] = useState<Domain[]>([]);
   const [loading, setLoading] = useState(false);
+  const [searched, setSearched] = useState(false);
 
   const handleSearch = async () => {
     setLoading(true);
+    setSearched(false); // Reset the searched state before making a new search
     try {
       const { data, error } = await getDomains(keyword);
       if (error) {
@@ -29,6 +33,7 @@ export default function DomainAvailability() {
         });
       } else if (data) {
         setDomains(data);
+        setSearched(true); // Set searched to true after receiving the data
       }
     } catch (error) {
       // Handle unexpected errors gracefully
@@ -60,7 +65,7 @@ export default function DomainAvailability() {
             id="domain-search"
             value={keyword}
             onChange={(e) => setKeyword(e.target.value)}
-            placeholder="Enter a keyword"
+            placeholder="google"
             className="flex-grow"
           />
         </motion.div>
@@ -68,31 +73,49 @@ export default function DomainAvailability() {
           {loading ? 'Searching...' : 'Search'}
         </Button>
       </div>
-      {domains.length > 0 && (
-        <motion.div
-          className="mt-4"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-        >
-          <h3 className="text-lg font-bold">Available Domains:</h3>
-          <ul className="list-disc pl-5 mt-2">
-            {domains.map((domain) => (
-              <motion.li
-                key={domain.name}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-              >
-                <span>{domain.name}</span>
-                {domain.price && (
-                  <span className="ml-2 text-gray-500"> - {domain.price}</span>
-                )}
-              </motion.li>
-            ))}
-          </ul>
-        </motion.div>
-      )}
+      {searched &&
+        (domains.length > 0 ? (
+          <motion.div
+            className="mt-4"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            <h3 className="text-lg font-bold">Available Domains:</h3>
+            <ul className="list-disc pl-5 mt-2">
+              {domains.map((domain) => (
+                <motion.li
+                  key={domain.name}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                >
+                  <span>{domain.name}</span>
+                  {domain.available ? (
+                    <span className="ml-2 text-green-500 font-semibold">
+                      Available
+                    </span>
+                  ) : (
+                    <span className="ml-2 text-red-500 font-semibold">
+                      Taken
+                    </span>
+                  )}
+                </motion.li>
+              ))}
+            </ul>
+          </motion.div>
+        ) : (
+          <motion.div
+            className="mt-4"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            <h3 className="text-lg font-bold">
+              No domains available for {keyword}
+            </h3>
+          </motion.div>
+        ))}
     </motion.div>
   );
 }

@@ -41,7 +41,7 @@ export default async function SettingsPage() {
         heading="Domains"
         text="Purchase and connect your domain"
       />
-      <div className="grid gap-10">
+      <div className="grid gap-10 p-8">
         <DomainAvailability />
       </div>
     </DashboardShell>
