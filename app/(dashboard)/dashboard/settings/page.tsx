@@ -1,21 +1,21 @@
-import { redirect } from "next/navigation";
-import { currentUser } from "@clerk/nextjs/server";
+import { redirect } from 'next/navigation';
+import { currentUser } from '@clerk/nextjs/server';
 
-import { prisma } from "@/lib/db";
-import { DashboardHeader } from "@/components/dashboard/header";
-import { DashboardShell } from "@/components/dashboard/shell";
-import { UserNameForm } from "@/components/forms/user-name-form";
+import { prisma } from '@/lib/db';
+import { DashboardHeader } from '@/components/dashboard/header';
+import { DashboardShell } from '@/components/dashboard/shell';
+import { UserNameForm } from '@/components/forms/user-name-form';
 
 export const metadata = {
-  title: "Settings",
-  description: "Manage account and website settings.",
+  title: 'Settings',
+  description: 'Manage account and website settings.',
 };
 
 export default async function SettingsPage() {
   const user = await currentUser();
 
   if (!user) {
-    redirect("/login");
+    redirect('/login');
   }
 
   const userDb = await prisma.user.findFirst({
@@ -30,7 +30,7 @@ export default async function SettingsPage() {
   });
 
   if (!userDb) {
-    redirect("/login");
+    redirect('/login');
   }
 
   return (
