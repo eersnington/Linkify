@@ -38,9 +38,9 @@ export default async function OnboardPage({
     where: { email: email },
   });
 
-  if (existingUser) {
-    redirect('/onboard/error?email=' + email + '&err=exists');
-  }
+  // if (existingUser) {
+  //   redirect('/onboard/error?email=' + email + '&err=exists');
+  // }
 
   const emailStr = email;
   const formdata = { email: emailStr };
