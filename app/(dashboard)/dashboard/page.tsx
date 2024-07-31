@@ -22,7 +22,7 @@ export const metadata = {
   title: 'Dashboard',
 };
 
-const URL = env.NEXT_PUBLIC_URL;
+const URL = env.NEXT_PUBLIC_APP_URL;
 
 export default async function DashboardPage() {
   const user = await currentUser();
