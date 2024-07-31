@@ -10,7 +10,7 @@ interface Domain {
   price?: string;
 }
 
-const tlds = ['com', 'me', 'co.uk', 'dev', 'pro'];
+const tlds = ['com', 'me', 'co.uk', 'dev', 'pro', 'buzz'];
 
 async function searchDomain(domain: string): Promise<Domain | null> {
   const params = new URLSearchParams({
@@ -104,6 +104,8 @@ async function registerDomain(domain: string): Promise<boolean> {
     currency: 'USD',
   });
 
+  console.log(params);
+
   try {
     const response = await axios.get('https://api.dynadot.com/api3.json', {
       params,
@@ -169,17 +171,16 @@ export async function buyDomain(domain: string) {
 
   try {
     return {
+      // to disable buying domain
       error: 'Buying domain is disabled for now',
     };
-    // const isRegistered = await registerDomain(domain);
-    // if (!isRegistered) {
-    //   return { error: 'Failed to register domain' };
-    // }
 
-    // const isPrivacySet = await setDomainPrivacy(domain);
-    // if (!isPrivacySet) {
-    //   return { error: 'Failed to set domain privacy' };
-    // }
+    const isRegistered = await registerDomain(domain);
+    if (!isRegistered) {
+      return { error: 'Failed to register domain' };
+    }
+
+    await setTimeout(() => {}, 1000); // Wait for a second before setting privacy
 
     return {
       success: `Domain ${domain} registered and privacy set successfully`,

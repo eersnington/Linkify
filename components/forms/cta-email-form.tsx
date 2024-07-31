@@ -52,6 +52,7 @@ export function CTAForm() {
               <FormItem className="w-3/5">
                 <FormControl>
                   <Input
+                    disabled={true}
                     type="email"
                     className="h-16 rounded-lg border-4 bg-white px-4 text-xs md:text-lg text-purple-950 transition-colors duration-300 placeholder:text-purple-400 hover:border-purple-500 focus:outline-none focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0"
                     placeholder="Enter your LinkedIn email address"
