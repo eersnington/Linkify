@@ -3,6 +3,9 @@ import { fetchLinkedInProfile } from '@/actions/fetch-linkedin';
 import { currentUser } from '@clerk/nextjs/server';
 import OnboardCard from '@/components/onboard/onboard-card';
 import { redirect } from 'next/navigation';
+import { prisma } from '@/lib/db';
+
+export const maxDuration = 30;
 
 export const metadata: Metadata = {
   title: 'Onboard',
@@ -18,7 +21,28 @@ export default async function OnboardPage({
 }) {
   const { email } = searchParams;
   const user = await currentUser();
-  const emailStr = user?.emailAddresses[0].emailAddress || email;
+
+  if (user) {
+    redirect('/dashboard/mypage');
+  }
+
+  if (!email) {
+    redirect('/onboard/error?email=undefined');
+  }
+
+  if (typeof email !== 'string') {
+    redirect('/onboard/error?email=undefined');
+  }
+
+  const existingUser = await prisma.user.findFirst({
+    where: { email: email },
+  });
+
+  if (existingUser) {
+    redirect('/onboard/error?email=' + email + '&err=exists');
+  }
+
+  const emailStr = email;
   const formdata = { email: emailStr };
 
   const response = await fetchLinkedInProfile(formdata);

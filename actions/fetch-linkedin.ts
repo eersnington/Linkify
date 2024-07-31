@@ -65,7 +65,7 @@ const rapidAPICall = async (email: string, sample: boolean) => {
 
     return response;
   } catch (error) {
-    console.error('Error fetching LinkedIn profile:', error);
+    console.error('Catch: Error fetching LinkedIn profile:', error);
     return { status: 'error', message: 'Failed to fetch LinkedIn profile' };
   }
 };

@@ -27,9 +27,10 @@ export default async function OnboardPage({
 }: {
   searchParams: {
     email: string;
+    err?: string;
   };
 }) {
-  const { email } = searchParams;
+  const { email, err } = searchParams;
 
   const user = await currentUser();
 
@@ -54,9 +55,16 @@ export default async function OnboardPage({
           <CardContent>
             <div className="flex flex-col items-center justify-center space-y-4 ">
               <div className="space-y-2">
-                <Label className="text-lg  text-purple-950">
-                  We couldn&apos;t find a LinkedIn account associated to {email}
-                </Label>
+                {err === 'exists' ? (
+                  <Label className="text-lg  text-purple-950">
+                    An account is already associated to this email: {email}
+                  </Label>
+                ) : (
+                  <Label className="text-lg  text-purple-950">
+                    We couldn&apos;t find a LinkedIn account associated to{' '}
+                    {email}
+                  </Label>
+                )}
               </div>
             </div>
           </CardContent>
