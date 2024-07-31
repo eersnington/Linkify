@@ -10,6 +10,8 @@ interface Domain {
   price?: string;
 }
 
+const tlds = ['com', 'me', 'co.uk', 'dev', 'pro'];
+
 async function searchDomain(domain: string): Promise<Domain | null> {
   const params = new URLSearchParams({
     key: process.env.DYNADOT_API_KEY || '',
@@ -30,11 +32,13 @@ async function searchDomain(domain: string): Promise<Domain | null> {
     ) {
       const result = response.data.SearchResponse.SearchResults[0];
 
-      return {
+      const finalResponse = {
         name: result.DomainName,
         available: result.Available === 'yes',
         price: result.Price,
       };
+
+      return finalResponse;
     }
   } catch (error) {
     console.error(`Error searching for ${domain}:`, error);
@@ -64,7 +68,6 @@ export async function getDomains(keyword: string) {
     return { error: 'Invalid keyword for a domain' };
   }
 
-  const tlds = ['com', 'net', 'me', 'co.uk'];
   const domains = tlds.map((tld) => `${keyword}.${tld}`);
 
   try {
@@ -87,5 +90,100 @@ export async function getDomains(keyword: string) {
   } catch (error) {
     console.error('Error fetching domains:', error);
     return { error: 'Error fetching domains' };
+  }
+}
+
+async function registerDomain(domain: string): Promise<boolean> {
+  const params = new URLSearchParams({
+    key: process.env.DYNADOT_API_KEY || '',
+    command: 'register',
+    domain: domain,
+    duration: '1',
+    currency: 'USD',
+  });
+
+  try {
+    const response = await axios.get('https://api.dynadot.com/api3.json', {
+      params,
+    });
+
+    console.log(response.data);
+
+    if (response.data?.RegisterResponse?.ResponseCode === '0') {
+      return true;
+    }
+  } catch (error) {
+    console.error(`Error registering domain ${domain}:`, error);
+  }
+  return false;
+}
+
+async function setDomainPrivacy(domain: string): Promise<boolean> {
+  const params = new URLSearchParams({
+    key: process.env.DYNADOT_API_KEY || '',
+    command: 'set_privacy',
+    domain: domain,
+    option: 'on',
+  });
+
+  try {
+    const response = await axios.get('https://api.dynadot.com/api3.json', {
+      params,
+    });
+
+    console.log(response.data);
+
+    if (response.data?.SetPrivacyResponse?.ResponseCode === '0') {
+      return true;
+    }
+  } catch (error) {
+    console.error(`Error setting privacy for domain ${domain}:`, error);
+  }
+  return false;
+}
+
+export async function buyDomain(domain: string) {
+  const user = await currentUser();
+
+  if (!user) {
+    redirect('/login');
+  }
+
+  if (!domain) {
+    return { error: 'Please enter a domain name' };
+  }
+
+  domain = domain.trim().toLowerCase();
+
+  const isValidDomain = (domain: string) => {
+    const tldPattern = tlds.map((tld) => tld.replace('.', '\\.')).join('|');
+    const regex = new RegExp(`^[a-z0-9]+(-[a-z0-9]+)*\\.(${tldPattern})$`);
+    return regex.test(domain);
+  };
+
+  if (!isValidDomain(domain)) {
+    return { error: 'Invalid domain name or unsupported TLD' };
+  }
+
+  try {
+    return {
+      error: 'Buying domain is disabled for now',
+    };
+    // const isRegistered = await registerDomain(domain);
+    // if (!isRegistered) {
+    //   return { error: 'Failed to register domain' };
+    // }
+
+    // const isPrivacySet = await setDomainPrivacy(domain);
+    // if (!isPrivacySet) {
+    //   return { error: 'Failed to set domain privacy' };
+    // }
+
+    return {
+      success: `Domain ${domain} registered and privacy set successfully`,
+    };
+  } catch (error) {
+    console.error('Error buying domain:', error);
+    return { error: 'Error buying domain' };
   }
 }
