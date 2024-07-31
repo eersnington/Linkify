@@ -3,14 +3,13 @@ import { NextResponse } from 'next/server';
 
 export default clerkMiddleware((auth, req) => {
   const url = req.nextUrl;
-  console.log('url', url);
 
   // Get hostname of request (e.g. sree.linkifyme.pro, sree.localhost:3000)
   let hostname = req.headers
     .get('host')!
     .replace('.localhost:3000', `.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`);
 
-  console.log('hostname', hostname);
+  console.log('Middleware - Hostname', hostname);
 
   // special case for Vercel preview deployment URLs
   if (
@@ -28,14 +27,20 @@ export default clerkMiddleware((auth, req) => {
     searchParams.length > 0 ? `?${searchParams}` : ''
   }`;
 
-  console.log('Path: ', path);
+  console.log('Middleware - Path: ', path);
+
+  // // rewrites for api endpoints
+  // if (path.startsWith('/api')) {
+  //   console.log('Middleware - Rewriting to /api');
+  //   return NextResponse.next();
+  // }
 
   // rewrite root application to `/home` folder
   if (
     hostname === 'localhost:3000' ||
     hostname === process.env.NEXT_PUBLIC_ROOT_DOMAIN
   ) {
-    console.log('Rewriting to /home');
+    console.log('Middleware - Rewriting to /home');
     return NextResponse.rewrite(
       new URL(`/home${path === '/' ? '' : path}`, req.url)
     );

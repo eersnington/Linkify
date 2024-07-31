@@ -1,5 +1,6 @@
 'use server';
 
+import { prisma } from '@/lib/db';
 import { currentUser } from '@clerk/nextjs/server';
 import axios from 'axios';
 import { redirect } from 'next/navigation';
@@ -146,6 +147,36 @@ async function setDomainPrivacy(domain: string): Promise<boolean> {
   return false;
 }
 
+async function setARecord(
+  domain: string,
+  subdomain: string,
+  ipAddress: string
+): Promise<boolean> {
+  const params = new URLSearchParams({
+    key: process.env.DYNADOT_API_KEY || '',
+    command: 'set_dns2',
+    domain: domain,
+    subdomain0: subdomain,
+    sub_record_type0: 'a',
+    sub_record0: ipAddress,
+  });
+
+  try {
+    const response = await axios.get('https://api.dynadot.com/api3.json', {
+      params,
+    });
+
+    console.log(response.data);
+
+    if (response.data?.SetDnsResponse?.ResponseCode === 0) {
+      return true;
+    }
+  } catch (error) {
+    console.error(`Error setting A record for ${domain}:`, error);
+  }
+  return false;
+}
+
 export async function buyDomain(domain: string) {
   const user = await currentUser();
 
@@ -169,21 +200,35 @@ export async function buyDomain(domain: string) {
     return { error: 'Invalid domain name or unsupported TLD' };
   }
 
-  try {
-    return {
-      // to disable buying domain
-      error: 'Buying domain is disabled for now',
-    };
+  const userData = await prisma.user.findUnique({
+    where: { id: user.id },
+    select: { domain: true },
+  });
 
-    const isRegistered = await registerDomain(domain);
-    if (!isRegistered) {
-      return { error: 'Failed to register domain' };
-    }
+  if (userData?.domain) {
+    return { error: 'You already have a domain registered' };
+  }
+
+  try {
+    // return {
+    //   // to disable buying domain
+    //   error: 'Buying domain is disabled for now',
+    // };
+
+    // const isRegistered = await registerDomain(domain);
+    // if (!isRegistered) {
+    //   return { error: 'Failed to register domain' };
+    // }
 
     await setTimeout(() => {}, 1000); // Wait for a second before setting privacy
 
+    await prisma.user.update({
+      where: { id: user.id },
+      data: { domain },
+    });
+
     return {
-      success: `Domain ${domain} registered and privacy set successfully`,
+      success: `Domain ${domain} registered and set successfully`,
     };
   } catch (error) {
     console.error('Error buying domain:', error);

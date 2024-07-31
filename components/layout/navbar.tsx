@@ -7,8 +7,6 @@ import { useUser } from '@clerk/nextjs';
 import { cn } from '@/lib/utils';
 import useScroll from '@/hooks/use-scroll';
 import { Button, buttonVariants } from '@/components/ui/button';
-
-import { Icons } from '../shared/icons';
 import { MainNav } from './main-nav';
 import { UserAccountNav } from './user-account-nav';
 import { UpgradeButton } from '../upgrade-button';

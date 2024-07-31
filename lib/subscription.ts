@@ -20,11 +20,6 @@ export async function getUserSubscriptionPlan(
     },
   });
 
-  // user_2jxN8YAqmTPT8JYijrEWwecVti2
-  // user_2jxN8YAqmTPT8JYijrEWwecVti2
-
-  console.log('UserId:', userId);
-
   if (!user) {
     throw new Error('User not found');
   }
