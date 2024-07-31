@@ -48,7 +48,7 @@ export default async function DashboardPage() {
                 Website Performance{' '}
                 <Badge className="text-center items-center">
                   <Link
-                    href={`${URL}/${domainName}`}
+                    href={`/${domainName}`}
                     target="_blank"
                     className="text-white hover:underline flex items-center justify-center mt-2"
                   >
