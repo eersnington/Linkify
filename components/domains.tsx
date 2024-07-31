@@ -6,7 +6,17 @@ import { getDomains, buyDomain } from '@/actions/dynabot-api';
 import { toast } from '@/components/ui/use-toast';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
 import Confetti from 'react-confetti';
+import { ArrowRight } from 'lucide-react';
 
 interface Domain {
   name: string;
@@ -15,6 +25,7 @@ interface Domain {
 }
 
 export default function DomainAvailability() {
+  const [selectedDomain, setSelectedDomain] = useState<string | null>(null);
   const [showConfetti, setShowConfetti] = useState(false);
   const [keyword, setKeyword] = useState('');
   const [domains, setDomains] = useState<Domain[]>([]);
@@ -51,10 +62,48 @@ export default function DomainAvailability() {
     }
   };
 
-  const handleBuy = async (domain: string) => {
-    setBuying(domain);
+  // const handleBuy = async (domain: string) => {
+  //   setBuying(domain);
+  //   try {
+  //     const { success, error } = await buyDomain(domain);
+  //     if (error) {
+  //       toast({
+  //         title: 'Domain Purchase Error',
+  //         description: error,
+  //         variant: 'destructive',
+  //       });
+  //     } else if (success) {
+  //       setShowConfetti(true);
+  //       toast({
+  //         title: 'Domain Purchased 🚀',
+  //         description: `Domain ${domain} registered successfully.`,
+  //         className: 'bg-green-500',
+  //       });
+  //       setTimeout(() => setShowConfetti(false), 7000); // Hide confetti after 7 seconds
+
+  //       // Optionally, you can update the domain list or state here
+  //     }
+  //   } catch (error) {
+  //     console.error('Unexpected error:', error);
+  //     toast({
+  //       title: 'Domain Purchase Error',
+  //       description: 'An unexpected error occurred. Please try again.',
+  //       variant: 'destructive',
+  //     });
+  //   } finally {
+  //     setBuying(null);
+  //   }
+  // };
+  const handleBuy = (domain: string) => {
+    setSelectedDomain(domain);
+  };
+
+  const confirmPurchase = async () => {
+    if (!selectedDomain) return;
+
+    setBuying(selectedDomain);
     try {
-      const { success, error } = await buyDomain(domain);
+      const { success, error } = await buyDomain(selectedDomain);
       if (error) {
         toast({
           title: 'Domain Purchase Error',
@@ -65,12 +114,10 @@ export default function DomainAvailability() {
         setShowConfetti(true);
         toast({
           title: 'Domain Purchased 🚀',
-          description: `Domain ${domain} registered successfully.`,
+          description: `Domain ${selectedDomain} registered successfully.`,
           className: 'bg-green-500',
         });
-        setTimeout(() => setShowConfetti(false), 7000); // Hide confetti after 7 seconds
-
-        // Optionally, you can update the domain list or state here
+        setTimeout(() => setShowConfetti(false), 7000);
       }
     } catch (error) {
       console.error('Unexpected error:', error);
@@ -81,12 +128,50 @@ export default function DomainAvailability() {
       });
     } finally {
       setBuying(null);
+      setSelectedDomain(null);
     }
   };
 
   return (
     <>
       {showConfetti && <Confetti />}
+      <Dialog
+        open={!!selectedDomain}
+        onOpenChange={(open) => !open && setSelectedDomain(null)}
+      >
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Confirm Domain Selection</DialogTitle>
+            <DialogDescription>
+              You are about to purchase the domain{' '}
+              <strong>{selectedDomain}</strong>.
+            </DialogDescription>
+            <DialogDescription className="">
+              Please note: Once you select a domain, you&apos; no longer
+              eligible for a free domain for 1 year. Refunds are not available
+              for domain purchases.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="sm:justify-start">
+            <Button
+              type="button"
+              variant="secondary"
+              onClick={() => setSelectedDomain(null)}
+            >
+              Cancel
+            </Button>
+            <Button
+              type="button"
+              onClick={confirmPurchase}
+              disabled={buying === selectedDomain}
+              className="ml-4 bg-blue-500 text-white"
+            >
+              {buying === selectedDomain ? 'Purchasing...' : 'Confirm Purchase'}
+              <ArrowRight className="ml-2" />
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       <motion.div
         className="domain-availability mt-8 p-6 bg-white rounded-lg shadow-lg"
@@ -101,7 +186,7 @@ export default function DomainAvailability() {
               value={keyword}
               onChange={(e) => setKeyword(e.target.value)}
               placeholder="Enter domain name..."
-              className="rounded-lg border-2 border-gray-300 bg-white px-4 py-2 text-sm md:text-base text-purple-950 transition-colors duration-300 placeholder:text-purple-400 focus:border-purple-500 focus-visible:ring-0"
+              className="rounded-lg border-2 border-gray-300 bg-white px-4 py-2 text-sm md:text-base text-purple-950 transition-colors duration-300  focus-visible:ring-0"
             />
           </motion.div>
           <Button
@@ -141,10 +226,9 @@ export default function DomainAvailability() {
                           </span>
                           <Button
                             onClick={() => handleBuy(domain.name)}
-                            disabled={buying === domain.name}
                             className="ml-4 px-3 py-1 bg-green-700 text-white rounded hover:bg-green-800 transition-colors"
                           >
-                            {buying === domain.name ? 'Setting...' : 'Select'}
+                            Select
                           </Button>
                         </>
                       ) : (

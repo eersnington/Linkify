@@ -84,6 +84,8 @@ export async function getDomains(keyword: string) {
       return { error: 'No domains available' };
     }
 
+    console.log(availableDomains);
+
     return {
       data: availableDomains,
     };
