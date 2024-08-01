@@ -6,6 +6,7 @@ import { currentUser } from '@clerk/nextjs/server';
 import PageEditor from '@/components/mypage/page-editor';
 import { LinkedInDataProvider } from '@/context/linkedin-data-context';
 import { getUserSubscriptionPlan } from '@/lib/subscription';
+import { prisma } from '@/lib/db';
 
 export const metadata = {
   title: 'My Page',
@@ -21,10 +22,19 @@ export default async function MyPage() {
 
   const userSubscriptionPlan = await getUserSubscriptionPlan(user.id);
 
+  const linkedInProfile = await prisma.linkedInProfile.findFirst({
+    where: {
+      userEmail: user.emailAddresses[0].emailAddress,
+    },
+  });
+
   return (
     <LinkedInDataProvider>
       <div className="flex h-full flex-1 bg-purple-950 p-4">
-        <PageEditor isUserPremium={userSubscriptionPlan.isPaid} />
+        <PageEditor
+          isUserPremium={userSubscriptionPlan.isPaid}
+          profileData={linkedInProfile}
+        />
       </div>
     </LinkedInDataProvider>
   );

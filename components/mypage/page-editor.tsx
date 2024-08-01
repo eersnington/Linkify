@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useThemeTemplate } from '@/context/editor-sidebar-context';
 import { useUser } from '@clerk/nextjs';
 
@@ -13,18 +13,44 @@ import { PublishDialog } from './publish-dialog';
 import { PageCanvas } from './page-canvas';
 import { PageSidebar } from './page-sidebar';
 import { EnhanceContentButton } from '../ehance-button';
+import { LinkedInProfile } from '@prisma/client';
+import { useLinkedInData } from '@/context/linkedin-data-context';
 
 interface PageEditorProps {
   isUserPremium: boolean;
+  profileData: LinkedInProfile | null;
 }
 
-export default function PageEditor({ isUserPremium }: PageEditorProps) {
+export default function PageEditor({
+  isUserPremium,
+  profileData,
+}: PageEditorProps) {
   const [open, setOpen] = useState(false);
+  const { linkedInProfile, updateLinkedInProfile } = useLinkedInData();
 
   const { selectedTemplate } = useThemeTemplate();
   const { user } = useUser();
 
   const email = user?.emailAddresses[0].emailAddress || 'example@email.com';
+
+  useEffect(() => {
+    async function loadProfile() {
+      try {
+        if (!linkedInProfile && profileData) {
+          console.log('Updating LinkedIn profile with fetched data');
+          updateLinkedInProfile(profileData);
+          return;
+        }
+        console.log('LinkedIn Profile exists in Context');
+      } catch (err) {
+        console.error(
+          err instanceof Error ? err.message : 'An unknown error occurred'
+        );
+      }
+    }
+
+    loadProfile();
+  }, [profileData, linkedInProfile, updateLinkedInProfile]);
 
   return (
     <div className="flex h-full w-full">
