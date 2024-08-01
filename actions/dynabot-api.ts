@@ -322,18 +322,16 @@ export async function buyDomain(domain: string) {
     return { error: 'You already have a domain registered' };
   }
 
-  domain = 'sreenington.buzz'; // Hardcoded for testing
-
   try {
     // return {
     //   // to disable buying domain
     //   error: 'Buying domain is disabled for now',
     // };
 
-    // const isRegistered = await registerDomain(domain);
-    // if (!isRegistered) {
-    //   return { error: 'Failed to register domain' };
-    // }
+    const isRegistered = await registerDomain(domain);
+    if (!isRegistered) {
+      return { error: 'Failed to register domain' };
+    }
 
     const addedToVercel = await addDomainToVercel(domain);
 
