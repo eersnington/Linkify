@@ -3,10 +3,10 @@ import { currentUser } from '@clerk/nextjs/server';
 import { prisma } from '@/lib/db';
 import { DashboardHeader } from '@/components/dashboard/header';
 import { DashboardShell } from '@/components/dashboard/shell';
-import Link from 'next/link';
-import { Button } from '@/components/ui/button';
-import { siteConfig } from '@/config/site';
-import DomainAvailability from '@/components/domains';
+import {
+  DomainSearchAndPurchase,
+  DomainConfigStatus,
+} from '@/components/domains';
 
 export const metadata = {
   title: 'Domains',
@@ -24,11 +24,6 @@ export default async function SettingsPage() {
     where: {
       id: user.id,
     },
-    select: {
-      id: true,
-      firstName: true,
-      lastName: true,
-    },
   });
 
   if (!userDb) {
@@ -39,10 +34,18 @@ export default async function SettingsPage() {
     <DashboardShell>
       <DashboardHeader
         heading="Domains"
-        text="Purchase and connect your domain"
+        text={
+          userDb.domain
+            ? 'Manage your domain'
+            : 'Purchase and connect your domain'
+        }
       />
       <div className="grid gap-10 p-8">
-        <DomainAvailability />
+        {userDb.domain ? (
+          <DomainConfigStatus domain={userDb.domain} />
+        ) : (
+          <DomainSearchAndPurchase />
+        )}
       </div>
     </DashboardShell>
   );
