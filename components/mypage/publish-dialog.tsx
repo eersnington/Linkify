@@ -27,7 +27,8 @@ import { useLinkedInData } from '@/context/linkedin-data-context';
 import { updateLinkedInProfile } from '@/actions/update-linkedin';
 import Link from 'next/link';
 
-const url = env.NEXT_PUBLIC_APP_URL;
+const rootDomain = env.NEXT_PUBLIC_ROOT_DOMAIN;
+const protocol = rootDomain === 'localhost:3000' ? `http://` : `https://`;
 
 interface PublishDialogProps {
   email: string;
@@ -76,7 +77,7 @@ export function PublishDialog({ email, selectedTemplate }: PublishDialogProps) {
           setShowConfetti(true);
           toast({
             title: 'Your Page is Published 🎉🎉',
-            description: `Link: ${url}/${domainName}`,
+            description: `Link: ${protocol}${domainName}.${rootDomain}`,
             className: 'bg-green-500 text-white font-mono',
           });
           setTimeout(() => setShowConfetti(false), 7000); // Hide confetti after 7 seconds
@@ -117,7 +118,7 @@ export function PublishDialog({ email, selectedTemplate }: PublishDialogProps) {
             </DialogTitle>
             <DialogDescription className="font-mono text-sm">
               Choose a domain name for your page. It will be accessible at{' '}
-              <strong>{`${url}/your_name`}</strong>
+              <strong>{`your_name.${rootDomain}`}</strong>
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
@@ -162,14 +163,19 @@ export function PublishDialog({ email, selectedTemplate }: PublishDialogProps) {
               Congratulations! 🎉
             </DialogTitle>
             <DialogDescription className="text-center font-mono text-sm">
-              Your domain <strong>{domainName}</strong> is now live at:
+              Your domain{' '}
+              <strong>
+                {domainName}.{rootDomain}
+              </strong>{' '}
+              is now live at:
               <br />
               <Link
-                href={`${url}/${domainName}`}
+                href={`${protocol}${domainName}.${rootDomain}`}
                 target="_blank"
                 className="text-blue-500 hover:underline flex items-center justify-center mt-2"
               >
-                {url}/{domainName} <ExternalLink className="ml-1" />
+                {`${domainName}.${rootDomain}`}{' '}
+                <ExternalLink className="ml-1" />
               </Link>
             </DialogDescription>
           </DialogHeader>

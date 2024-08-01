@@ -27,7 +27,6 @@ export default function UserPageContent({
         <SelectedTemplateComponent
           profile={{
             ...profile,
-            recommendations: [{ id: 1, text: 'Great work!' }],
           }}
         />
       </main>

@@ -90,8 +90,6 @@ export function LinkedInProfileForm() {
         id: userId,
         userEmail: userEmail,
         linkedInUrl: linkedInProfile.linkedInUrl,
-        certifications: linkedInProfile.certifications,
-        // recommendations: linkedInProfile.recommendations,
         skills: linkedInProfile.skills,
         ...data,
       });

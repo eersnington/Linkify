@@ -18,9 +18,7 @@ export type LinkedInProfile = {
   title: string;
   description: string;
   linkedInUrl: string;
-  certifications: any;
   workExperiences: any;
-  recommendations: any;
   education: any;
   skills: any;
 };

@@ -18,7 +18,6 @@ export function DemoCanvas() {
 
   const processsedProfile = {
     ...linkedInProfile,
-    recommendations: [],
   };
 
   return (

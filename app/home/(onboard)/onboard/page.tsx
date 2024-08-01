@@ -55,7 +55,7 @@ export default async function OnboardPage({
 
   const processedData = {
     ...data,
-    recommendations: [],
+    // recommendations: [],
   };
 
   return (

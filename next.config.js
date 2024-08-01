@@ -34,7 +34,7 @@ const nextConfig = {
       },
       {
         protocol: 'https',
-        hostname: 'linkify-cv.vercel.app',
+        hostname: 'linkifyme.pro',
       },
     ],
   },

@@ -15,12 +15,12 @@ import {
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
 import { LinkedInLogoIcon } from '@radix-ui/react-icons';
-import { LinkedInProfile } from '@/types/linkedin';
 import { useLinkedInData } from '@/context/linkedin-data-context';
 import { Upload } from 'lucide-react';
 import { useState } from 'react';
 import { processCV } from '@/actions/process-cv';
 import Link from 'next/link';
+import { LinkedInProfile } from '@prisma/client';
 
 const OnboardCard = ({
   profile,
@@ -36,8 +36,6 @@ const OnboardCard = ({
   const { firstName, lastName, photoUrl } = profile;
 
   const linkedInProfile = {
-    id: 'anonymous',
-    userEmail: email,
     ...profile,
   };
 

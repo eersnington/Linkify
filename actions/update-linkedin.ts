@@ -16,6 +16,8 @@ export async function updateLinkedInProfile(
     return { status: 'error', message: 'Unauthorized' };
   }
 
+  console.log(`Updating LinkedIn profile for ${email}`);
+
   try {
     const validatedData = AILinkedInProfileSchema.parse(data);
 
@@ -30,9 +32,7 @@ export async function updateLinkedInProfile(
         description: validatedData.description,
         linkedInUrl: validatedData.linkedInUrl,
         photoUrl: validatedData.photoUrl,
-        certifications: validatedData.certifications,
         workExperiences: validatedData.workExperiences,
-        // recommendations: validatedData.recommendations,
         education: validatedData.education,
         skills: validatedData.skills,
       },
@@ -45,9 +45,7 @@ export async function updateLinkedInProfile(
         description: validatedData.description,
         linkedInUrl: validatedData.linkedInUrl,
         photoUrl: validatedData.photoUrl,
-        certifications: validatedData.certifications,
         workExperiences: validatedData.workExperiences,
-        // recommendations: validatedData.recommendations,
         education: validatedData.education,
         skills: validatedData.skills,
       },

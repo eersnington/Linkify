@@ -109,7 +109,7 @@ export function PageSidebar({ isUserPremium }: PageSidebarProps) {
                   </Card>
                 </TooltipTrigger>
                 {template.isPremium && !isUserPremium && (
-                  <TooltipContent>
+                  <TooltipContent className="bg-purple-500 text-white">
                     <p>
                       You need a Premium Subscription to access this template
                     </p>
@@ -156,7 +156,7 @@ export function PageSidebar({ isUserPremium }: PageSidebarProps) {
         defaultValue="template"
         className="flex h-full flex-col overflow-hidden rounded-lg bg-white p-4 drop-shadow-lg"
       >
-        <TabsList className="grid w-full grid-cols-3 rounded-md">
+        <TabsList className="grid w-full grid-cols-2 rounded-md">
           <TabsTrigger
             value="template"
             className="flex items-center justify-center space-x-2 text-sm font-medium transition-all hover:bg-white data-[state=active]:bg-white data-[state=active]:text-purple-700 rounded-md"
@@ -164,13 +164,13 @@ export function PageSidebar({ isUserPremium }: PageSidebarProps) {
             <LayoutPanelLeft size={16} />
             <span className="hidden sm:inline">Templates</span>
           </TabsTrigger>
-          <TabsTrigger
+          {/* <TabsTrigger
             value="theme"
             className="flex items-center justify-center space-x-2 text-sm font-medium transition-all hover:bg-white data-[state=active]:bg-white data-[state=active]:text-purple-700 rounded-md"
           >
             <Palette size={16} />
             <span className="hidden sm:inline">Themes</span>
-          </TabsTrigger>
+          </TabsTrigger> */}
           <TabsTrigger
             value="blocks"
             className="flex items-center justify-center space-x-2 text-sm font-medium transition-all hover:bg-white data-[state=active]:bg-white data-[state=active]:text-purple-700 rounded-md"

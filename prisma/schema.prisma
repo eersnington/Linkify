@@ -49,10 +49,7 @@ model LinkedInProfile {
   linkedInUrl       String
   photoUrl          String
 
-  certifications    Json[]
   workExperiences   Json[]
-  // recommendations   Json[]
-
   education         Json[]
   skills            String[]
 

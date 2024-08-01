@@ -5,21 +5,7 @@ import { useThemeTemplate } from '@/context/editor-sidebar-context';
 
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { useLinkedInData } from '@/context/linkedin-data-context';
-
-type LinkedInProfile = {
-  firstName: string;
-  lastName: string;
-  photoUrl: string;
-  title: string;
-  description: string;
-  linkedInUrl: string;
-  certifications: any;
-  workExperiences: any;
-  recommendations: any;
-  education: any;
-  skills: any;
-};
-
+ 
 export function PageCanvas() {
   const { templates, selectedTemplate } = useThemeTemplate();
   const { linkedInProfile } = useLinkedInData();

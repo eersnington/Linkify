@@ -31,13 +31,6 @@ export const AILinkedInProfileSchema = z.object({
   title: z.string(),
   description: z.string(),
   linkedInUrl: z.string(),
-  certifications: z.array(
-    z.object({
-      name: z.string(),
-      organization: z.string(),
-      date: z.string(),
-    })
-  ),
   workExperiences: z.array(
     z.object({
       title: z.string(),
