@@ -13,8 +13,9 @@ export type FormData = {
 };
 
 type DatePart = {
-  month: string;
-  year: string;
+  year: number;
+  month: number;
+  day: number;
 };
 
 type DateRange = {
@@ -24,9 +25,10 @@ type DateRange = {
 
 // Helper function to convert date part to string
 const formatDatePart = (datePart: DatePart): string => {
-  if (!datePart) return '';
-  const { month = '', year = '' } = datePart;
-  return [month, year].filter(Boolean).join('/');
+  if (!datePart || (datePart.year === 0 && datePart.month === 0)) return '';
+  const month =
+    datePart.month > 0 ? datePart.month.toString().padStart(2, '0') : '01';
+  return `${datePart.year}-${month}`;
 };
 
 // Helper function to convert date range to string
@@ -40,7 +42,6 @@ const rapidAPICall = async (email: string, sample: boolean) => {
   if (sample) {
     console.log('Fetching Sample LinkedIn Profile...');
     await new Promise((resolve) => setTimeout(resolve, 6000));
-
     return sample_linkedin_response;
   }
 
@@ -59,8 +60,8 @@ const rapidAPICall = async (email: string, sample: boolean) => {
 
     const response = res.data;
     console.log('LinkedIn Profile:', response);
-    if (response.error) {
-      console.error('Error fetching LinkedIn profile:', response.error);
+    if (!response.success) {
+      console.error('Error fetching LinkedIn profile:', response.message);
       return { status: 'error', message: 'Failed to fetch LinkedIn profile' };
     }
 
@@ -72,51 +73,33 @@ const rapidAPICall = async (email: string, sample: boolean) => {
 };
 
 const processLinkedInData = (response: any) => {
-  const defaultData = { name: 'N/A', degree: 'N/A', date: 'N/A' };
-  const firstName = response.firstName || 'John';
-  const lastName = response.lastName || 'Doe';
-  const title = response.headline || 'N/A';
-  const description = response.summary || 'N/A';
-  const photoUrl = response.photoUrl || '/images/placeholder';
-  const linkedInUrl = response.linkedInUrl || 'N/A';
+  const data = response.data;
 
-  const certifications = response.certifications?.certificationHistory?.map(
-    (cert: any) => ({
-      name: cert.name,
-      organization: cert.organizationName,
-      date: cert.issuedDate,
-    })
-  ) || [defaultData];
+  const firstName = data.firstName || 'John';
+  const lastName = data.lastName || 'Doe';
+  const title = data.headline || 'N/A';
+  const description = data.about || 'N/A';
+  const photoUrl =
+    data.photoUrl || 'https://linkifyme.pro/images/portrats/person.png';
+  const linkedInUrl = data.linkedInUrl || 'N/A';
 
-  const workExperiences = response.positions?.positionHistory?.map(
-    (position: any) => ({
+  const workExperiences =
+    data.positions?.map((position: any) => ({
       title: position.title,
       company: position.companyName,
-      date: formatDateRange(position.startEndDate as DateRange),
-      description: position.description,
-    })
-  ) || [defaultData];
+      date: formatDateRange(position.startEndDate),
+      description: position.description || '',
+    })) || [];
 
-  // const recommendations =
-  //   response.recommendations?.recommendationHistory?.length > 0
-  //     ? response.recommendations.recommendationHistory
-  //     : [
-  //         {
-  //           recommendation: 'N/A',
-  //           recommendationDate: { month: 1, year: 2000 },
-  //           recommenderFirstName: 'N/A',
-  //           recommenderLastName: 'N/A',
-  //           recommenderTitle: 'N/A',
-  //         },
-  //       ];
+  const education =
+    data.schools?.map((edu: any) => ({
+      name: edu.schoolName,
+      degree: edu.degreeName,
+      date: formatDateRange(edu.startEndDate),
+      fieldOfStudy: edu.fieldOfStudy || '',
+    })) || [];
 
-  const education = response.schools?.educationHistory?.map((edu: any) => ({
-    name: edu.schoolName,
-    degree: edu.degreeName,
-    date: formatDateRange(edu.startEndDate as DateRange),
-  })) || [defaultData];
-
-  const skills = response.skills?.length > 0 ? response.skills : ['N/A'];
+  const skills = data.skills?.map((skill: any) => skill.name) || [];
 
   return {
     firstName,
@@ -125,9 +108,7 @@ const processLinkedInData = (response: any) => {
     title,
     description,
     linkedInUrl,
-    certifications,
     workExperiences,
-    // recommendations,
     education,
     skills,
   };
@@ -141,40 +122,18 @@ export async function fetchLinkedInProfile(data: FormData) {
 
   const email = parsed.data.email;
 
-  const response = await rapidAPICall(email, TEST_MODE); // set to false to make a real API call
+  const response = await rapidAPICall(email, TEST_MODE);
 
   if (response.status === 'error') {
     return { status: 'error', message: 'Failed to fetch LinkedIn profile' };
   }
 
-  const {
-    firstName,
-    lastName,
-    photoUrl,
-    title,
-    description,
-    linkedInUrl,
-    certifications,
-    workExperiences,
-    // recommendations,
-    education,
-    skills,
-  } = processLinkedInData(response); // sample_linkedin_response || response;
+  const profileData = processLinkedInData(response);
 
   const linkedInProfile: LinkedInProfile = {
     id: 'anonymous',
     userEmail: email,
-    firstName,
-    lastName,
-    photoUrl,
-    title,
-    description,
-    linkedInUrl,
-    certifications,
-    workExperiences,
-    // recommendations,
-    education,
-    skills,
+    ...profileData,
   };
 
   return {
