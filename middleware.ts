@@ -29,11 +29,11 @@ export default clerkMiddleware((auth, req) => {
 
   console.log('Middleware - Path: ', path);
 
-  // // rewrites for api endpoints
-  // if (path.startsWith('/api')) {
-  //   console.log('Middleware - Rewriting to /api');
-  //   return NextResponse.next();
-  // }
+  // rewrites for api endpoints
+  if (path.startsWith('/api')) {
+    console.log('Middleware - Rewriting to /api');
+    return NextResponse.next();
+  }
 
   // rewrite root application to `/home` folder
   if (
