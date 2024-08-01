@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 
-export default function AnalyticsTracker() {
+export default function AnalyticsTracker({ subdomain }: { subdomain: string }) {
   const [userCountry, setUserCountry] = useState('Unknown');
 
   useEffect(() => {
@@ -31,7 +31,7 @@ export default function AnalyticsTracker() {
     const trackPageView = async () => {
       try {
         const response = await axios.post('/api/analytics', {
-          page: window.location.pathname,
+          page: subdomain,
           referrer: document.referrer,
           userAgent: navigator.userAgent,
           country: userCountry,

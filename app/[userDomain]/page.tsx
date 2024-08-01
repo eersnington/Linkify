@@ -121,7 +121,7 @@ export default async function UserPage() {
 
   return (
     <ThemeTemplateProvider>
-      <AnalyticsTracker />
+      <AnalyticsTracker subdomain={website.domainName} />
       <UserPageContent
         profile={linkedinProfile}
         templateId={website.template}
