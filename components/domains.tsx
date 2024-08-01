@@ -1,8 +1,13 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { getDomains, buyDomain } from '@/actions/dynabot-api';
+import {
+  getDomains,
+  buyDomain,
+  getConfigResponse,
+  verifyDomain,
+} from '@/actions/dynabot-api';
 import { toast } from '@/components/ui/use-toast';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -16,30 +21,55 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import Confetti from 'react-confetti';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, CheckCircle, Loader, XCircle } from 'lucide-react';
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+  CardFooter,
+} from './ui/card';
+import {
+  Table,
+  TableHeader,
+  TableRow,
+  TableHead,
+  TableBody,
+  TableCell,
+} from './ui/table';
+import { Badge } from './ui/badge';
+import { set } from 'date-fns';
 
-interface Domain {
+interface DomainSearchResponse {
   name: string;
   available: boolean;
   price?: string;
 }
 
-export default function DomainAvailability() {
+interface DomainVerificationResponse {
+  verified: boolean;
+}
+
+interface DomainConfigResponse {
+  misconfigured: boolean;
+}
+
+export function DomainSearchAndPurchase() {
   const [selectedDomain, setSelectedDomain] = useState<string | null>(null);
   const [showConfetti, setShowConfetti] = useState(false);
   const [keyword, setKeyword] = useState('');
-  const [domains, setDomains] = useState<Domain[]>([]);
+  const [domains, setDomains] = useState<DomainSearchResponse[]>([]);
   const [loading, setLoading] = useState(false);
   const [searched, setSearched] = useState(false);
   const [buying, setBuying] = useState<string | null>(null);
 
   const handleSearch = async () => {
     setLoading(true);
-    setSearched(false); // Reset the searched state before making a new search
+    setSearched(false);
     try {
       const { data, error } = await getDomains(keyword);
       if (error) {
-        // Show error using Toast component
         toast({
           title: 'Domain Search Error',
           description: error,
@@ -47,10 +77,9 @@ export default function DomainAvailability() {
         });
       } else if (data) {
         setDomains(data);
-        setSearched(true); // Set searched to true after receiving the data
+        setSearched(true);
       }
     } catch (error) {
-      // Handle unexpected errors gracefully
       console.error('Unexpected error:', error);
       toast({
         title: 'Domain Search Error',
@@ -62,38 +91,6 @@ export default function DomainAvailability() {
     }
   };
 
-  // const handleBuy = async (domain: string) => {
-  //   setBuying(domain);
-  //   try {
-  //     const { success, error } = await buyDomain(domain);
-  //     if (error) {
-  //       toast({
-  //         title: 'Domain Purchase Error',
-  //         description: error,
-  //         variant: 'destructive',
-  //       });
-  //     } else if (success) {
-  //       setShowConfetti(true);
-  //       toast({
-  //         title: 'Domain Purchased 🚀',
-  //         description: `Domain ${domain} registered successfully.`,
-  //         className: 'bg-green-500',
-  //       });
-  //       setTimeout(() => setShowConfetti(false), 7000); // Hide confetti after 7 seconds
-
-  //       // Optionally, you can update the domain list or state here
-  //     }
-  //   } catch (error) {
-  //     console.error('Unexpected error:', error);
-  //     toast({
-  //       title: 'Domain Purchase Error',
-  //       description: 'An unexpected error occurred. Please try again.',
-  //       variant: 'destructive',
-  //     });
-  //   } finally {
-  //     setBuying(null);
-  //   }
-  // };
   const handleBuy = (domain: string) => {
     setSelectedDomain(domain);
   };
@@ -114,8 +111,8 @@ export default function DomainAvailability() {
         setShowConfetti(true);
         toast({
           title: 'Domain Purchased 🚀',
-          description: `Domain ${selectedDomain} registered successfully.`,
-          className: 'bg-green-500',
+          description: `${success}`,
+          className: 'bg-green-500 text-white',
         });
         setTimeout(() => setShowConfetti(false), 7000);
       }
@@ -146,115 +143,191 @@ export default function DomainAvailability() {
               You are about to purchase the domain{' '}
               <strong>{selectedDomain}</strong>.
             </DialogDescription>
-            <DialogDescription className="">
-              Please note: Once you select a domain, you&apos; no longer
+            <DialogDescription>
+              Please note: Once you select a domain, you&apos;re no longer
               eligible for a free domain for 1 year. Refunds are not available
               for domain purchases.
             </DialogDescription>
           </DialogHeader>
-          <DialogFooter className="sm:justify-start">
-            <Button
-              type="button"
-              variant="secondary"
-              onClick={() => setSelectedDomain(null)}
-            >
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setSelectedDomain(null)}>
               Cancel
             </Button>
             <Button
-              type="button"
               onClick={confirmPurchase}
               disabled={buying === selectedDomain}
-              className="ml-4 bg-blue-500 text-white"
+              className="bg-green-500 text-white"
             >
-              {buying === selectedDomain ? 'Purchasing...' : 'Confirm Purchase'}
-              <ArrowRight className="ml-2" />
+              {buying === selectedDomain
+                ? 'Purchasing...'
+                : 'Confirm Selection'}
+              <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
 
-      <motion.div
-        className="domain-availability mt-8 p-6 bg-white rounded-lg shadow-lg"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-      >
-        <div className="flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-4">
-          <motion.div className="flex-grow">
+      <Card>
+        <CardHeader>
+          <CardTitle>Search for a Domain</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="flex space-x-2">
             <Input
-              id="domain-search"
               value={keyword}
               onChange={(e) => setKeyword(e.target.value)}
               placeholder="Enter domain name..."
-              className="rounded-lg border-2 border-gray-300 bg-white px-4 py-2 text-sm md:text-base text-purple-950 transition-colors duration-300  focus-visible:ring-0"
+              className="flex-grow"
             />
-          </motion.div>
-          <Button
-            onClick={handleSearch}
-            disabled={loading}
-            className="w-1/5 px-4 py-2 bg-gradient-to-tr  from-indigo-500 to-purple-500 text-white rounded-lg shadow-md ease-linear transition-colors duration-300  hover:from-indigo-600 hover:to-purple-600"
-          >
-            {loading ? 'Searching...' : 'Search'}
-          </Button>
-        </div>
-        {searched &&
-          (domains.length > 0 ? (
+            <Button
+              onClick={handleSearch}
+              disabled={loading}
+              className="bg-gradient_indigo-purple"
+            >
+              {loading ? 'Searching...' : 'Search'}
+            </Button>
+          </div>
+
+          {searched && (
             <motion.div
               className="mt-6"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
             >
-              <h3 className="text-xl font-bold text-gray-800">
-                Available Domains:
-              </h3>
-              <ul className="list-disc pl-5 mt-3 space-y-2">
-                {domains.map((domain) => (
-                  <motion.li
-                    key={domain.name}
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    className="flex items-center justify-between py-2"
-                  >
-                    <span className="text-gray-700">{domain.name}</span>
-                    <div className="flex items-center">
-                      {domain.available ? (
-                        <>
-                          <span className="ml-2 text-green-600 font-semibold">
-                            Available
-                          </span>
-                          <Button
-                            onClick={() => handleBuy(domain.name)}
-                            className="ml-4 px-3 py-1 bg-green-700 text-white rounded hover:bg-green-800 transition-colors"
+              {domains.length > 0 ? (
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Domain</TableHead>
+                      <TableHead>Status</TableHead>
+                      <TableHead>Action</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {domains.map((domain) => (
+                      <TableRow key={domain.name}>
+                        <TableCell>{domain.name}</TableCell>
+                        <TableCell>
+                          <Badge
+                            className={
+                              domain.available ? 'bg-green-500' : 'bg-red-500'
+                            }
                           >
-                            Select
-                          </Button>
-                        </>
-                      ) : (
-                        <span className="ml-2 text-red-600 font-semibold">
-                          Taken
-                        </span>
-                      )}
-                    </div>
-                  </motion.li>
-                ))}
-              </ul>
+                            {domain.available ? 'Available' : 'Taken'}
+                          </Badge>
+                        </TableCell>
+                        <TableCell>
+                          {domain.available ? (
+                            <Button
+                              onClick={() => handleBuy(domain.name)}
+                              size="sm"
+                              className="bg-purple-500 text-white"
+                            >
+                              Select
+                            </Button>
+                          ) : (
+                            <Badge className="bg-purple-950">Unavailable</Badge>
+                          )}
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              ) : (
+                <p className="text-center text-muted-foreground">
+                  No domains available for{' '}
+                  <span className="font-semibold">{keyword}</span>
+                </p>
+              )}
             </motion.div>
-          ) : (
-            <motion.div
-              className="mt-6"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-            >
-              <h3 className="text-xl font-bold text-gray-800">
-                No domains available for{' '}
-                <span className="text-red-600">{keyword}</span>
-              </h3>
-            </motion.div>
-          ))}
-      </motion.div>
+          )}
+        </CardContent>
+      </Card>
     </>
+  );
+}
+
+export function DomainConfigStatus({ domain }: { domain: string }) {
+  const [isVercelConfigured, setIsVercelConfigured] = useState(false);
+  const [isDNSConfigured, setIsDNSConfigured] = useState(false);
+  const [loadingVercel, setLoadingVercel] = useState(false);
+  const [loadingDNS, setLoadingDNS] = useState(false);
+
+  const handleVerifyDomain = async () => {
+    setLoadingDNS(true);
+    const response = await verifyDomain(domain);
+    setIsDNSConfigured(response.verified);
+    setLoadingDNS(false);
+  };
+
+  const handleGetConfigResponse = async () => {
+    setLoadingVercel(true);
+    const response = await getConfigResponse(domain);
+    setIsVercelConfigured(!response.misconfigured);
+    setLoadingVercel(false);
+  };
+
+  return (
+    <div className="grid gap-6">
+      <Card>
+        <CardHeader>
+          <CardTitle>
+            Your Domain: <Badge>{domain}</Badge>
+          </CardTitle>
+          <CardDescription>Configuration status for domain</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-4">
+            <div className="flex items-center space-x-2">
+              {isVercelConfigured ? (
+                <CheckCircle className="h-5 w-5 text-green-500" />
+              ) : (
+                <XCircle className="h-5 w-5 text-red-500" />
+              )}
+              <span>Vercel Configuration</span>
+              <Button
+                onClick={handleGetConfigResponse}
+                disabled={loadingVercel}
+              >
+                {loadingVercel ? (
+                  <Loader className="animate-spin h-4 w-4" />
+                ) : (
+                  'Verify'
+                )}
+              </Button>
+            </div>
+            <div className="flex items-center space-x-2">
+              {isDNSConfigured ? (
+                <CheckCircle className="h-5 w-5 text-green-500" />
+              ) : (
+                <XCircle className="h-5 w-5 text-red-500" />
+              )}
+              <span>DNS Configuration</span>
+              <Button onClick={handleVerifyDomain} disabled={loadingDNS}>
+                {loadingDNS ? (
+                  <Loader className="animate-spin h-4 w-4" />
+                ) : (
+                  'Verify'
+                )}
+              </Button>
+            </div>
+          </div>
+          <CardFooter className="mt-4 border-2 rounded-lg p-2 items-center text-center">
+            {isVercelConfigured && isDNSConfigured ? (
+              <p className="text-muted-foreground text-sm">
+                Good news! Your DNS records are set up correctly, but it can
+                take some time for them to propagate globally.
+              </p>
+            ) : (
+              <p className="text-muted-foreground text-sm">
+                Depending on your provider, it might take some time for the DNS
+                records to apply. It may take from 5 mins to 24 hours.
+              </p>
+            )}
+          </CardFooter>
+        </CardContent>
+      </Card>
+    </div>
   );
 }
