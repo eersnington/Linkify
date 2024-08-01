@@ -3,12 +3,22 @@
 import { prisma } from '@/lib/db';
 import { currentUser } from '@clerk/nextjs/server';
 import axios from 'axios';
+import { revalidateTag } from 'next/cache';
+import getConfig from 'next/config';
 import { redirect } from 'next/navigation';
 
 interface Domain {
   name: string;
   available: boolean;
   price?: string;
+}
+
+interface vercelDomainVerificationResponse {
+  verified: boolean;
+}
+
+interface vercelDomainConfigResponse {
+  misconfigured: boolean;
 }
 
 const tlds = ['com', 'me', 'co.uk', 'dev', 'pro', 'buzz'];
@@ -123,7 +133,115 @@ async function registerDomain(domain: string): Promise<boolean> {
   return false;
 }
 
+async function addDomainToVercel(domain: string): Promise<boolean> {
+  try {
+    const endpoint = `https://api.vercel.com/v10/projects/${
+      process.env.VERCEL_PROJECT_ID
+    }/domains${
+      process.env.VERCEL_TEAM_ID ? `?teamId=${process.env.VERCEL_TEAM_ID}` : ''
+    }`;
+
+    const response = await axios.post(
+      endpoint,
+      { name: domain },
+      {
+        headers: {
+          Authorization: `Bearer ${process.env.VERCEL_TOKEN}`,
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+
+    console.log('Vercel domain addition response:', response.data);
+
+    if (response.data.name === domain) {
+      return true;
+    }
+  } catch (error) {
+    console.error(`Error adding domain ${domain} to Vercel:`, error);
+  }
+  return false;
+}
+
+export async function getConfigResponse(
+  domain: string
+): Promise<vercelDomainConfigResponse> {
+  try {
+    const endpoint = `https://api.vercel.com/v6/domains/${domain}/config${
+      process.env.VERCEL_TEAM_ID ? `?teamId=${process.env.VERCEL_TEAM_ID}` : ''
+    }`;
+
+    const response = await axios.get(endpoint, {
+      headers: {
+        Authorization: `Bearer ${process.env.VERCEL_TOKEN}`,
+        'Content-Type': 'application/json',
+      },
+    });
+
+    console.log('Vercel domain config check response:', response.data);
+    return {
+      misconfigured: response.data.misconfigured,
+    };
+  } catch (error) {
+    if (error.response) {
+      // The request was made and the server responded with a status code
+      // that falls out of the range of 2xx
+      console.error(
+        `Error checking domain ${domain} config from Vercel:`,
+        error.response.data
+      );
+    } else if (error.request) {
+      // The request was made but no response was received
+      console.error(
+        `Error checking domain ${domain} config from Vercel:`,
+        error.request
+      );
+    } else {
+      // Something happened in setting up the request that triggered an Error
+      console.error(
+        `Error checking domain ${domain} config from Vercel:`,
+        error.message
+      );
+    }
+    return {
+      misconfigured: true,
+    };
+  }
+}
+
+export async function verifyDomain(domain: string): Promise<any> {
+  try {
+    const response = await axios.post(
+      `https://api.vercel.com/v9/projects/${
+        process.env.VERCEL_PROJECT_ID
+      }/domains/${domain}/verify${
+        process.env.VERCAL_TEAM_ID
+          ? `?teamId=${process.env.VERCAL_TEAM_ID}`
+          : ''
+      }`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${process.env.VERCEL_TOKEN}`,
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+
+    console.log('Vercel domain verification response:', response.data);
+    return {
+      verified: response.data.verified,
+    };
+  } catch (error) {
+    console.error(`Error verifying domain ${domain} from Vercel:`, error);
+    return {
+      verified: false,
+    };
+  }
+}
+
 async function setDomainPrivacy(domain: string): Promise<boolean> {
+  // this function is not used in the current implementation as domains are set to private by default
   const params = new URLSearchParams({
     key: process.env.DYNADOT_API_KEY || '',
     command: 'set_privacy',
@@ -147,18 +265,13 @@ async function setDomainPrivacy(domain: string): Promise<boolean> {
   return false;
 }
 
-async function setARecord(
-  domain: string,
-  subdomain: string,
-  ipAddress: string
-): Promise<boolean> {
+async function setARecord(domain: string, ipAddress: string): Promise<boolean> {
   const params = new URLSearchParams({
     key: process.env.DYNADOT_API_KEY || '',
     command: 'set_dns2',
     domain: domain,
-    subdomain0: subdomain,
-    sub_record_type0: 'a',
-    sub_record0: ipAddress,
+    main_record_type0: 'a',
+    main_record0: ipAddress,
   });
 
   try {
@@ -209,6 +322,8 @@ export async function buyDomain(domain: string) {
     return { error: 'You already have a domain registered' };
   }
 
+  domain = 'sreenington.buzz'; // Hardcoded for testing
+
   try {
     // return {
     //   // to disable buying domain
@@ -220,12 +335,30 @@ export async function buyDomain(domain: string) {
     //   return { error: 'Failed to register domain' };
     // }
 
-    await setTimeout(() => {}, 1000); // Wait for a second before setting privacy
+    const addedToVercel = await addDomainToVercel(domain);
 
-    await prisma.user.update({
-      where: { id: user.id },
-      data: { domain },
+    if (addedToVercel) {
+      await prisma.user.update({
+        where: { id: user.id },
+        data: { domain, domainInVercel: true },
+      });
+    } else {
+      await prisma.user.update({
+        where: { id: user.id },
+        data: { domain },
+      });
+    }
+
+    const website = await prisma.website.findFirst({
+      where: { userEmail: user.emailAddresses[0].emailAddress },
     });
+
+    if (website) {
+      await setARecord(domain, '76.76.21.21');
+      revalidateTag(
+        `${website.domainName}.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}-metadata`
+      );
+    }
 
     return {
       success: `Domain ${domain} registered and set successfully`,
