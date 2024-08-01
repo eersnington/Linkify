@@ -1,86 +1,104 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useThemeTemplate } from '@/context/editor-sidebar-context';
-
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { useLinkedInData } from '@/context/linkedin-data-context';
- 
+import { getLinkedInProfile } from '@/actions/get-stored-profile';
+import UploadCVButton from '../upload-cv-button';
+import { fetchLinkedInProfile } from '@/actions/fetch-linkedin';
+import { useUser } from '@clerk/nextjs';
+import { LinkedInProfile } from '@prisma/client';
+
 export function PageCanvas() {
   const { templates, selectedTemplate } = useThemeTemplate();
-  const { linkedInProfile } = useLinkedInData();
+  const { user } = useUser();
+  const { linkedInProfile, updateLinkedInProfile } = useLinkedInData();
+  const [profile, setProfile] = useState<LinkedInProfile | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  if (!linkedInProfile) {
+  useEffect(() => {
+    async function loadProfile() {
+      try {
+        setLoading(true);
+        // First, try to get the profile from the database
+        let profileData = await getLinkedInProfile();
+
+        // If not in the database, check the context
+        if (!profileData && linkedInProfile) {
+          profileData = linkedInProfile;
+        }
+
+        setProfile(profileData);
+      } catch (err) {
+        setError(
+          err instanceof Error ? err.message : 'An unknown error occurred'
+        );
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    loadProfile();
+  }, [linkedInProfile]);
+
+  const handleFetchLinkedIn = async () => {
+    if (user) {
+      try {
+        setLoading(true);
+        const response = await fetchLinkedInProfile({
+          email: user.emailAddresses[0].emailAddress || 'example@gmail.com',
+        });
+        if (response.status === 'success' && response.data) {
+          updateLinkedInProfile(response.data);
+          setProfile(response.data);
+        } else {
+          setError('Failed to fetch LinkedIn profile');
+        }
+      } catch (err) {
+        setError(
+          err instanceof Error ? err.message : 'An unknown error occurred'
+        );
+      } finally {
+        setLoading(false);
+      }
+    }
+  };
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
+
+  if (!profile) {
     return (
-      // TODO: Add a section which lets user upload a CV or a button to connect linkedin profile
-      // TODO: Custo mQuestionnairse form
-      <div className="w-full">
-        LinkedIn Profile is not loaded. Please start the onboarding again
+      <div className="w-1/3 flex flex-col items-center text-center justify-center">
+        <p>
+          You have not connected your LinkedIn profile yet. Please connect your
+          LinkedIn profile to generate a resume, or you can upload your CV.
+        </p>
+        <UploadCVButton />
+        <button onClick={handleFetchLinkedIn}>Fetch LinkedIn Profile</button>
       </div>
     );
   }
 
-  // const linkedinProfileSample = {
-  //   // Jane Doe | Product Manager @ Discord | Write a catchy description for this
-  //   firstName: 'Jane',
-  //   lastName: 'Doe',
-  //   photoUrl: '/images/portraits/woman_1.jpeg',
-  //   title: 'Product Manager @ Discord',
-  //   description:
-  //     "I am a product manager with 5 years of experience in the tech industry. I have worked with companies like Microsoft and Discord. I am passionate about building products that make a difference in people's lives.",
-  //   linkedInUrl: 'https://www.linkedin.com/in/janedoe',
-  //   certifications: [
-  //     {
-  //       title: 'Certified Scrum Master',
-  //       date: '2021',
-  //     },
-  //     {
-  //       title: 'Product Management Certificate',
-  //       date: '2020',
-  //     },
-  //   ],
-  //   workExperiences: [
-  //     {
-  //       title: 'Product Manager',
-  //       company: 'Discord',
-  //       date: '2019 - Present',
-  //       description:
-  //         "I am responsible for the product strategy and roadmap for Discord's mobile app. I work closely with the engineering and design teams to deliver high-quality features that delight our users.",
-  //     },
-  //     {
-  //       title: 'Product Manager',
-  //       company: 'Microsoft',
-  //       date: '2016 - 2019',
-  //       description:
-  //         "I led the product development for Microsoft's cloud services. I worked with cross-functional teams to deliver innovative solutions that met the needs of our enterprise customers.",
-  //     },
-  //   ],
-  //   recommendations: [
-  //     {
-  //       name: 'John Smith',
-  //       title: 'Engineering Manager at Discord',
-  //     },
-  //   ],
-  //   education: [
-  //     {
-  //       name: 'University of California, Berkeley',
-  //       degree: 'Bachelor of Science in Computer Science',
-  //       date: '2020 - 2024',
-  //     },
-  //   ],
-  // };
-
   const SelectedTemplateComponent = templates[selectedTemplate]?.component;
 
-  const processsedProfile = {
-    ...linkedInProfile,
-    recommendations: [],
+  const processedProfile = {
+    ...profile,
   };
 
   return (
     <ScrollArea className="rounded-md p-4 shadow-lg">
-      {SelectedTemplateComponent && (
-        <SelectedTemplateComponent profile={processsedProfile} />
+      {SelectedTemplateComponent ? (
+        <SelectedTemplateComponent profile={processedProfile} />
+      ) : (
+        <div>No template selected</div>
       )}
     </ScrollArea>
   );
