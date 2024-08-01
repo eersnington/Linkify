@@ -249,10 +249,12 @@ export function DomainSearchAndPurchase() {
 }
 
 export function DomainConfigStatus({ domain }: { domain: string }) {
-  const [isVercelConfigured, setIsVercelConfigured] = useState(false);
-  const [isDNSConfigured, setIsDNSConfigured] = useState(false);
-  const [loadingVercel, setLoadingVercel] = useState(false);
-  const [loadingDNS, setLoadingDNS] = useState(false);
+  const [isVercelConfigured, setIsVercelConfigured] = useState<boolean | null>(
+    null
+  );
+  const [isDNSConfigured, setIsDNSConfigured] = useState<boolean | null>(null);
+  const [loadingVercel, setLoadingVercel] = useState(true);
+  const [loadingDNS, setLoadingDNS] = useState(true);
 
   const handleVerifyDomain = async () => {
     setLoadingDNS(true);
@@ -268,6 +270,22 @@ export function DomainConfigStatus({ domain }: { domain: string }) {
     setLoadingVercel(false);
   };
 
+  useEffect(() => {
+    handleVerifyDomain();
+    handleGetConfigResponse();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [domain]);
+
+  const renderStatus = (isConfigured: boolean | null, loading: boolean) => {
+    if (loading) return <Loader className="animate-spin h-5 w-5" />;
+    if (isConfigured === null) return null;
+    return isConfigured ? (
+      <CheckCircle className="h-5 w-5 text-green-500" />
+    ) : (
+      <XCircle className="h-5 w-5 text-red-500" />
+    );
+  };
+
   return (
     <div className="grid gap-6">
       <Card>
@@ -280,11 +298,7 @@ export function DomainConfigStatus({ domain }: { domain: string }) {
         <CardContent>
           <div className="space-y-4">
             <div className="flex items-center space-x-2">
-              {isVercelConfigured ? (
-                <CheckCircle className="h-5 w-5 text-green-500" />
-              ) : (
-                <XCircle className="h-5 w-5 text-red-500" />
-              )}
+              {renderStatus(isVercelConfigured, loadingVercel)}
               <span>Vercel Configuration</span>
               <Button
                 onClick={handleGetConfigResponse}
@@ -298,11 +312,7 @@ export function DomainConfigStatus({ domain }: { domain: string }) {
               </Button>
             </div>
             <div className="flex items-center space-x-2">
-              {isDNSConfigured ? (
-                <CheckCircle className="h-5 w-5 text-green-500" />
-              ) : (
-                <XCircle className="h-5 w-5 text-red-500" />
-              )}
+              {renderStatus(isDNSConfigured, loadingDNS)}
               <span>DNS Configuration</span>
               <Button onClick={handleVerifyDomain} disabled={loadingDNS}>
                 {loadingDNS ? (
