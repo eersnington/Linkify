@@ -45,7 +45,7 @@ export default function AnalyticsTracker({ subdomain }: { subdomain: string }) {
     if (userCountry !== 'Unknown') {
       trackPageView();
     }
-  }, [userCountry]);
+  }, [subdomain, userCountry]);
 
   return <></>; // This component doesn't render anything
 }

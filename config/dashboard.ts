@@ -17,6 +17,16 @@ export const dashboardConfig: DashboardConfig = {
   ],
   sidebarNav: [
     {
+      title: 'My Page',
+      href: '/mypage',
+      icon: 'user',
+    },
+    {
+      title: 'Analytics',
+      href: '/dashboard/',
+      icon: 'barchart',
+    },
+    {
       title: 'Domains',
       href: '/dashboard/domains',
       icon: 'link',
