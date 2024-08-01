@@ -7,6 +7,7 @@ import {
   DomainSearchAndPurchase,
   DomainConfigStatus,
 } from '@/components/domains';
+import { UpgradeCard } from '@/components/upgrade-card';
 
 export const metadata = {
   title: 'Domains',
@@ -30,6 +31,8 @@ export default async function SettingsPage() {
     redirect('/login');
   }
 
+  const isPremium = !!userDb.stripeCustomerId;
+
   return (
     <DashboardShell>
       <DashboardHeader
@@ -41,10 +44,14 @@ export default async function SettingsPage() {
         }
       />
       <div className="grid gap-10 p-8">
-        {userDb.domain ? (
-          <DomainConfigStatus domain={userDb.domain} />
+        {isPremium ? (
+          userDb.domain ? (
+            <DomainConfigStatus domain={userDb.domain} />
+          ) : (
+            <DomainSearchAndPurchase />
+          )
         ) : (
-          <DomainSearchAndPurchase />
+          <UpgradeCard />
         )}
       </div>
     </DashboardShell>
