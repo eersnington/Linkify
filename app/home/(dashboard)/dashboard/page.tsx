@@ -18,21 +18,21 @@ import { ExternalLink, PlusSquare } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { env } from '@/env.mjs';
 
+const url = env.NEXT_PUBLIC_ROOT_DOMAIN;
+
 export const metadata = {
   title: 'Dashboard',
 };
 
-const URL = env.NEXT_PUBLIC_APP_URL;
-
 export default async function DashboardPage() {
   const user = await currentUser();
 
-  if (!user) {
-    redirect('/login');
-  }
-
   const website = await prisma.website.findFirst({
     where: { userEmail: user?.emailAddresses[0].emailAddress },
+  });
+
+  const userDb = await prisma.user.findFirst({
+    where: { id: user?.id },
   });
 
   const domainName = website?.domainName;
@@ -48,11 +48,17 @@ export default async function DashboardPage() {
                 Website Performance{' '}
                 <Badge className="text-center items-center">
                   <Link
-                    href={`/${domainName}`}
+                    href={
+                      userDb?.domain
+                        ? `https://${userDb?.domain}`
+                        : `https://${domainName}.${url}`
+                    }
                     target="_blank"
                     className="text-white hover:underline flex items-center justify-center mt-2"
                   >
-                    {URL}/{domainName}{' '}
+                    {userDb?.domain
+                      ? `https://${userDb?.domain}`
+                      : `https://${domainName}.${url}`}{' '}
                     <ExternalLink className="ml-2" size={12} />
                   </Link>
                 </Badge>
