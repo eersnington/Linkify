@@ -1,11 +1,12 @@
-import { createEnv } from "@t3-oss/env-nextjs";
-import { z } from "zod";
+import { createEnv } from '@t3-oss/env-nextjs';
+import { z } from 'zod';
 
 export const env = createEnv({
   server: {
     // This is optional because it's only used in development.
     // See https://next-auth.js.org/deployment.
     NEXTAUTH_URL: z.string().url().optional(),
+    DYNADOT_API_KEY: z.string().min(1),
     RAPID_API_KEY: z.string().min(1),
     DATABASE_URL: z.string().min(1),
     DATABASE_URL_NON_POOLING: z.string().min(1),
@@ -17,9 +18,12 @@ export const env = createEnv({
     NEXT_PUBLIC_APP_URL: z.string().min(1),
     NEXT_PUBLIC_STRIPE_PRO_MONTHLY_PLAN_ID: z.string().min(1),
     NEXT_PUBLIC_STRIPE_PRO_YEARLY_PLAN_ID: z.string().min(1),
+    NEXT_PUBLIC_ROOT_DOMAIN: z.string().min(1),
   },
   runtimeEnv: {
+    DYNADOT_API_KEY: process.env.DYNADOT_API_KEY,
     NEXTAUTH_URL: process.env.NEXTAUTH_URL,
+    NEXT_PUBLIC_ROOT_DOMAIN: process.env.NEXT_PUBLIC_ROOT_DOMAIN,
     DATABASE_URL: process.env.DATABASE_URL,
     DATABASE_URL_NON_POOLING: process.env.DATABASE_URL_NON_POOLING,
     RESEND_API_KEY: process.env.RESEND_API_KEY,
