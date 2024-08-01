@@ -7,6 +7,7 @@ import { anthropic } from '@ai-sdk/anthropic';
 
 import { createOpenAI } from '@ai-sdk/openai';
 import { AILinkedInProfileSchema } from '@/lib/validations/linkedin-profile';
+import { revalidatePath } from 'next/cache';
 
 function getModel() {
   const groqAPIKey = process.env.GROQ_API_KEY;
@@ -37,7 +38,7 @@ export async function enhanceContent(
     const { object } = await generateObject({
       model,
       schema: AILinkedInProfileSchema,
-      prompt: `Enhance the following LinkedIn profile data by improving the descriptions, titles, and ensuring a professional tone:\n\n${JSON.stringify(profile)}`,
+      prompt: `Enhance the following LinkedIn profile data by improving the descriptions, titles, and ensuring a professional tone. Always give me a different output compared to the input (but make sure the details are the same):\n\n${JSON.stringify(profile)}`,
     });
 
     const enhancedProfile = {
