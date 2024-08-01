@@ -41,12 +41,6 @@ export async function processCV(
       return { success: false, error: 'Missing file or email' };
     }
 
-    // // Store the file in Supabase
-    // const savedFile = await storeFileInSupabase(file, email);
-    // if (!savedFile) {
-    //   throw new Error('Failed to store the file');
-    // }
-
     // Read the file content using pdf2json
     const fileContent = await readPDFContent(file);
     console.log('Parsed PDF Content:', fileContent);
@@ -62,25 +56,6 @@ export async function processCV(
     return { success: false, error: 'Failed to process CV' };
   }
 }
-
-// async function storeFileInSupabase(file: File, email: string) {
-//   const buffer = await file.arrayBuffer();
-//   const fileData = Buffer.from(buffer);
-
-//   try {
-//     const result = await prisma.cV.create({
-//       data: {
-//         email,
-//         filedata: fileData,
-//       },
-//     });
-
-//     return result;
-//   } catch (error) {
-//     console.error('Error storing file in Supabase:', error);
-//     return null;
-//   }
-// }
 
 async function readPDFContent(file: File): Promise<string> {
   const fileBuffer = Buffer.from(await file.arrayBuffer());
