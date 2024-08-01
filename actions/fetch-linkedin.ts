@@ -6,7 +6,7 @@ import { ctaFormSchema } from '@/lib/validations/user';
 import { sample_linkedin_response } from '@/lib/sample-response';
 import { LinkedInProfile } from '@prisma/client';
 
-const TEST_MODE = false;
+const TEST_MODE = true;
 
 export type FormData = {
   email: string;
@@ -45,8 +45,8 @@ const rapidAPICall = async (email: string, sample: boolean) => {
   }
 
   const apiKey = env.RAPID_API_KEY;
-  const apiHost = 'email-to-linkedin-profile-finder-api.p.rapidapi.com';
-  const url = `https://${apiHost}/v1/rapidapi/person`;
+  const apiHost = 'lookup-contact.p.rapidapi.com';
+  const url = `https://${apiHost}/email-to-linkedin`;
 
   try {
     const res = await axios.get(url, {
@@ -58,6 +58,7 @@ const rapidAPICall = async (email: string, sample: boolean) => {
     });
 
     const response = res.data;
+    console.log('LinkedIn Profile:', response);
     if (response.error) {
       console.error('Error fetching LinkedIn profile:', response.error);
       return { status: 'error', message: 'Failed to fetch LinkedIn profile' };
