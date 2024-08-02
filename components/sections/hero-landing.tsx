@@ -1,5 +1,4 @@
 'use client';
-
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -9,11 +8,10 @@ import { Badge } from '../ui/badge';
 
 export function HeroLanding() {
   const images = [
-    '/images/templates/Basic.png',
-    '/images/templates/Creative.png',
-    '/images/templates/Modern.png',
-    '/images/templates/Minimalist.png',
-    '/images/templates/Professional.png',
+    '/images/carousel/hero/image1.png',
+    '/images/carousel/hero/image2.png',
+    '/images/carousel/hero/image3.png',
+    '/images/carousel/hero/image4.png',
   ];
 
   return (
@@ -25,7 +23,7 @@ export function HeroLanding() {
         </Badge>
         <HeroTextFormComponent />
       </div>
-      <div className="flex flex-row items-center justify-between gap-y-8 mt-8">
+      <div className="flex flex-row items-center justify-between gap-y-8 mt-8 mb-8">
         <SampleLinkedInProfile />
         <Arrow />
         <CustomCarousel images={images} />
@@ -62,13 +60,13 @@ const HeroTextFormComponent = () => {
 
 const SampleLinkedInProfile = () => {
   return (
-    <div className="rounded-lg shadow-xl">
+    <div className="rounded-lg overflow-hidden w-[600px] shadow-xl">
       <Image
         src="/images/linkedin-profile.png"
         alt="LinkedIn Profile"
         width={600}
         height={800}
-        className="w-full h-full max-w-1/3 rounded-lg"
+        className="object-cover"
       />
     </div>
   );
@@ -104,7 +102,7 @@ const CustomCarousel = ({ images }) => {
   }, [images.length]);
 
   return (
-    <div className="relative w-[600px] h-[300px] overflow-hidden rounded-lg shadow-xl">
+    <div className="relative w-[600px] h-[800px] overflow-hidden rounded-lg shadow-xl">
       <AnimatePresence>
         <motion.div
           key={currentIndex}
