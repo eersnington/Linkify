@@ -49,16 +49,7 @@ export function LandingNavBar({
           ) : (
             <Link
               href="/signin"
-              // className="flex gap-2 bg-transparent px-4 text-sm font-semibold hover:bg-transparent hover:text-purple-600"
-              className={cn(
-                buttonVariants({
-                  variant: 'default',
-                  size: 'sm',
-                  rounded: 'lg',
-                }),
-                'bg-purple-950 text-sm font-semibold hover:bg-purple-800',
-                'px-4'
-              )}
+              className="flex gap-2 bg-transparent text-purple-950 px-4 text-sm font-semibold hover:bg-transparent hover:text-purple-600"
             >
               <span>Sign In</span>
             </Link>
