@@ -74,6 +74,7 @@ export default async function UserPage() {
       <UserPageContent
         profile={linkedinProfile}
         templateId={website.template}
+        isPremium={true}
       />
     </ThemeTemplateProvider>
   );
