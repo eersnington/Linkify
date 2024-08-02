@@ -10,11 +10,45 @@ import {
   DialogTitle,
   DialogTrigger,
 } from './ui/dialog';
-import { Button, buttonVariants } from './ui/button';
-
-import { Sparkles, Crown, Zap } from 'lucide-react';
+import {
+  Sparkles,
+  Loader,
+  Globe,
+  Layout,
+  LineChart,
+  Headphones,
+  Wand2 as MagicWand,
+} from 'lucide-react';
+import { Button } from './ui/button';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+
+const features = [
+  {
+    icon: Globe,
+    text: 'Your own custom domain (e.g., yourname.com)',
+  },
+  {
+    icon: Layout,
+    text: 'Access to premium templates',
+  },
+  {
+    icon: LineChart,
+    text: 'Website visitor statistics',
+  },
+  {
+    icon: Headphones,
+    text: 'Priority customer support',
+  },
+  {
+    icon: MagicWand,
+    text: 'AI-powered content generation',
+  },
+  {
+    icon: Sparkles,
+    text: 'And much more',
+  },
+];
 
 export function UpgradeButton() {
   const [isClicked, setClicked] = useState(false);
@@ -32,42 +66,23 @@ export function UpgradeButton() {
         <DialogHeader>
           <DialogTitle className="text-gradient_indigo-purple flex items-center gap-2 text-2xl font-bold">
             <Sparkles className="size-6 text-yellow-500" />
-            Unlock Premium Theme
+            Unlock Premium Features
           </DialogTitle>
           <DialogDescription className="text-lg">
-            Elevate your profile with our exclusive premium theme!
+            Elevate your profile with our exclusive premium features!
           </DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4">
-          <div className="flex items-center gap-4">
-            <div className="rounded-full bg-purple-100 p-2">
-              <Sparkles className="size-6 text-purple-600" />
+          {features.map((feature, index) => (
+            <div key={index} className="flex items-center gap-2 font-semibold">
+              <div className="rounded-full bg-purple-100 p-2">
+                <feature.icon className="size-6 text-purple-600" />
+              </div>
+              <div className="text-sm">
+                <p>{feature.text}</p>
+              </div>
             </div>
-            <div className="text-sm">
-              <p className="font-semibold">Enhanced Visual Appeal</p>
-              <p className="text-gray-500">Stand out with unique designs</p>
-            </div>
-          </div>
-          <div className="flex items-center gap-4">
-            <div className="rounded-full bg-purple-100 p-2">
-              <Crown className="size-6 text-purple-600" />
-            </div>
-            <div className="text-sm">
-              <p className="font-semibold">Professional Edge</p>
-              <p className="text-gray-500">Impress potential employers</p>
-            </div>
-          </div>
-          <div className="flex items-center gap-4">
-            <div className="rounded-full bg-purple-100 p-2">
-              <Zap className="size-6 text-purple-600" />
-            </div>
-            <div className="text-sm">
-              <p className="font-semibold">Advanced Features</p>
-              <p className="text-gray-500">
-                Custom domain, web analytics, and AI content
-              </p>
-            </div>
-          </div>
+          ))}
         </div>
         <DialogFooter>
           <Button
