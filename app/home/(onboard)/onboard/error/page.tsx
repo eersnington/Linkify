@@ -76,7 +76,7 @@ export default async function OnboardPage({
               >
                 {'Try Again?'}
               </Link>
-              <UploadCVButton email={email} />
+              {err !== 'exists' && <UploadCVButton email={email} />}
             </div>
           </CardFooter>
         </Card>

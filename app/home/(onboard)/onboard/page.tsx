@@ -38,9 +38,9 @@ export default async function OnboardPage({
     where: { email: email },
   });
 
-  // if (existingUser) {
-  //   redirect('/onboard/error?email=' + email + '&err=exists');
-  // }
+  if (existingUser) {
+    redirect('/onboard/error?email=' + email + '&err=exists');
+  }
 
   const emailStr = email;
   const formdata = { email: emailStr };
@@ -50,7 +50,7 @@ export default async function OnboardPage({
   const { status, message, data } = response;
 
   if (status === 'error' || !data) {
-    return redirect('/onboard/error?email=' + emailStr);
+    return redirect('/onboard/error?email=' + emailStr + '&err=' + message);
   }
 
   const processedData = {

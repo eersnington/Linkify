@@ -5,6 +5,7 @@ export const maxDuration = 30;
 import { redirect } from 'next/navigation';
 
 import OnboardEditor from '@/components/onboard/onboard-editor';
+import { prisma } from '@/lib/db';
 
 export const metadata = {
   title: 'Onboarding | My Page',
@@ -20,6 +21,14 @@ export default async function MyPage({
 
   if (!email) {
     redirect('/');
+  }
+
+  const existingUser = await prisma.user.findFirst({
+    where: { email: email },
+  });
+
+  if (existingUser) {
+    redirect('/onboard/error?email=' + email + '&err=exists');
   }
 
   return (

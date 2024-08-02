@@ -177,7 +177,7 @@ export default function OnboardUpgrade({
               <Dialog open={isOpen} onOpenChange={setIsOpen}>
                 <DialogTrigger asChild>
                   <Button
-                    className="bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-3 px-8 rounded-lg shadow-md transform transition duration-300 hover:scale-105 text- md:text-lg"
+                    className="bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-3 px-8 rounded-lg shadow-md transform transition duration-300 hover:scale-105 text-sm md:text-lg"
                     onClick={handleUpgradeClick}
                     disabled={upgrading}
                   >
