@@ -19,9 +19,11 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { useRouter } from 'next/navigation';
+import { cn } from '@/lib/utils';
 
 interface UpgradeCardProps {
   title: string;
+  border?: boolean;
 }
 
 const features = [
@@ -51,7 +53,7 @@ const features = [
   },
 ];
 
-export function UpgradeCard({ title }: UpgradeCardProps) {
+export function UpgradeCard({ title, border }: UpgradeCardProps) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -61,7 +63,12 @@ export function UpgradeCard({ title }: UpgradeCardProps) {
   };
 
   return (
-    <Card className="w-full max-w-lg mx-auto">
+    <Card
+      className={cn(
+        'w-full max-w-lg mx-auto',
+        border && 'border-purple-500 border-2'
+      )}
+    >
       <CardHeader>
         <CardTitle className="text-gradient_indigo-purple flex items-center gap-2 text-2xl font-bold">
           <Sparkles className="size-6 text-yellow-500" />

@@ -89,6 +89,7 @@ export default async function UserPage() {
   if (domainInfo.type === 'localhost' || domainInfo.type === 'subdomain') {
     website = await prisma.website.findUnique({
       where: { domainName: domainInfo.subdomain },
+      include: { user: true },
     });
   } else if (domainInfo.type === 'custom') {
     // Check for premium user with custom domain
@@ -119,12 +120,15 @@ export default async function UserPage() {
     return <NotFoundScreen />;
   }
 
+  const isPremiumUser = website.user.stripeCustomerId ? true : false;
+
   return (
     <ThemeTemplateProvider>
       <AnalyticsTracker subdomain={website.domainName} />
       <UserPageContent
         profile={linkedinProfile}
         templateId={website.template}
+        isPremium={isPremiumUser}
       />
     </ThemeTemplateProvider>
   );

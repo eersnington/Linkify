@@ -15,6 +15,8 @@ import { PageSidebar } from './page-sidebar';
 import { EnhanceContentButton } from '../ehance-button';
 import { LinkedInProfile } from '@prisma/client';
 import { useLinkedInData } from '@/context/linkedin-data-context';
+import { Dialog, DialogContent } from '../ui/dialog';
+import { UpgradeCard } from '../upgrade-card';
 
 interface PageEditorProps {
   isUserPremium: boolean;
@@ -27,6 +29,7 @@ export default function PageEditor({
 }: PageEditorProps) {
   const [open, setOpen] = useState(false);
   const { linkedInProfile, updateLinkedInProfile } = useLinkedInData();
+  const [showUpgradeDialog, setShowUpgradeDialog] = useState(false);
 
   const { selectedTemplate } = useThemeTemplate();
   const { user } = useUser();
@@ -35,6 +38,7 @@ export default function PageEditor({
 
   useEffect(() => {
     async function loadProfile() {
+      setShowUpgradeDialog(!isUserPremium);
       try {
         if (!linkedInProfile && profileData) {
           console.log('Updating LinkedIn profile with fetched data');
@@ -50,12 +54,17 @@ export default function PageEditor({
     }
 
     loadProfile();
-  }, [profileData, linkedInProfile, updateLinkedInProfile]);
+  }, [profileData, linkedInProfile, updateLinkedInProfile, isUserPremium]);
 
   return (
     <div className="flex h-full w-full">
+      <Dialog open={showUpgradeDialog} onOpenChange={setShowUpgradeDialog}>
+        <DialogContent>
+          <UpgradeCard title="Unlock Premium Templates" border />
+        </DialogContent>
+      </Dialog>
       <aside className="hidden lg:block w-1/4 overflow-auto ml-4 my-4">
-        <PageSidebar isUserPremium={true} />
+        <PageSidebar isUserPremium={isUserPremium} />
       </aside>
       <main className="w-full lg:w-3/4 flex-1 overflow-hidden mx-4 my-4 ">
         <DashboardShell className="h-full rounded-lg bg-slate-50 p-4">
