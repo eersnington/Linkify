@@ -22,13 +22,17 @@ export default async function DashboardPage() {
 
   const domainName = website?.domainName;
 
+  // Perform the premium check here. If null, then user is not premium
+  const isPremium = userDb?.stripeCustomerId ? true : false;
+
   return (
     <DashboardShell className="">
       <DashboardHeader heading="Dashboard" text="View Your Web Analytics" />
       <DashboardCards
         website={website}
-        userDb={userDb}
         domainName={domainName}
+        userDb={userDb}
+        isPremium={isPremium}
       />
     </DashboardShell>
   );
