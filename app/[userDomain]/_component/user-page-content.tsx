@@ -38,18 +38,20 @@ export default function UserPageContent({
           }}
         />
       </main>
-      <div className="fixed bottom-4 right-4 z-50">
-        <Button
-          variant="outline"
-          size="lg"
-          className="rounded-full inline-flex bg-white shadow-md hover:bg-gray-100 transition-colors duration-200"
-        >
-          <Logo className="w-6 h-6 mr-2" />
-          <Link href={url} target="_blank">
-            Made with Linkify
-          </Link>
-        </Button>
-      </div>
+      {!isPremium && (
+        <div className="fixed bottom-4 right-4 z-50">
+          <Button
+            variant="outline"
+            size="lg"
+            className="rounded-full inline-flex bg-white shadow-md hover:bg-gray-100 transition-colors duration-200"
+          >
+            <Logo className="w-6 h-6 mr-2" />
+            <Link href={url} target="_blank">
+              Made with Linkify
+            </Link>
+          </Button>
+        </div>
+      )}
     </div>
   );
 }
