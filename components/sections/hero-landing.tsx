@@ -6,6 +6,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { LayoutTemplate, Sparkles } from 'lucide-react';
 import { LinkedInLogoIcon } from '@radix-ui/react-icons';
 import { CTAForm } from '../forms/cta-email-form';
+import { Button } from '../ui/button';
 
 const wordVariants = {
   hidden: { opacity: 0, x: -20 },
@@ -44,6 +45,14 @@ export function HeroLanding() {
   return (
     <section className="container">
       <div className="flex flex-col items-center text-center justify-center gap-y-8 mt-8">
+        <Button
+          variant={'outline'}
+          rounded={'full'}
+          className="border-purple-500 text-purple-500 hover:bg-purple-500 hover:text-white"
+        >
+          <LinkedInLogoIcon className="w-6 h-6 mr-2" />
+          Over 500 LinkedIn Users Served
+        </Button>
         <HeroTextFormComponent />
       </div>
       <div className="flex flex-row items-center justify-between gap-y-8 mt-4">
@@ -56,78 +65,27 @@ export function HeroLanding() {
 }
 
 const HeroTextFormComponent = () => {
-  const firstLineWords = ['Create', 'a', 'stunning', 'personal'];
-
   return (
     <>
       <div className="space-y-4">
-        <div className="text-balance font-extrabold text-purple-950 text-3xl sm:text-5xl md:text-7xl">
-          {firstLineWords.map((word, index) => (
-            <motion.span
-              key={index}
-              className="inline-block mr-2"
-              initial="hidden"
-              animate="visible"
-              variants={wordVariants}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-            >
-              {word}
-              {index === 2 && (
-                <motion.span
-                  className="inline-block text-purple-500 mx-2"
-                  variants={iconVariants}
-                  transition={{ duration: 0.5, delay: (index + 1) * 0.1 }}
-                >
-                  <Sparkles className="inline-block size-10 md:size-12 lg:size-14" />
-                </motion.span>
-              )}
-            </motion.span>
-          ))}
-        </div>
-        <motion.div
-          className="text-balance font-extrabold text-purple-950 text-2xl sm:text-4xl md:text-6xl"
-          initial="hidden"
-          animate="visible"
-          variants={secondLineVariants}
-          transition={{ duration: 0.5, delay: 0.5 }}
-        >
-          website{' '}
-          <motion.span
-            className="inline-block text-purple-500"
-            variants={iconVariants}
-            transition={{ duration: 0.5, delay: 0.5 }}
-          >
-            <LayoutTemplate className="inline-block size-10 md:size-12 lg:size-14" />
-          </motion.span>{' '}
-          from your
-        </motion.div>
-        <motion.div
-          className="text-balance font-extrabold text-purple-950 text-2xl sm:text-4xl md:text-6xl"
-          initial="hidden"
-          animate="visible"
-          variants={thirdLineVariants}
-          transition={{ duration: 0.5, delay: 0.7 }}
-        >
-          LinkedIn{' '}
-          <motion.span
-            className="inline-block text-purple-500"
-            variants={iconVariants}
-            transition={{ duration: 0.5, delay: 0.7 }}
-          >
-            <LinkedInLogoIcon className="inline-block size-10 md:size-12 lg:size-14" />
-          </motion.span>{' '}
-          profile
-        </motion.div>
+        <h1 className="font-bold tracking-tighter text-purple-950 text-4xl sm:text-5xl md:text-6xl leading-tight">
+          Create a professional
+          <br />
+          personal website instantly
+          <br />
+          from your LinkedIn or
+          <br />
+          CV/Resume
+        </h1>
+        <p className="text-purple-500 tracking-tight font-medium text-xl sm:text-2xl md:text-3xl sans-serif">
+          Boost your career by presenting yourself like a true professional.
+          <br />
+          It&apos;s free and takes seconds with our powerful AI.
+        </p>
       </div>
-      <motion.div
-        className="w-full max-w-xl mx-auto"
-        initial="hidden"
-        animate="visible"
-        variants={formVariants}
-        transition={{ duration: 0.5, delay: 0.9 }}
-      >
+      <div className="w-full max-w-xl mx-auto my-4">
         <CTAForm />
-      </motion.div>
+      </div>
     </>
   );
 };

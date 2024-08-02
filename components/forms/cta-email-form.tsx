@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { SparklesIcon } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
@@ -44,17 +44,16 @@ export function CTAForm() {
         onSubmit={form.handleSubmit(onSubmit)}
         className="w-full sm:max-w-4xl"
       >
-        <div className="flex space-x-2">
+        <div className="flex flex-col md:flex-row md:space-x-2 space-y-2 md:space-y-0">
           <FormField
             control={form.control}
             name="email"
             render={({ field }) => (
-              <FormItem className="w-3/5">
+              <FormItem className="w-full md:w-3/5">
                 <FormControl>
                   <Input
-                    // disabled={true}
                     type="email"
-                    className="h-16 rounded-lg border-4 bg-white px-4 text-xs md:text-lg text-purple-950 transition-colors duration-300 placeholder:text-purple-400 hover:border-purple-500 focus:outline-none focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0"
+                    className="h-16 rounded-lg border-4 bg-white px-4 text-base sm:text-lg text-purple-950 transition-colors duration-300 placeholder:text-purple-400 hover:border-purple-500 focus:outline-none focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0"
                     placeholder="Enter your LinkedIn email address"
                     {...field}
                   />
@@ -65,13 +64,10 @@ export function CTAForm() {
           />
           <Button
             type="submit"
-            className="relative h-16 w-2/5 overflow-hidden rounded-lg p-[3px] focus:outline-none hover:transform hover:scale-105 transition-transform duration-300"
+            className="w-full md:w-2/5 h-16 font-semibold text-base sm:text-lg bg-purple-500 text-white hover:bg-purple-700 rounded-lg p-[3px] focus:outline-none hover:transform hover:scale-105 transition-transform duration-300"
             disabled={isSubmitting}
           >
-            <span className="absolute inset-[-1000%] animate-[spin_4s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#6366f1,#a855f7,#8B5CF6)]" />
-            <span className="bg-white inline-flex size-full cursor-pointer items-center justify-center rounded-lg px-3 py-1 text-sm md:text-lg font-medium text-purple-950 backdrop-blur-3xl">
-              <SparklesIcon className="mx-2 text-yellow-500" /> Get Started
-            </span>
+            Get Started <ArrowRight className="w-6 h-6 ml-2" />
           </Button>
         </div>
       </form>
