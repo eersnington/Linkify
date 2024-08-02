@@ -51,7 +51,7 @@ export default async function SettingsPage() {
             <DomainSearchAndPurchase />
           )
         ) : (
-          <UpgradeCard />
+          <UpgradeCard title={'Need a custom .com domain?'} />
         )}
       </div>
     </DashboardShell>
