@@ -4,7 +4,6 @@ import { prisma } from '@/lib/db';
 import { currentUser } from '@clerk/nextjs/server';
 import axios from 'axios';
 import { revalidateTag } from 'next/cache';
-import getConfig from 'next/config';
 import { redirect } from 'next/navigation';
 
 interface Domain {
@@ -133,7 +132,9 @@ async function registerDomain(domain: string): Promise<boolean> {
   return false;
 }
 
-async function addDomainToVercel(domain: string): Promise<boolean> {
+async function addDomainToVercel(
+  domain: string
+): Promise<vercelDomainVerificationResponse> {
   try {
     const endpoint = `https://api.vercel.com/v10/projects/${
       process.env.VERCEL_PROJECT_ID
@@ -155,12 +156,16 @@ async function addDomainToVercel(domain: string): Promise<boolean> {
     console.log('Vercel domain addition response:', response.data);
 
     if (response.data.name === domain) {
-      return true;
+      return {
+        verified: response.data.verified,
+      };
     }
   } catch (error) {
     console.error(`Error adding domain ${domain} to Vercel:`, error);
   }
-  return false;
+  return {
+    verified: false,
+  };
 }
 
 export async function getConfigResponse(

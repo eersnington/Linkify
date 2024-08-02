@@ -65,6 +65,7 @@ export default function OnboardUpgrade({
   const handleUpgradeClick = async () => {
     setUpgrading(true);
     const priceId = pricingData[1].stripeIds.yearly;
+    const couponId = pricingData[1].stripeIds.coupon;
 
     if (!priceId) {
       throw new Error('Price ID is required');
@@ -75,7 +76,8 @@ export default function OnboardUpgrade({
         emailAddress,
         firstName,
         lastName,
-        priceId
+        priceId,
+        couponId
       );
       if (result.status === 'success' && result.stripeUrl) {
         window.location.href = result.stripeUrl;

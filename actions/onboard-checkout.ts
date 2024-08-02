@@ -1,11 +1,8 @@
 'use server';
 
-import { redirect } from 'next/navigation';
 import { stripe } from '@/lib/stripe';
 import { absoluteUrl } from '@/lib/utils';
-import { useClerk } from '@clerk/nextjs';
-import { prisma } from '@/lib/db';
-import { createClerkClient } from '@clerk/backend';
+import Stripe from 'stripe';
 
 export type responseAction = {
   status: 'success' | 'error';
@@ -13,15 +10,13 @@ export type responseAction = {
 };
 
 const billingUrl = absoluteUrl('/dashboard/billing');
-const clerkClient = createClerkClient({
-  secretKey: process.env.CLERK_SECRET_KEY,
-});
 
 export async function generateStripeCheckoutForUnsignedUser(
   email: string,
   firstName: string,
   lastName: string,
-  priceId: string
+  priceId: string,
+  couponId?: string
 ): Promise<responseAction> {
   let redirectUrl: string = '';
 
@@ -30,26 +25,8 @@ export async function generateStripeCheckoutForUnsignedUser(
       throw new Error('Email is required');
     }
 
-    const clerkUser = await clerkClient.users.createUser({
-      emailAddress: [email],
-      firstName: firstName,
-      lastName: lastName,
-    });
-
-    console.log('Clerk user created', clerkUser.id);
-    const dbUser = await prisma.user.create({
-      data: {
-        id: clerkUser.id,
-        email,
-        firstName,
-        lastName,
-      },
-    });
-
-    console.log('DB user created');
-
     // Create a checkout session for the unsigned user
-    const stripeSession = await stripe.checkout.sessions.create({
+    const sessionParams: Stripe.Checkout.SessionCreateParams = {
       success_url: billingUrl,
       cancel_url: billingUrl,
       payment_method_types: ['card'],
@@ -63,9 +40,23 @@ export async function generateStripeCheckoutForUnsignedUser(
         },
       ],
       metadata: {
-        userId: clerkUser.id,
+        userEmail: email,
+        userFirstName: firstName,
+        userLastName: lastName,
       },
-    });
+    };
+
+    // Add the discount coupon if provided
+    if (couponId) {
+      sessionParams.discounts = [
+        {
+          coupon: couponId,
+        },
+      ];
+    }
+
+    // Create a checkout session for the unsigned user
+    const stripeSession = await stripe.checkout.sessions.create(sessionParams);
 
     redirectUrl = stripeSession.url as string;
 

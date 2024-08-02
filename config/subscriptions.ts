@@ -54,6 +54,7 @@ export const pricingData: SubscriptionPlan[] = [
     stripeIds: {
       monthly: env.NEXT_PUBLIC_STRIPE_PRO_MONTHLY_PLAN_ID,
       yearly: env.NEXT_PUBLIC_STRIPE_PRO_YEARLY_PLAN_ID,
+      coupon: 'D4kPxEuZ',
     },
   },
 ];

@@ -23,7 +23,7 @@ export default async function OnboardPage({
   const user = await currentUser();
 
   if (user) {
-    redirect('/dashboard/mypage');
+    redirect('/dashboard/');
   }
 
   if (!email) {

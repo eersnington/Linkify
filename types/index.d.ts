@@ -1,7 +1,7 @@
-import { User } from "@prisma/client";
-import type { Icon } from "lucide-react";
+import { User } from '@prisma/client';
+import type { Icon } from 'lucide-react';
 
-import { Icons } from "@/components/shared/icons";
+import { Icons } from '@/components/shared/icons';
 
 export type NavItem = {
   title: string;
@@ -40,7 +40,7 @@ export type SiteConfig = {
     github: string;
   };
   seoKeywords: string[];
-  defaultTheme: "dark" | "light" | "system";
+  defaultTheme: 'dark' | 'light' | 'system';
 };
 
 export type HeroSectionConfig = {
@@ -111,14 +111,15 @@ export type SubscriptionPlan = {
   stripeIds: {
     monthly: string | null;
     yearly: string | null;
+    coupon?: string;
   };
 };
 
 export type UserSubscriptionPlan = SubscriptionPlan &
-  Pick<User, "stripeCustomerId" | "stripeSubscriptionId" | "stripePriceId"> & {
+  Pick<User, 'stripeCustomerId' | 'stripeSubscriptionId' | 'stripePriceId'> & {
     stripeCurrentPeriodEnd: number;
     isPaid: boolean;
-    interval: "month" | "year" | null;
+    interval: 'month' | 'year' | null;
     isCanceled?: boolean;
   };
 
