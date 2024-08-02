@@ -1,17 +1,17 @@
-import * as React from "react";
-import Link from "next/link";
+import * as React from 'react';
+import Link from 'next/link';
 
-import { footerLinks, siteConfig } from "@/config/site";
-import { cn } from "@/lib/utils";
-import { ModeToggle } from "@/components/layout/mode-toggle";
+import { footerLinks, siteConfig } from '@/config/site';
+import { cn } from '@/lib/utils';
+import { ModeToggle } from '@/components/layout/mode-toggle';
 
-import { NewsletterForm } from "../forms/newsletter-form";
-import { Icons } from "../shared/icons";
+import { NewsletterForm } from '../forms/newsletter-form';
+import { Icons } from '../shared/icons';
 
 export function SiteFooter({ className }: React.HTMLAttributes<HTMLElement>) {
   return (
-    <footer className={cn("border-t", className)}>
-      <div className="container grid grid-cols-1 gap-6 py-14 sm:grid-cols-2 md:grid-cols-5">
+    <footer className={cn('border-t', className)}>
+      {/* <div className="container grid grid-cols-1 gap-6 py-14 sm:grid-cols-2 md:grid-cols-5">
         {footerLinks.map((section) => (
           <div key={section.title}>
             <span className="text-sm font-medium text-foreground">
@@ -34,10 +34,10 @@ export function SiteFooter({ className }: React.HTMLAttributes<HTMLElement>) {
         <div className="flex flex-col  items-end md:col-span-2">
           <NewsletterForm />
         </div>
-      </div>
+      </div> */}
 
       <div className="border-t py-4">
-        <div className="container flex items-center justify-between">
+        <div className="container flex items-center justify-center">
           {/* 
             If you want to mention Copyright for your LLP | Pvt Ltd, uncomment the lines below
            */}
@@ -45,38 +45,47 @@ export function SiteFooter({ className }: React.HTMLAttributes<HTMLElement>) {
             Copyright &copy; 2024. All rights reserved.
           </span> */}
           <p className="text-left text-sm text-muted-foreground">
-            Built by{" "}
+            Brought to you by{' '}
             <Link
-              href={siteConfig.links.twitter}
+              href={'#'}
               target="_blank"
               rel="noreferrer"
               className="font-medium underline underline-offset-4"
             >
-              Sreenington
+              Belgravia Software Limited
             </Link>
-            . Hosted on{" "}
+            .{' '}
             <Link
-              href="https://vercel.com"
+              href="/terms"
               target="_blank"
               rel="noreferrer"
-              className="font-medium underline underline-offset-4"
+              className="font-medium hover:underline underline-offset-4"
             >
-              Vercel
-            </Link>
-            . Illustrations by{" "}
+              Terms and Conditions
+            </Link>{' '}
+            |{' '}
             <Link
-              href="https://popsy.co"
+              href="/privacy"
               target="_blank"
               rel="noreferrer"
-              className="font-medium underline underline-offset-4"
+              className="font-medium hover:underline underline-offset-4"
             >
-              Popsy.
+              Privacy Policy
+            </Link>{' '}
+            |{' '}
+            <Link
+              href={`mailto:${siteConfig.mailSupport}`}
+              target="_blank"
+              rel="noreferrer"
+              className="font-medium hover:underline underline-offset-4"
+            >
+              {siteConfig.mailSupport}
             </Link>
           </p>
 
-          <div className="flex items-center gap-3">
+          {/* <div className="flex items-center gap-3">
             <ModeToggle />
-          </div>
+          </div> */}
         </div>
       </div>
     </footer>
