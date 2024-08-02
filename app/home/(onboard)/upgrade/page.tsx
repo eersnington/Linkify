@@ -1,4 +1,4 @@
-import UpgradeCards from '@/components/onboard/onboard-upgrade';
+import OnboardUpgrade from '@/components/onboard/onboard-upgrade';
 
 export default function Page({
   searchParams,
@@ -8,7 +8,7 @@ export default function Page({
   const { email } = searchParams;
   return (
     <>
-      <UpgradeCards emailAddress={email} />
+      <OnboardUpgrade emailAddress={email} />
     </>
   );
 }
