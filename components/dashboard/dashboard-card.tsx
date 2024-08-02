@@ -82,7 +82,7 @@ export default function DashboardCards({
         <CardHeader>
           <CardTitle>
             Website Performance{' '}
-            <Badge className="text-center items-center">
+            <Badge className="inline-flex items-center justify-center text-center bg-gray-800 p-2">
               <Link
                 href={
                   userDb?.domain
@@ -90,7 +90,7 @@ export default function DashboardCards({
                     : `${protocol}${domainName}.${rootDomain}`
                 }
                 target="_blank"
-                className="text-white hover:underline flex items-center justify-center mt-2"
+                className="text-white hover:underline flex items-center"
               >
                 {userDb?.domain
                   ? `${userDb?.domain}`
