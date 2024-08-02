@@ -1,6 +1,4 @@
-import { FAQ } from '@/components/sections/faq';
 import { HeroLanding } from '@/components/sections/hero-landing';
-import { BentoPrivacy } from '@/components/sections/privacy';
 import { ThreeSteps } from '@/components/sections/three-steps';
 
 export default async function IndexPage() {
@@ -8,9 +6,8 @@ export default async function IndexPage() {
     <>
       <HeroLanding />
       <ThreeSteps />
-      <BentoPrivacy />
-      <FAQ />
+      {/* <BentoPrivacy />
+      <FAQ /> */}
     </>
   );
 }
-
