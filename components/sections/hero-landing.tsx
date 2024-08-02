@@ -3,35 +3,9 @@
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { AnimatePresence, motion } from 'framer-motion';
-import { LayoutTemplate, Sparkles } from 'lucide-react';
 import { LinkedInLogoIcon } from '@radix-ui/react-icons';
 import { CTAForm } from '../forms/cta-email-form';
-import { Button } from '../ui/button';
-
-const wordVariants = {
-  hidden: { opacity: 0, x: -20 },
-  visible: { opacity: 1, x: 0 },
-};
-
-const iconVariants = {
-  hidden: { opacity: 0, rotate: -15 },
-  visible: { opacity: 1, rotate: 0 },
-};
-
-const secondLineVariants = {
-  hidden: { opacity: 0, x: 100 },
-  visible: { opacity: 1, x: 0 },
-};
-
-const thirdLineVariants = {
-  hidden: { opacity: 0, y: 100 },
-  visible: { opacity: 1, y: 0 },
-};
-
-const formVariants = {
-  hidden: { opacity: 0, y: 100 },
-  visible: { opacity: 1, y: 0 },
-};
+import { Badge } from '../ui/badge';
 
 export function HeroLanding() {
   const images = [
@@ -45,17 +19,13 @@ export function HeroLanding() {
   return (
     <section className="container">
       <div className="flex flex-col items-center text-center justify-center gap-y-8 mt-8">
-        <Button
-          variant={'outline'}
-          rounded={'full'}
-          className="border-purple-500 text-purple-500 hover:bg-purple-500 hover:text-white"
-        >
+        <Badge className="border-purple-500 text-purple-500 hover:text-purple-500 bg-white hover:bg-white">
           <LinkedInLogoIcon className="w-6 h-6 mr-2" />
           Over 500 LinkedIn Users Served
-        </Button>
+        </Badge>
         <HeroTextFormComponent />
       </div>
-      <div className="flex flex-row items-center justify-between gap-y-8 mt-4">
+      <div className="flex flex-row items-center justify-between gap-y-8 mt-8">
         <SampleLinkedInProfile />
         <Arrow />
         <CustomCarousel images={images} />
@@ -77,7 +47,7 @@ const HeroTextFormComponent = () => {
           <br />
           CV/Resume
         </h1>
-        <p className="text-purple-500 tracking-tight font-medium text-xl sm:text-2xl md:text-3xl sans-serif">
+        <p className="text-purple-800 tracking-tight font-medium text-lg sm:text-xl md:text-2xl">
           Boost your career by presenting yourself like a true professional.
           <br />
           It&apos;s free and takes seconds with our powerful AI.
@@ -92,12 +62,7 @@ const HeroTextFormComponent = () => {
 
 const SampleLinkedInProfile = () => {
   return (
-    <motion.div
-      className="rounded-lg shadow-xl"
-      initial={{ opacity: 0, x: -50 }}
-      animate={{ opacity: 1, x: 0 }}
-      transition={{ duration: 0.5, delay: 1.1 }}
-    >
+    <div className="rounded-lg shadow-xl">
       <Image
         src="/images/linkedin-profile.png"
         alt="LinkedIn Profile"
@@ -105,25 +70,20 @@ const SampleLinkedInProfile = () => {
         height={800}
         className="w-full h-full max-w-1/3 rounded-lg"
       />
-    </motion.div>
+    </div>
   );
 };
 
 const Arrow = () => {
   return (
-    <motion.div
-      className="flex items-center justify-center"
-      initial={{ opacity: 0, scale: 0.5 }}
-      animate={{ opacity: 1, scale: 1 }}
-      transition={{ duration: 0.5, delay: 1.3 }}
-    >
+    <div className="flex items-center justify-center">
       <Image
         src="/images/hand-drawn-arrow.jpg"
         alt="Hand-drawn arrow"
         width={200}
         height={200}
       />
-    </motion.div>
+    </div>
   );
 };
 
@@ -144,12 +104,7 @@ const CustomCarousel = ({ images }) => {
   }, [images.length]);
 
   return (
-    <motion.div
-      className="relative w-[600px] h-[300px] overflow-hidden rounded-lg shadow-xl"
-      initial={{ opacity: 0, x: 50 }}
-      animate={{ opacity: 1, x: 0 }}
-      transition={{ duration: 0.5, delay: 1.1 }}
-    >
+    <div className="relative w-[600px] h-[300px] overflow-hidden rounded-lg shadow-xl">
       <AnimatePresence>
         <motion.div
           key={currentIndex}
@@ -169,6 +124,6 @@ const CustomCarousel = ({ images }) => {
           />
         </motion.div>
       </AnimatePresence>
-    </motion.div>
+    </div>
   );
 };
