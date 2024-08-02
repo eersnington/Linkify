@@ -16,7 +16,7 @@ export default async function MarketingLayout({
   return (
     <div className="flex min-h-screen flex-col">
       <Suspense fallback="...">
-        <LandingNavBar items={marketingConfig.mainNav} scroll={true} />
+        <LandingNavBar scroll={true} />
       </Suspense>
       <main>{children}</main>
       <SiteFooter />
