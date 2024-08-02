@@ -7,7 +7,7 @@ export const dashboardConfig: DashboardConfig = {
       href: '/mypage',
     },
     {
-      title: 'Dashboard',
+      title: 'Analytics',
       href: '/dashboard/',
     },
     {
