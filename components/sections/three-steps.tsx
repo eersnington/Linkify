@@ -8,9 +8,9 @@ import { Card, CardContent, CardHeader } from '../ui/card';
 
 const steps = [
   {
-    title: 'Copy & Paste Your LinkedIn URL',
+    title: 'Connect your LinkedIn',
     description:
-      "Transform your professional presence in seconds! Just drop your LinkedIn URL or upload your CV, and watch the magic unfold. It's that simple!",
+      "Transform your professional presence in seconds! Connect your LinkedIn with your email, and watch the magic unfold. It's that simple!",
     video: '/videos/step_one.mp4',
     gradient: 'from-cyan-400 to-blue-500',
     icon: <LinkedInLogoIcon className="w-12 h-12" />,
