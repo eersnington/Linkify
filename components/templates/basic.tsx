@@ -2,7 +2,17 @@
 
 import Image from 'next/image';
 import { motion } from 'framer-motion';
-import { Briefcase, ChevronDown, GraduationCap } from 'lucide-react';
+import {
+  Briefcase,
+  GraduationCap,
+  Mail,
+  Calendar,
+  Building,
+} from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Separator } from '@/components/ui/separator';
 
 import { LinkedInProfile as TemplateProps } from '@prisma/client';
 
@@ -15,101 +25,132 @@ export function BasicTemplate({ profile }: { profile: TemplateProps }) {
     photoUrl,
     workExperiences,
     education,
+    skills,
+    userEmail,
   } = profile;
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className="flex flex-col rounded-lg border border-gray-200 bg-white p-8 shadow-md"
+      className="container mx-auto px-4 py-8 max-w-4xl"
     >
-      <div className="mx-auto max-w-4xl">
-        <motion.header
-          className="mb-12 text-center"
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-        >
-          <Image
-            src={photoUrl}
-            alt={firstName + ' ' + lastName}
-            width={200}
-            height={200}
-            className="mx-auto mb-4 rounded-full shadow-lg"
-          />
-          <div className="mb-2 text-4xl font-bold text-gray-800">
-            {firstName + ' ' + lastName}
+      <Card className="mb-8 overflow-hidden">
+        <div className="bg-gradient-to-r from-blue-300 to-purple-300 h-32"></div>
+        <CardContent className="p-6 relative">
+          <div className="flex flex-col md:flex-row items-start gap-6">
+            <Image
+              src={photoUrl}
+              alt={firstName + ' ' + lastName}
+              width={200}
+              height={200}
+              className="rounded-full shadow-lg border-4 border-white absolute top-0 transform -translate-y-1/2"
+            />
+            <div className="md:ml-56 mt-24 md:mt-0">
+              <div className="flex justify-between items-start">
+                <div>
+                  <h1 className="text-3xl font-bold text-gray-800 mb-2">
+                    {firstName + ' ' + lastName}
+                  </h1>
+                  <p className="text-xl font-semibold text-purple-600 mb-4">
+                    {title}
+                  </p>
+                </div>
+                <Button
+                  onClick={() => (window.location.href = `mailto:${userEmail}`)}
+                  className="bg-purple-500 hover:bg-purple-600 text-white rounded-full"
+                >
+                  <Mail className="mr-2 w-6 h-6" /> Contact Me
+                </Button>
+              </div>
+              <div className="flex flex-wrap gap-2 mb-4">
+                {skills.slice(0, 5).map((skill, index) => (
+                  <Badge
+                    key={index}
+                    variant="secondary"
+                    className="bg-yellow-100 text-yellow-800"
+                  >
+                    {skill}
+                  </Badge>
+                ))}
+              </div>
+              <p className="text-gray-600 mb-4">{description}</p>
+              <div className="flex flex-wrap gap-4 text-sm text-gray-600">
+                <span className="flex items-center">
+                  <Mail className="w-4 h-4 mr-2" />
+                  {userEmail}
+                </span>
+              </div>
+            </div>
           </div>
-          <div className="mb-2 text-xl font-semibold text-gray-600">
-            {title}
-          </div>
-          <span className="text-xl text-gray-600">{description}</span>
-        </motion.header>
+        </CardContent>
+      </Card>
 
-        <motion.section
-          className="mb-12"
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ delay: 0.4 }}
-        >
-          <h2 className="mb-6 flex items-center text-2xl font-semibold text-gray-800">
+      <Card className="mb-8">
+        <CardHeader>
+          <CardTitle className="flex items-center text-2xl font-semibold text-blue-600">
             <Briefcase className="mr-2" /> Work Experience
-          </h2>
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
           {workExperiences.map((job: any, index: number) => (
             <motion.div
               key={job.company}
-              className="mb-6 rounded-lg bg-gray-50 p-6 shadow-md"
+              className="mb-8 last:mb-0"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 * index }}
             >
-              <h3 className="mb-2 text-xl font-semibold text-gray-800">
-                {job.title}
-              </h3>
-              <span className="mb-1 text-gray-600">{job.company}</span>
-              <div className="mb-2 text-sm text-gray-500">{job.date}</div>
-              <span className="text-gray-700">{job.description}</span>
+              <div className="flex flex-col md:flex-row justify-between mb-2">
+                <h3 className="text-xl font-semibold text-blue-700">
+                  {job.title}
+                </h3>
+                <span className="text-sm text-blue-500 flex items-center">
+                  <Calendar className="w-4 h-4 mr-1" /> {job.date}
+                </span>
+              </div>
+              <p className="text-blue-600 mb-2 flex items-center">
+                <Building className="w-4 h-4 mr-2" /> {job.company}
+              </p>
+              <p className="text-gray-700">{job.description}</p>
+              {index < workExperiences.length - 1 && (
+                <Separator className="my-6" />
+              )}
             </motion.div>
           ))}
-        </motion.section>
+        </CardContent>
+      </Card>
 
-        <motion.section
-          initial={{ opacity: 0, x: 20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ delay: 0.6 }}
-        >
-          <h2 className="mb-6 flex items-center text-2xl font-semibold text-gray-800">
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center text-2xl font-semibold text-purple-600">
             <GraduationCap className="mr-2" /> Education
-          </h2>
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
           {education.map((school: any, index: number) => (
             <motion.div
               key={school.name}
-              className="mb-6 rounded-lg bg-gray-50 p-6 shadow-md"
+              className="mb-6 last:mb-0"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 * index }}
             >
-              <h3 className="mb-2 text-xl font-semibold text-gray-800">
-                {school.name}
-              </h3>
-              <span className="mb-1 text-gray-600">{school.degree}</span>
-              <div className="text-sm text-gray-500">{school.date}</div>
+              <div className="flex flex-col md:flex-row justify-between mb-2">
+                <h3 className="text-xl font-semibold text-purple-700">
+                  {school.name}
+                </h3>
+                <span className="text-sm text-purple-500 flex items-center">
+                  <Calendar className="w-4 h-4 mr-1" /> {school.date}
+                </span>
+              </div>
+              <p className="text-purple-600">{school.degree}</p>
+              {index < education.length - 1 && <Separator className="my-4" />}
             </motion.div>
           ))}
-        </motion.section>
-
-        <motion.div
-          className="text-center"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.8 }}
-        >
-          <ChevronDown
-            className="mx-auto animate-bounce text-gray-400"
-            size={32}
-          />
-        </motion.div>
-      </div>
+        </CardContent>
+      </Card>
     </motion.div>
   );
 }
