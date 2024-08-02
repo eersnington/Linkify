@@ -22,6 +22,11 @@ interface vercelDomainConfigResponse {
 
 const tlds = ['com', 'me', 'co.uk', 'dev', 'pro', 'buzz'];
 
+function extractPrice(priceString: string): number {
+  const match = priceString.match(/Registration Price: (\d+(\.\d+)?) in USD/);
+  return match ? parseFloat(match[1]) : 0;
+}
+
 async function searchDomain(domain: string): Promise<Domain | null> {
   const params = new URLSearchParams({
     key: process.env.DYNADOT_API_KEY || '',
@@ -42,10 +47,12 @@ async function searchDomain(domain: string): Promise<Domain | null> {
     ) {
       const result = response.data.SearchResponse.SearchResults[0];
 
+      const price = result.Price ? `$${extractPrice(result.Price)}` : undefined;
+
       const finalResponse = {
         name: result.DomainName,
         available: result.Available === 'yes',
-        price: result.Price,
+        price: price,
       };
 
       return finalResponse;

@@ -214,7 +214,7 @@ export function DomainSearchAndPurchase() {
                               domain.available ? 'bg-green-500' : 'bg-red-500'
                             }
                           >
-                            {domain.available ? 'Available' : 'Taken'}
+                            {domain.price ? domain.price : 'Taken'}
                           </Badge>
                         </TableCell>
                         <TableCell>
