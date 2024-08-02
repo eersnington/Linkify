@@ -15,6 +15,10 @@ export const env = createEnv({
 
     DATABASE_URL: z.string().min(1),
     DATABASE_URL_NON_POOLING: z.string().min(1),
+    SUPABASE_HOST: z.string().min(1),
+    SUPABASE_PROJECT_URL: z.string().min(1),
+    SUPABASE_SECRET_KEY: z.string().min(1),
+
     STRIPE_API_KEY: z.string().min(1),
     STRIPE_WEBHOOK_SECRET: z.string().min(1),
 
@@ -39,6 +43,9 @@ export const env = createEnv({
     // Database
     DATABASE_URL: process.env.DATABASE_URL,
     DATABASE_URL_NON_POOLING: process.env.DATABASE_URL_NON_POOLING,
+    SUPABASE_HOST: process.env.SUPABASE_HOST,
+    SUPABASE_PROJECT_URL: process.env.SUPABASE_PROJECT_URL,
+    SUPABASE_SECRET_KEY: process.env.SUPABASE_SECRET_KEY,
 
     // API keys
     RESEND_API_KEY: process.env.RESEND_API_KEY,

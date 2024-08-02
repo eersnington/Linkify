@@ -6,6 +6,8 @@ import { WebhookEvent } from '@clerk/nextjs/server';
 import { Webhook } from 'svix';
 
 import { prisma } from '@/lib/db';
+import { tempStore } from '@/lib/temp-store';
+import { v4 as uuidv4 } from 'uuid';
 
 export const maxDuration = 30;
 
@@ -101,12 +103,14 @@ export async function POST(req: Request) {
         status: 200,
       });
     } else {
-      const { email_addresses, first_name, last_name, image_url } =
+      const { id, email_addresses, first_name, last_name, image_url } =
         payload?.data;
 
       const email = email_addresses[0]?.email_address;
       console.log('Action: Upsert user - ', email);
       console.log(payload.type);
+
+      const websiteName = uuidv4().substring(0, 6).toUpperCase();
 
       await prisma.user.upsert({
         where: { email: email },
@@ -125,6 +129,56 @@ export async function POST(req: Request) {
           image: image_url || '',
         },
       });
+
+      const linkedInProfileData = tempStore.get(email);
+
+      console.log(linkedInProfileData);
+
+      await prisma.linkedInProfile.upsert({
+        where: { userEmail: email },
+        update: {
+          id: id,
+          userEmail: email,
+          firstName: linkedInProfileData?.firstName || '',
+          lastName: linkedInProfileData?.lastName || '',
+          title: linkedInProfileData?.title || '',
+          description: linkedInProfileData?.description || '',
+          linkedInUrl: linkedInProfileData?.linkedInUrl || '',
+          photoUrl: linkedInProfileData?.photoUrl || '',
+          workExperiences: linkedInProfileData?.workExperiences || [],
+          education: linkedInProfileData?.education || [],
+          skills: linkedInProfileData?.skills || [],
+        },
+        create: {
+          id: id,
+          userEmail: email,
+          firstName: linkedInProfileData?.firstName || '',
+          lastName: linkedInProfileData?.lastName || '',
+          title: linkedInProfileData?.title || '',
+          description: linkedInProfileData?.description || '',
+          linkedInUrl: linkedInProfileData?.linkedInUrl || '',
+          photoUrl: linkedInProfileData?.photoUrl || '',
+          workExperiences: linkedInProfileData?.workExperiences || [],
+          education: linkedInProfileData?.education || [],
+          skills: linkedInProfileData?.skills || [],
+        },
+      });
+
+      await prisma.website.upsert({
+        where: { userEmail: email },
+        update: {
+          userEmail: email,
+          domainName: websiteName,
+        },
+        create: {
+          userEmail: email,
+          domainName: websiteName,
+          firstName: linkedInProfileData?.firstName,
+          template: 0,
+        },
+      });
+
+      console.log('User updated in database successfully');
 
       return new NextResponse('User updated in database successfully', {
         status: 200,

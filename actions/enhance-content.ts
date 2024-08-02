@@ -7,7 +7,6 @@ import { anthropic } from '@ai-sdk/anthropic';
 
 import { createOpenAI } from '@ai-sdk/openai';
 import { AILinkedInProfileSchema } from '@/lib/validations/linkedin-profile';
-import { revalidatePath } from 'next/cache';
 
 function getModel() {
   const groqAPIKey = process.env.GROQ_API_KEY;

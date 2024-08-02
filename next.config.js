@@ -36,6 +36,10 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'linkifyme.pro',
       },
+      {
+        protocol: 'https',
+        hostname: process.env.SUPABASE_HOST,
+      },
     ],
   },
   experimental: {

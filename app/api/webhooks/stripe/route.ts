@@ -44,29 +44,59 @@ export async function POST(req: Request) {
       const userFirstName = session?.metadata?.userFirstName as string;
       const userLastName = session?.metadata?.userLastName as string;
 
-      const clerkUser = await clerkClient.users.createUser({
-        emailAddress: [userEmail],
-        firstName: userFirstName,
-        lastName: userLastName,
-      });
-      console.log('Clerk user created', clerkUser.id);
-
-      const dbUser = await prisma.user.create({
-        data: {
-          id: clerkUser.id,
-          email: userEmail,
+      try {
+        const clerkUser = await clerkClient.users.createUser({
+          emailAddress: [userEmail],
           firstName: userFirstName,
           lastName: userLastName,
+        });
+        console.log('Clerk user created', clerkUser.id);
 
-          stripeSubscriptionId: subscription.id,
-          stripeCustomerId: subscription.customer as string,
-          stripePriceId: subscription.items.data[0].price.id,
-          stripeCurrentPeriodEnd: new Date(
-            subscription.current_period_end * 1000
-          ),
-        },
-      });
-      console.log('DB user created with Stripe');
+        await prisma.user.create({
+          data: {
+            id: clerkUser.id,
+            email: userEmail,
+            firstName: userFirstName,
+            lastName: userLastName,
+
+            stripeSubscriptionId: subscription.id,
+            stripeCustomerId: subscription.customer as string,
+            stripePriceId: subscription.items.data[0].price.id,
+            stripeCurrentPeriodEnd: new Date(
+              subscription.current_period_end * 1000
+            ),
+          },
+        });
+
+        console.log('DB user created with Stripe');
+      } catch (error) {
+        console.error('Error creating user:', error);
+
+        // rare case of user already existing in clerk
+        const user = await prisma.user.findUnique({
+          where: {
+            email: userEmail,
+          },
+        });
+
+        if (!user) {
+          return new Response(error, { status: 500 });
+        }
+
+        await prisma.user.update({
+          where: {
+            id: user.id,
+          },
+          data: {
+            stripeSubscriptionId: subscription.id,
+            stripeCustomerId: subscription.customer as string,
+            stripePriceId: subscription.items.data[0].price.id,
+            stripeCurrentPeriodEnd: new Date(
+              subscription.current_period_end * 1000
+            ),
+          },
+        });
+      }
     } else {
       await prisma.user.update({
         where: {

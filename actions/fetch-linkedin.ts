@@ -5,8 +5,9 @@ import { env } from '@/env.mjs';
 import { ctaFormSchema } from '@/lib/validations/user';
 import { sample_linkedin_response } from '@/lib/sample-response';
 import { LinkedInProfile } from '@prisma/client';
+import { tempStore } from '@/lib/temp-store';
 
-const TEST_MODE = true;
+const TEST_MODE = false;
 
 export type FormData = {
   email: string;
@@ -135,6 +136,8 @@ export async function fetchLinkedInProfile(data: FormData) {
     userEmail: email,
     ...profileData,
   };
+
+  tempStore.set(email, linkedInProfile);
 
   return {
     status: 'success',
