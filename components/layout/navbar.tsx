@@ -44,7 +44,9 @@ export function NavBar({
       }`}
     >
       <div className="container flex h-[60px] items-center justify-between py-4">
-        <MainNav items={items}>{children}</MainNav>
+        <MainNav items={items} isDashboard>
+          {children}
+        </MainNav>
 
         <div className="flex items-center space-x-3 ">
           {rightElements}
@@ -64,16 +66,7 @@ export function NavBar({
           ) : (
             <Link
               href="/signin"
-              // className="flex gap-2 bg-transparent px-4 text-sm font-semibold hover:bg-transparent hover:text-purple-600"
-              className={cn(
-                buttonVariants({
-                  variant: 'default',
-                  size: 'sm',
-                  rounded: 'lg',
-                }),
-                'bg-slate-800 text-sm font-semibold hover:bg-purple-600',
-                'px-4'
-              )}
+              className="flex gap-2 bg-transparent px-4 text-sm font-semibold hover:bg-transparent hover:text-purple-600"
             >
               <span>Sign In</span>
             </Link>
