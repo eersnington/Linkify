@@ -15,7 +15,7 @@ export const siteConfig: SiteConfig = {
     github: '-',
   },
   twitterID: '@sreenington',
-  mailSupport: 'sree.zaplineai@gmail.com',
+  mailSupport: 'support@email.com',
   seoKeywords: [
     'Linkify',
     'LinkedIn profile to website',
