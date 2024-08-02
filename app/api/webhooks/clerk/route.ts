@@ -110,8 +110,6 @@ export async function POST(req: Request) {
       console.log('Action: Upsert user - ', email);
       console.log(payload.type);
 
-      const websiteName = uuidv4().substring(0, 6).toUpperCase();
-
       await prisma.user.upsert({
         where: { email: email },
         update: {
@@ -132,51 +130,53 @@ export async function POST(req: Request) {
 
       const linkedInProfileData = tempStore.get(email);
 
-      console.log(linkedInProfileData);
+      if (linkedInProfileData) {
+        const websiteName = uuidv4().substring(0, 6).toUpperCase();
 
-      await prisma.linkedInProfile.upsert({
-        where: { userEmail: email },
-        update: {
-          id: id,
-          userEmail: email,
-          firstName: linkedInProfileData?.firstName || '',
-          lastName: linkedInProfileData?.lastName || '',
-          title: linkedInProfileData?.title || '',
-          description: linkedInProfileData?.description || '',
-          linkedInUrl: linkedInProfileData?.linkedInUrl || '',
-          photoUrl: linkedInProfileData?.photoUrl || '',
-          workExperiences: linkedInProfileData?.workExperiences || [],
-          education: linkedInProfileData?.education || [],
-          skills: linkedInProfileData?.skills || [],
-        },
-        create: {
-          id: id,
-          userEmail: email,
-          firstName: linkedInProfileData?.firstName || '',
-          lastName: linkedInProfileData?.lastName || '',
-          title: linkedInProfileData?.title || '',
-          description: linkedInProfileData?.description || '',
-          linkedInUrl: linkedInProfileData?.linkedInUrl || '',
-          photoUrl: linkedInProfileData?.photoUrl || '',
-          workExperiences: linkedInProfileData?.workExperiences || [],
-          education: linkedInProfileData?.education || [],
-          skills: linkedInProfileData?.skills || [],
-        },
-      });
+        await prisma.linkedInProfile.upsert({
+          where: { userEmail: email },
+          update: {
+            id: id,
+            userEmail: email,
+            firstName: linkedInProfileData?.firstName || '',
+            lastName: linkedInProfileData?.lastName || '',
+            title: linkedInProfileData?.title || '',
+            description: linkedInProfileData?.description || '',
+            linkedInUrl: linkedInProfileData?.linkedInUrl || '',
+            photoUrl: linkedInProfileData?.photoUrl || '',
+            workExperiences: linkedInProfileData?.workExperiences || [],
+            education: linkedInProfileData?.education || [],
+            skills: linkedInProfileData?.skills || [],
+          },
+          create: {
+            id: id,
+            userEmail: email,
+            firstName: linkedInProfileData?.firstName || '',
+            lastName: linkedInProfileData?.lastName || '',
+            title: linkedInProfileData?.title || '',
+            description: linkedInProfileData?.description || '',
+            linkedInUrl: linkedInProfileData?.linkedInUrl || '',
+            photoUrl: linkedInProfileData?.photoUrl || '',
+            workExperiences: linkedInProfileData?.workExperiences || [],
+            education: linkedInProfileData?.education || [],
+            skills: linkedInProfileData?.skills || [],
+          },
+        });
 
-      await prisma.website.upsert({
-        where: { userEmail: email },
-        update: {
-          userEmail: email,
-          domainName: websiteName,
-        },
-        create: {
-          userEmail: email,
-          domainName: websiteName,
-          firstName: linkedInProfileData?.firstName,
-          template: 0,
-        },
-      });
+        await prisma.website.upsert({
+          where: { userEmail: email },
+          update: {
+            userEmail: email,
+            domainName: websiteName,
+          },
+          create: {
+            userEmail: email,
+            domainName: websiteName,
+            firstName: linkedInProfileData?.firstName,
+            template: 0,
+          },
+        });
+      }
 
       console.log('User updated in database successfully');
 
