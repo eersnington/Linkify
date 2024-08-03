@@ -44,7 +44,7 @@ export function OnboardingSourceForm() {
   });
 
   if (!user) {
-    return router.push('/signin');
+    router.push('/signin');
   }
 
   function onSubmit(data: z.infer<typeof sourceSchema>) {

@@ -1,7 +1,6 @@
 'use client';
 
-import { OnboardingSourceForm } from "@/components/forms/onboard-question";
-
+import { OnboardingSourceForm } from '@/components/forms/onboard-question';
 
 export default function OnboardingPage() {
   return (

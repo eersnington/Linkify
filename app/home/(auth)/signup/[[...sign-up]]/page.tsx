@@ -26,6 +26,6 @@ export default function SignUpPage({
 
   console.log('Normal Redirect!');
   return (
-    <SignUp initialValues={initialValues} forceRedirectUrl={'/dashboard'} />
+    <SignUp initialValues={initialValues} forceRedirectUrl={'/onboard/form'} />
   );
 }
