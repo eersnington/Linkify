@@ -7,7 +7,9 @@ import { sample_linkedin_response } from '@/lib/sample-response';
 import { LinkedInProfile } from '@prisma/client';
 import { tempStore } from '@/lib/temp-store';
 
-const TEST_MODE = false;
+const envTestMode = process.env.TEST_MODE === 'true';
+
+const TEST_MODE = envTestMode;
 
 export type FormData = {
   email: string;

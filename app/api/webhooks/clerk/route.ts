@@ -63,6 +63,10 @@ export async function POST(req: Request) {
 
     console.log(payload.type);
 
+    /*
+     * User deletion action
+     * This action is triggered when a user is deleted from Clerk
+     */
     if (payload.type === 'user.deleted') {
       // action for deleting user
       console.log('Action: Deleting user - ', id);
@@ -71,12 +75,12 @@ export async function POST(req: Request) {
         where: { id: id },
       }); // to get the email of the user
 
+      const user_email = user?.email;
+      console.log('User email:', user_email);
       console.log('Awaiting user deletion');
       await prisma.user.delete({
-        where: { email: user?.email },
+        where: { email: user_email },
       });
-
-      const user_email = user?.email;
 
       console.log('Awaiting website deletion');
       const website = await prisma.website.findFirst({
@@ -103,6 +107,10 @@ export async function POST(req: Request) {
         status: 200,
       });
     } else {
+      /*
+       * User upsert action
+       * This action is triggered when a user is created or updated in Clerk
+       */
       const { id, email_addresses, first_name, last_name, image_url } =
         payload?.data;
 
