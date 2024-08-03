@@ -7,6 +7,7 @@ import { CreativeTemplate } from '@/components/templates/creative';
 import { MinimalistTemplate } from '@/components/templates/minimalist';
 import { ModernTemplate } from '@/components/templates/modern';
 import { ProfessionalTemplate } from '@/components/templates/professional';
+import { SnappyTemplate } from '@/components/templates/snappy';
 
 // Import other templates here
 
@@ -28,6 +29,12 @@ export const templates = [
     component: ModernTemplate,
     isPremium: true,
     image: '/images/templates/Modern.png',
+  },
+  {
+    name: 'Snappy Green',
+    component: SnappyTemplate,
+    isPremium: true,
+    image: '/images/templates/Snappy.png',
   },
   {
     name: 'Minimalist',

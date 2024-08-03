@@ -1,6 +1,6 @@
 import '@/styles/globals.css';
 
-import { fontHeading, fontSans, fontUrban } from '@/assets/fonts';
+import { fontHeading, fontImpact, fontSans, fontUrban } from '@/assets/fonts';
 import { ClerkProvider } from '@clerk/nextjs';
 import { Analytics } from '@vercel/analytics/react';
 import { ThemeProvider } from 'next-themes';
@@ -61,7 +61,8 @@ export default function RootLayout({ children }: RootLayoutProps) {
             'min-h-screen bg-background font-sans antialiased',
             fontSans.variable,
             fontUrban.variable,
-            fontHeading.variable
+            fontHeading.variable,
+            fontImpact.variable
           )}
         >
           {/*//@ts-ignore */}
