@@ -22,10 +22,15 @@ function getModel() {
 
     console.log('Using Groq model');
     return groqModel('llama-3.1-70b-versatile');
-  } else {
+  }
+
+  if (anthropicAPIKey) {
     console.log('Using Anthropic model');
     return anthropicModel;
   }
+
+  console.error('No API key provided');
+  throw new Error('No AI API key provided');
 }
 
 export async function enhanceContent(
