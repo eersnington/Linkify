@@ -9,7 +9,7 @@ export type responseAction = {
   stripeUrl?: string;
 };
 
-const billingUrl = absoluteUrl('/dashboard/billing');
+const billingUrl = absoluteUrl('/onboard/form');
 
 export async function generateStripeCheckoutForUnsignedUser(
   email: string,

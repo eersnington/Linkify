@@ -43,10 +43,6 @@ export function OnboardingSourceForm() {
     resolver: zodResolver(sourceSchema),
   });
 
-  if (!user) {
-    router.push('/signin');
-  }
-
   function onSubmit(data: z.infer<typeof sourceSchema>) {
     setIsSubmitting(true);
     console.log(data);
@@ -93,7 +89,7 @@ export function OnboardingSourceForm() {
                       </FormControl>
                       <FormLabel
                         htmlFor={option.value}
-                        className="flex flex-col items-center justify-between rounded-md border-2 border-purple-500 p-4 hover:bg-purple-200 text-purple-950 peer-data-[state=checked]:bg-purple-700 [&:has([data-state=checked])]:bg-purple-700 cursor-pointer transition-colors"
+                        className="flex flex-col items-center justify-between rounded-md border-2 border-purple-500 p-4 hover:bg-purple-200 text-purple-950 peer-data-[state=checked]:bg-purple-400 [&:has([data-state=checked])]:bg-purple-700 cursor-pointer transition-colors"
                       >
                         <option.icon className="mb-3 h-6 w-6" />
                         {option.label}
