@@ -17,6 +17,6 @@ export const fontHeading = localFont({
 });
 
 export const fontImpact = localFont({
-  src: './Impact.ttf',
+  src: './impact.ttf',
   variable: '--font-impact',
 });
