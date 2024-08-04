@@ -17,10 +17,10 @@ export function HeroLanding() {
   return (
     <section className="container">
       <div className="flex flex-col items-center text-center justify-center gap-y-8 mt-8">
-        <Badge className="border-purple-500 text-purple-500 hover:text-purple-500 bg-white hover:bg-white">
+        {/* <Badge className="border-purple-500 text-purple-500 hover:text-purple-500 bg-white hover:bg-white">
           <LinkedInLogoIcon className="w-6 h-6 mr-2" />
           Over 500 LinkedIn Users Served
-        </Badge>
+        </Badge> */}
         <HeroTextFormComponent />
       </div>
       <div className="flex flex-row items-center justify-between gap-y-8 mt-8 mb-8">
