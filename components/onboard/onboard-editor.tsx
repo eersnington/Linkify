@@ -30,7 +30,7 @@ export default function OnboardEditor({ email }: PageEditorProps) {
           <div className="flex flex-col sm:flex-row items-center justify-between px-2">
             <div className="grid gap-1 text-center sm:text-left">
               <h1 className="font-heading text-2xl sm:text-3xl md:text-4xl text-purple-500">
-                Preview Template
+                Choose your design
               </h1>
               <p className="text-base sm:text-lg text-purple-800">
                 Customize your page and change your template anytime
@@ -41,7 +41,7 @@ export default function OnboardEditor({ email }: PageEditorProps) {
                 <SheetTrigger asChild>
                   <Button
                     variant="outline"
-                    className="lg:hidden border-purple-700 text-purple-950"
+                    className="lg:hidden border-purple-700 text-purple-950 mt-4 mb-2"
                   >
                     <Pencil className="h-5 w-5" /> Select a Template
                   </Button>
@@ -56,7 +56,7 @@ export default function OnboardEditor({ email }: PageEditorProps) {
               <Button
                 variant={'default'}
                 onClick={() => router.push('/upgrade?email=' + email)}
-                className="bg-green-700 text-white md:animate-bounce"
+                className="bg-green-700 text-white md:animate-bounce "
               >
                 Continue <ArrowRight size={16} className="ml-2" />
               </Button>
