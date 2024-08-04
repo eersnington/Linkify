@@ -26,6 +26,7 @@ import { useSignupModal } from '@/hooks/use-signup-modal';
 import { useLinkedInData } from '@/context/linkedin-data-context';
 import { updateLinkedInProfile } from '@/actions/update-linkedin';
 import Link from 'next/link';
+import { useChangesMade } from '@/context/changes-made-context';
 
 const rootDomain = env.NEXT_PUBLIC_ROOT_DOMAIN;
 const protocol = rootDomain === 'localhost:3000' ? `http://` : `https://`;
@@ -43,6 +44,7 @@ export function PublishDialog({ email, selectedTemplate }: PublishDialogProps) {
   const [successDialogOpen, setSuccessDialogOpen] = useState(false);
   const signUpModal = useSignupModal();
   const { linkedInProfile } = useLinkedInData();
+  const { setChangesMade } = useChangesMade();
 
   const { isSignedIn } = useUser();
   const router = useRouter();
@@ -75,6 +77,7 @@ export function PublishDialog({ email, selectedTemplate }: PublishDialogProps) {
         if (result.status === 'success') {
           setOpen(false);
           setShowConfetti(true);
+          setChangesMade(false);
           toast({
             title: 'Your Page is Published 🎉🎉',
             description: `Link: ${protocol}${domainName}.${rootDomain}`,
@@ -117,14 +120,14 @@ export function PublishDialog({ email, selectedTemplate }: PublishDialogProps) {
               You&apos;re almost there!
             </DialogTitle>
             <DialogDescription className="font-mono text-sm">
-              Choose a domain name for your page. It will be accessible at{' '}
+              Choose a url for your page. It will be accessible at{' '}
               <strong>{`your_name.${rootDomain}`}</strong>
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="domain-name" className="text-right">
-                Domain Name
+                Subdomain Name
               </Label>
               <Input
                 id="domain-name"
@@ -163,7 +166,7 @@ export function PublishDialog({ email, selectedTemplate }: PublishDialogProps) {
               Congratulations! 🎉
             </DialogTitle>
             <DialogDescription className="text-center font-mono text-sm">
-              Your domain{' '}
+              Your site{' '}
               <strong>
                 {domainName}.{rootDomain}
               </strong>{' '}
