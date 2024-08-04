@@ -57,8 +57,12 @@ export function NavBar({
                 <UpgradeButton />
               ) : (
                 <Button className={'bg-gradient_indigo-purple'}>
-                  <Sparkles className="text-yellow-500 h-4 w-4 mr-2" />
-                  Premium Member
+                  <Link href="/dashboard/billing">
+                    <span className="flex items-center space-x-2">
+                      <Sparkles className="text-yellow-500 h-4 w-4 mr-2" />
+                      Premium Member
+                    </span>
+                  </Link>
                 </Button>
               )}
               <UserAccountNav user={userObj} />
