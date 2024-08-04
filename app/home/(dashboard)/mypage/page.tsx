@@ -7,6 +7,7 @@ import PageEditor from '@/components/mypage/page-editor';
 import { LinkedInDataProvider } from '@/context/linkedin-data-context';
 import { getUserSubscriptionPlan } from '@/lib/subscription';
 import { prisma } from '@/lib/db';
+import { ChangesMadeProvider } from '@/context/changes-made-context';
 
 export const metadata = {
   title: 'My Page',
@@ -30,12 +31,14 @@ export default async function MyPage() {
 
   return (
     <LinkedInDataProvider>
-      <div className="flex h-full flex-1 bg-purple-950 p-4">
-        <PageEditor
-          isUserPremium={userSubscriptionPlan.isPaid}
-          profileData={linkedInProfile}
-        />
-      </div>
+      <ChangesMadeProvider>
+        <div className="flex h-full flex-1 bg-purple-950 p-4">
+          <PageEditor
+            isUserPremium={userSubscriptionPlan.isPaid}
+            profileData={linkedInProfile}
+          />
+        </div>
+      </ChangesMadeProvider>
     </LinkedInDataProvider>
   );
 }
