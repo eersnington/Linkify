@@ -70,7 +70,7 @@ export default function PageEditor({
         <DashboardShell className="h-full rounded-lg bg-slate-50 p-4">
           <DashboardHeader
             heading="Editor"
-            text="Customise your page and change templates any time"
+            text="You can change the text, generate AI content and customise the design in a moment."
           >
             <div className="flex items-center space-x-2">
               <Sheet open={open} onOpenChange={setOpen}>
