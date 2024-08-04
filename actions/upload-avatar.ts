@@ -5,8 +5,6 @@ import { env } from '@/env.mjs';
 import { revalidatePath } from 'next/cache';
 import { prisma } from '@/lib/db';
 import { currentUser } from '@clerk/nextjs/server';
-import { LinkedInProfile } from '@prisma/client';
-import { AILinkedInProfileSchema } from '@/lib/validations/linkedin-profile';
 
 const supabase = createClient(
   env.SUPABASE_PROJECT_URL,

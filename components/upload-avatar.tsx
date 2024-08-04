@@ -48,13 +48,13 @@ export function UploadAvatarButton() {
         toast({
           title: 'Error',
           description:
-            'There was an error uploading your avatar. Please try again.',
+            result.error || 'An error occurred while uploading your avatar',
           variant: 'destructive',
         });
       } else if (result.success) {
         toast({
           title: 'Profile Photo Uploaded',
-          description: `Your profile photo has been uploaded successfully. Publish the changes to see the updated photo.`,
+          description: `Your profile photo has been uploaded successfully.`,
           className: 'bg-green-500 text-white font-mono',
         });
         console.log('result.filePath', result.filePath);
@@ -63,8 +63,7 @@ export function UploadAvatarButton() {
       console.error('Error uploading avatar:', error);
       toast({
         title: 'Error',
-        description:
-          'There was an error uploading your profile photo. Please try again.',
+        description: 'An error occurred while uploading your avatar',
         variant: 'destructive',
       });
     } finally {
