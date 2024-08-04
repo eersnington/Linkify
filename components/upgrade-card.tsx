@@ -25,6 +25,7 @@ import { cn } from '@/lib/utils';
 interface UpgradeCardProps {
   title: string;
   border?: boolean;
+  sparkle?: boolean;
 }
 
 const features = [
@@ -58,7 +59,7 @@ const features = [
   },
 ];
 
-export function UpgradeCard({ title, border }: UpgradeCardProps) {
+export function UpgradeCard({ title, border, sparkle = true }: UpgradeCardProps) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -76,7 +77,7 @@ export function UpgradeCard({ title, border }: UpgradeCardProps) {
     >
       <CardHeader>
         <CardTitle className="text-gradient_indigo-purple flex items-center gap-2 text-2xl font-bold">
-          <Sparkles className="size-6 text-yellow-500" />
+          {sparkle && <Sparkles className="size-6 text-yellow-500" />}
           {title}
         </CardTitle>
       </CardHeader>

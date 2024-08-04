@@ -62,7 +62,11 @@ export default function PageEditor({
     <div className="flex h-full w-full">
       <Dialog open={showUpgradeDialog} onOpenChange={setShowUpgradeDialog}>
         <DialogContent>
-          <UpgradeCard title="Unlock Premium Templates" border />
+          <UpgradeCard
+            title="Unlock premium templates to boost your career!"
+            border
+            sparkle={false}
+          />
         </DialogContent>
       </Dialog>
       <aside className="hidden lg:block w-1/4 overflow-auto ml-4 my-4">
