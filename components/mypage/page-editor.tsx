@@ -97,6 +97,7 @@ export default function PageEditor({
               <EnhanceContentButton />
               <PublishDialog
                 email={email}
+                isPremium={isUserPremium}
                 selectedTemplate={selectedTemplate}
               />
             </div>
