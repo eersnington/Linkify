@@ -49,9 +49,6 @@ export default async function SettingsPage() {
           <h2 className="text-xl font-semibold">
             Welcome, {userDb.firstName} {userDb.lastName}
           </h2>
-          <p className="text-gray-700 mt-2">
-            Here you can manage your account settings and get support.
-          </p>
         </div>
         <div className="bg-white p-6 shadow rounded-lg">
           <h3 className="text-lg font-medium">Account Details</h3>
