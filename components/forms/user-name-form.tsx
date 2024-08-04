@@ -1,14 +1,14 @@
-"use client";
+'use client';
 
-import { useTransition } from "react";
-import { updateUserName, type FormData } from "@/actions/update-user-name";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { User } from "@prisma/client";
-import { useForm } from "react-hook-form";
+import { useTransition } from 'react';
+import { updateUserName, type FormData } from '@/actions/update-user-name';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { User } from '@prisma/client';
+import { useForm } from 'react-hook-form';
 
-import { cn } from "@/lib/utils";
-import { userNameSchema } from "@/lib/validations/user";
-import { buttonVariants } from "@/components/ui/button";
+import { cn } from '@/lib/utils';
+import { userNameSchema } from '@/lib/validations/user';
+import { buttonVariants } from '@/components/ui/button';
 import {
   Card,
   CardContent,
@@ -16,14 +16,14 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { toast } from "@/components/ui/use-toast";
-import { Icons } from "@/components/shared/icons";
+} from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { toast } from '@/components/ui/use-toast';
+import { Icons } from '@/components/shared/icons';
 
 interface UserNameFormProps {
-  user: Pick<User, "id" | "firstName" | "lastName">;
+  user: Pick<User, 'id' | 'firstName' | 'lastName'>;
 }
 
 export function UserNameForm({ user }: UserNameFormProps) {
@@ -37,8 +37,8 @@ export function UserNameForm({ user }: UserNameFormProps) {
   } = useForm<FormData>({
     resolver: zodResolver(userNameSchema),
     defaultValues: {
-      firstName: user?.firstName || "",
-      lastName: user?.lastName || "",
+      firstName: user?.firstName || '',
+      lastName: user?.lastName || '',
     },
   });
 
@@ -46,16 +46,16 @@ export function UserNameForm({ user }: UserNameFormProps) {
     startTransition(async () => {
       const { status } = await updateUserNameWithId(data);
 
-      if (status !== "success") {
+      if (status !== 'success') {
         toast({
-          title: "Something went wrong.",
-          description: "Your name was not updated. Please try again.",
-          variant: "destructive",
+          title: 'Something went wrong.',
+          description: 'Your name was not updated. Please try again.',
+          variant: 'destructive',
         });
       } else {
         toast({
-          description: "Your name has been updated.",
-          className: "bg-green-500 text-white font-semibold",
+          description: 'Your name has been updated.',
+          className: 'bg-green-500 text-white font-semibold',
         });
       }
     });
@@ -78,7 +78,7 @@ export function UserNameForm({ user }: UserNameFormProps) {
                 id="firstName"
                 className="w-full sm:w-[400px]"
                 size={32}
-                {...register("firstName")}
+                {...register('firstName')}
               />
               {errors?.firstName && (
                 <p className="px-1 text-xs text-red-600">
@@ -92,7 +92,7 @@ export function UserNameForm({ user }: UserNameFormProps) {
                 id="lastName"
                 className="w-full sm:w-[400px]"
                 size={32}
-                {...register("lastName")}
+                {...register('lastName')}
               />
               {errors?.lastName && (
                 <p className="px-1 text-xs text-red-600">
@@ -105,13 +105,13 @@ export function UserNameForm({ user }: UserNameFormProps) {
         <CardFooter>
           <button
             type="submit"
-            className={cn(buttonVariants())}
+            className={cn(buttonVariants(), 'bg-blue-500')}
             disabled={isPending}
           >
             {isPending && (
               <Icons.spinner className="mr-2 size-4 animate-spin" />
             )}
-            <span>{isPending ? "Saving" : "Save"}</span>
+            <span>{isPending ? 'Saving' : 'Save'}</span>
           </button>
         </CardFooter>
       </Card>
