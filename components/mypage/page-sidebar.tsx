@@ -39,6 +39,7 @@ import {
 import { LinkedInProfileForm } from '../forms/linkedin-update-form';
 import UploadCVButton from '../upload-cv-button';
 import { UploadAvatarButton } from '../upload-avatar';
+import { useChangesMade } from '@/context/changes-made-context';
 
 interface PageSidebarProps {
   isUserPremium: boolean;
@@ -51,6 +52,7 @@ export function PageSidebar({ isUserPremium }: PageSidebarProps) {
     selectedTemplate,
     setSelectedTemplate,
   } = useThemeTemplate();
+  const { setChangesMade } = useChangesMade();
 
   const PremiumBadge = () => (
     <Badge className="text-xs px-2 py-0.5 bg-gradient-to-r from-yellow-400 to-amber-600">
@@ -102,7 +104,10 @@ export function PageSidebar({ isUserPremium }: PageSidebarProps) {
                           'bg-slate-500 text-white': selectedTemplate !== index,
                         })}
                         disabled={template.isPremium && !isUserPremium}
-                        onClick={() => setSelectedTemplate(index)}
+                        onClick={() => {
+                          setChangesMade(true);
+                          setSelectedTemplate(index);
+                        }}
                       >
                         {selectedTemplate === index ? 'Selected' : 'Select'}
                       </Button>
