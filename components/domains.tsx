@@ -298,7 +298,7 @@ export function DomainConfigStatus({ domain }: { domain: string }) {
           <div className="space-y-4">
             <div className="flex items-center space-x-2">
               {renderStatus(isVercelConfigured, loadingVercel)}
-              <span>Vercel Configuration</span>
+              <span>Server Configuration</span>
               <Button
                 onClick={handleGetConfigResponse}
                 disabled={loadingVercel}
@@ -312,7 +312,7 @@ export function DomainConfigStatus({ domain }: { domain: string }) {
             </div>
             <div className="flex items-center space-x-2">
               {renderStatus(isDNSConfigured, loadingDNS)}
-              <span>DNS Configuration</span>
+              <span>Domain Configuration</span>
               <Button onClick={handleVerifyDomain} disabled={loadingDNS}>
                 {loadingDNS ? (
                   <Loader className="animate-spin h-4 w-4" />
@@ -325,13 +325,14 @@ export function DomainConfigStatus({ domain }: { domain: string }) {
           <CardFooter className="mt-4 border-2 rounded-lg p-2 items-center text-center">
             {isVercelConfigured && isDNSConfigured ? (
               <p className="text-muted-foreground text-sm">
-                Good news! Your DNS records are set up correctly, but it can
-                take some time for them to propagate globally.
+                Great news! Your domain is set up correctly. It might take some
+                time for the changes to be visible globally.
               </p>
             ) : (
               <p className="text-muted-foreground text-sm">
-                Depending on your provider, it might take some time for the DNS
-                records to apply. It may take from 5 mins to 24 hours.
+                Your domain is now being set up, it might take some time. Please
+                allow between 5 minutes to 24 hours. You can check back here and
+                click verify to see the status.
               </p>
             )}
           </CardFooter>
