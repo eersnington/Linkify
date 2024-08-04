@@ -8,6 +8,7 @@ import { MinimalistTemplate } from '@/components/templates/minimalist';
 import { ModernTemplate } from '@/components/templates/modern';
 import { ProfessionalTemplate } from '@/components/templates/professional';
 import { SnappyTemplate } from '@/components/templates/snappy';
+import { BasicWebTemplate } from '@/components/templates/basic-web';
 
 // Import other templates here
 
@@ -15,6 +16,12 @@ export const templates = [
   {
     name: 'Basic',
     component: BasicTemplate,
+    isPremium: false,
+    image: '/images/templates/Basic.png',
+  },
+  {
+    name: 'Basic Web',
+    component: BasicWebTemplate,
     isPremium: false,
     image: '/images/templates/Basic.png',
   },
