@@ -9,7 +9,7 @@ import { tempStore } from '@/lib/temp-store';
 
 const envTestMode = process.env.TEST_MODE === 'true';
 
-const TEST_MODE = true;
+const TEST_MODE = envTestMode;
 
 export type FormData = {
   email: string;
