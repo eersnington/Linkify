@@ -11,6 +11,10 @@ export const dashboardConfig: DashboardConfig = {
       href: '/dashboard/',
     },
     {
+      title: 'Domains',
+      href: '/dashboard/domains',
+    },
+    {
       title: 'Support',
       href: '/dashboard/support',
     },
@@ -31,7 +35,6 @@ export const dashboardConfig: DashboardConfig = {
       href: '/dashboard/domains',
       icon: 'link',
     },
-
     {
       title: 'Billing',
       href: '/dashboard/billing',
