@@ -144,9 +144,8 @@ export function DomainSearchAndPurchase() {
               <strong>{selectedDomain}</strong>.
             </DialogDescription>
             <DialogDescription>
-              Please note: Once you select a domain, you&apos;re no longer
-              eligible for a free domain for 1 year. Refunds are not available
-              for domain purchases.
+              Please note: Once you select a domain, this cannot be changed.
+              Refunds are not available for domain purchases
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
@@ -214,7 +213,7 @@ export function DomainSearchAndPurchase() {
                               domain.available ? 'bg-green-500' : 'bg-red-500'
                             }
                           >
-                            {domain.price ? domain.price : 'Taken'}
+                            {domain.price ? 'Available' : 'Taken'}
                           </Badge>
                         </TableCell>
                         <TableCell>
