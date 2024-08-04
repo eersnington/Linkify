@@ -286,6 +286,8 @@ async function setARecord(domain: string, ipAddress: string): Promise<boolean> {
     main_record0: ipAddress,
   });
 
+  console.log('Setting A record for domain:', domain);
+
   try {
     const response = await axios.get('https://api.dynadot.com/api3.json', {
       params,
@@ -363,8 +365,9 @@ export async function buyDomain(domain: string) {
       where: { userEmail: user.emailAddresses[0].emailAddress },
     });
 
+    await setARecord(domain, '76.76.21.21');
+
     if (website) {
-      await setARecord(domain, '76.76.21.21');
       revalidateTag(
         `${website.domainName}.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}-metadata`
       );
