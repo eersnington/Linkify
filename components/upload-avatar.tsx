@@ -6,7 +6,6 @@ import { toast } from './ui/use-toast';
 import { useUser } from '@clerk/nextjs';
 import { ImageUp } from 'lucide-react'; // Make sure to import the Upload icon
 import { useLinkedInData } from '@/context/linkedin-data-context';
-import { Button } from './ui/button';
 import { Label } from 'recharts';
 
 export function UploadAvatarButton() {
