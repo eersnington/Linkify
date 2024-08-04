@@ -17,6 +17,7 @@ import { LinkedInProfile } from '@prisma/client';
 import { useLinkedInData } from '@/context/linkedin-data-context';
 import { Dialog, DialogContent } from '../ui/dialog';
 import { UpgradeCard } from '../upgrade-card';
+import { useChangesMade } from '@/context/changes-made-context';
 
 interface PageEditorProps {
   isUserPremium: boolean;
@@ -30,6 +31,7 @@ export default function PageEditor({
   const [open, setOpen] = useState(false);
   const { linkedInProfile, updateLinkedInProfile } = useLinkedInData();
   const [showUpgradeDialog, setShowUpgradeDialog] = useState(false);
+  const { changesMade } = useChangesMade();
 
   const { selectedTemplate } = useThemeTemplate();
   const { user } = useUser();
@@ -70,9 +72,12 @@ export default function PageEditor({
         <DashboardShell className="h-full rounded-lg bg-slate-50 p-4">
           <DashboardHeader
             heading="Editor"
-            text="You can change the text, generate AI content and customise the design in a moment."
+            text="Edit text, generate AI content and customise the design in a moment."
           >
             <div className="flex items-center space-x-2">
+              {changesMade && (
+                <span className="text-red-700">Publish to see changes</span>
+              )}
               <Sheet open={open} onOpenChange={setOpen}>
                 <SheetTrigger asChild>
                   <Button
