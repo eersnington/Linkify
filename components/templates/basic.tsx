@@ -37,17 +37,20 @@ export function BasicTemplate({ profile }: { profile: TemplateProps }) {
       className="container mx-auto px-4 py-8 max-w-4xl"
     >
       <Card className="mb-8 overflow-hidden">
-        <div className="bg-gradient-to-r from-blue-300 to-purple-300 h-32 sm:h-40"></div>
-        <CardContent className="p-4 sm:p-6 relative">
-          <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6">
+        <div className="bg-gradient-to-r from-blue-300 to-purple-300 sm:p-6">
+          <div className="h-32 sm:h-40">
             <Image
               src={photoUrl}
               alt={firstName + ' ' + lastName}
               width={160}
               height={160}
-              className="rounded-full shadow-lg border-4 border-white -mt-20 sm:-mt-24 sm:absolute sm:top-0 sm:left-6 sm:transform sm:-translate-y-1/2"
+              className="rounded-full shadow-lg border-4 border-white m-2"
             />
-            <div className="sm:ml-48 mt-4 sm:mt-0 text-center sm:text-left w-full">
+          </div>
+        </div>
+        <CardContent className="p-4 sm:p-6 relative">
+          <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6">
+            <div className="sm:ml-6 mt-4 sm:mt-0 text-center sm:text-left w-full">
               <div className="flex flex-col sm:flex-row justify-between items-center sm:items-start gap-4 sm:gap-0">
                 <div>
                   <h1 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-2">
