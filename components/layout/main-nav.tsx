@@ -76,7 +76,11 @@ export function MainNav({ items, children, isDashboard }: MainNavProps) {
         onClick={toggleMobileMenu}
       >
         {showMobileMenu ? <Icons.close /> : <Logo />}
-        <span className="font-bold">Menu</span>
+        {items != undefined ? (
+          <span className="font-bold">Menu</span>
+        ) : (
+          <span className="font-bold">{siteConfig.name}</span>
+        )}
       </button>
       {showMobileMenu && items && (
         <MobileNav items={items}>{children}</MobileNav>

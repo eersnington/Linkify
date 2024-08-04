@@ -16,6 +16,7 @@ import {
 import { Label } from '@/components/ui/label';
 import Link from 'next/link';
 import UploadCVButton from '@/components/upload-cv-button';
+import { ChangesMadeProvider } from '@/context/changes-made-context';
 
 export const metadata: Metadata = {
   title: 'Onboard',
@@ -76,7 +77,17 @@ export default async function OnboardPage({
               >
                 {'Try Again?'}
               </Link>
-              {err !== 'exists' && <UploadCVButton email={email} />}
+              {err !== 'exists' && (
+                <>
+                  <Label className="text-lg text-purple-950 mt-4 -mb-2">
+                    Alternatively, you can proceed by
+                    <br /> uploading your CV instead
+                  </Label>
+                  <ChangesMadeProvider>
+                    <UploadCVButton email={email} />
+                  </ChangesMadeProvider>
+                </>
+              )}
             </div>
           </CardFooter>
         </Card>
