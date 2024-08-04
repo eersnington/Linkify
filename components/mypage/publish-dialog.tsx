@@ -33,10 +33,15 @@ const protocol = rootDomain === 'localhost:3000' ? `http://` : `https://`;
 
 interface PublishDialogProps {
   email: string;
+  isPremium: boolean;
   selectedTemplate: number;
 }
 
-export function PublishDialog({ email, selectedTemplate }: PublishDialogProps) {
+export function PublishDialog({
+  email,
+  isPremium,
+  selectedTemplate,
+}: PublishDialogProps) {
   const [domainName, setDomainName] = useState('');
   const [isPublishing, setIsPublishing] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
@@ -119,7 +124,7 @@ export function PublishDialog({ email, selectedTemplate }: PublishDialogProps) {
             <DialogTitle className="text-gradient_indigo-purple font-mono text-lg font-bold">
               You&apos;re almost there!
             </DialogTitle>
-            <DialogDescription className="font-mono text-sm">
+            <DialogDescription className="font-mono text-sm text-justify">
               Choose a url for your page. It will be accessible at{' '}
               <strong>{`your_name.${rootDomain}`}</strong>
             </DialogDescription>
@@ -137,6 +142,20 @@ export function PublishDialog({ email, selectedTemplate }: PublishDialogProps) {
               />
             </div>
           </div>
+          <DialogDescription className="font-mono text-sm mt-4 w-full text-justify">
+            {isPremium ? (
+              <span>
+                Note: As a Premium Member, changes you make are also
+                automatically saved to your custom domain. To claim a domain,
+                visit the Domains section.
+              </span>
+            ) : (
+              <span>
+                Want a custom domain like yourname.com? Upgrade to Premium for
+                this and more benefits!
+              </span>
+            )}
+          </DialogDescription>
           <DialogFooter>
             <Button
               type="submit"
