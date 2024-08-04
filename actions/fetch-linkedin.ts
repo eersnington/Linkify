@@ -44,7 +44,7 @@ const formatDateRange = (dateRange: DateRange): string => {
 const rapidAPICall = async (email: string, sample: boolean) => {
   if (sample) {
     console.log('Fetching Sample LinkedIn Profile...');
-    await new Promise((resolve) => setTimeout(resolve, 6000));
+    await new Promise((resolve) => setTimeout(resolve, 3000));
     return sample_linkedin_response;
   }
 
