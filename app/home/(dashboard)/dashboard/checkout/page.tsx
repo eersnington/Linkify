@@ -27,6 +27,10 @@ export default async function BillingPage() {
 
   const userSubscriptionPlan = await getUserSubscriptionPlan(user.id);
 
+  if (userSubscriptionPlan.isPaid) {
+    redirect('/dashboard/billing');
+  }
+
   return (
     <DashboardShell>
       <DashboardHeader
