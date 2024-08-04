@@ -5,6 +5,7 @@ import { useUser } from '@clerk/nextjs';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Upload } from 'lucide-react';
+import { useChangesMade } from '@/context/changes-made-context';
 
 interface Props {
   email?: string;
@@ -13,6 +14,7 @@ interface Props {
 export default function UploadCVButton({ email }: Props) {
   const [isProcessing, setIsProcessing] = useState(false);
   const { updateLinkedInProfile } = useLinkedInData();
+  const { setChangesMade } = useChangesMade();
   const router = useRouter();
 
   const { user } = useUser();
@@ -43,6 +45,7 @@ export default function UploadCVButton({ email }: Props) {
           if (email) {
             router.push('/onboard/mypage?email=' + email);
           }
+          setChangesMade(true);
         } else {
           // Handle error
           console.error(result.error);
