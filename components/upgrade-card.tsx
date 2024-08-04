@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import {
+  Link,
   Sparkles,
   Loader,
   Globe,
@@ -30,6 +31,10 @@ const features = [
   {
     icon: Globe,
     text: 'Your own custom domain (e.g., yourname.com)',
+  },
+  {
+    icon: Link,
+    text: 'No Linkify branding on your website',
   },
   {
     icon: Layout,
