@@ -1,11 +1,10 @@
 'use client';
 
 import * as React from 'react';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { UpgradeCard } from './upgrade-card';
 import { UserSubscriptionPlan } from 'types';
 import { cn, formatDate } from '@/lib/utils';
+import Link from 'next/link';
 import {
   Card,
   CardContent,
@@ -16,6 +15,7 @@ import {
 } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import {
+  Link as LinkIcon,
   Globe,
   Headphones,
   Layout,
@@ -34,6 +34,10 @@ const features = [
   {
     icon: Globe,
     text: 'Your own custom domain (e.g., yourname.com)',
+  },
+  {
+    icon: LinkIcon,
+    text: 'No Linkify branding on your website',
   },
   {
     icon: Layout,
