@@ -78,7 +78,7 @@ export function UploadAvatarButton() {
         <input
           id="avatar-upload"
           type="file"
-          accept="image/jpeg"
+          accept="image/png"
           onChange={handleFileUpload}
           className="hidden"
           disabled={isUploading}
