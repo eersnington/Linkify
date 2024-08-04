@@ -107,7 +107,7 @@ export function LinkedInProfileForm() {
           ...data,
         });
         toast({
-          description: message || 'Your profile has been updated.',
+          description: 'Your website has been updated successfully.',
           className: 'bg-green-500 text-white font-semibold',
         });
       }
@@ -119,10 +119,8 @@ export function LinkedInProfileForm() {
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <Card>
           <CardHeader>
-            <CardTitle>LinkedIn Profile</CardTitle>
-            <CardDescription>
-              Update your LinkedIn profile information.
-            </CardDescription>
+            <CardTitle>Your Profile</CardTitle>
+            <CardDescription>Update your website information.</CardDescription>
           </CardHeader>
           <CardContent>
             <Accordion type="single" collapsible className="w-full">
@@ -194,7 +192,7 @@ export function LinkedInProfileForm() {
                         </FormItem>
                       )}
                     />
-                    <FormField
+                    {/* <FormField
                       control={form.control}
                       name="photoUrl"
                       render={({ field }) => (
@@ -209,7 +207,7 @@ export function LinkedInProfileForm() {
                           <FormMessage />
                         </FormItem>
                       )}
-                    />
+                    /> */}
                   </div>
                 </AccordionContent>
               </AccordionItem>
