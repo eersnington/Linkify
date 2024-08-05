@@ -27,6 +27,8 @@ interface SignUpFormProps {
 }
 
 export default function SignUpForm({ initialValues }: SignUpFormProps) {
+  // console.log('Initial Values: ', initialValues);
+
   const router = useRouter();
 
   const handleChangeEmail = (e: React.MouseEvent<HTMLAnchorElement>) => {
@@ -59,10 +61,7 @@ export default function SignUpForm({ initialValues }: SignUpFormProps) {
                           <Label>First name</Label>
                         </Clerk.Label>
                         <Clerk.Input type="text" required asChild>
-                          <Input
-                            defaultValue={initialValues?.firstName}
-                            className="focus:ring-gray-200 focus:border-gray-300"
-                          />
+                          <Input className="focus:ring-gray-200 focus:border-gray-300" />
                         </Clerk.Input>
                         <Clerk.FieldError className="block text-sm text-destructive" />
                       </Clerk.Field>
@@ -71,10 +70,7 @@ export default function SignUpForm({ initialValues }: SignUpFormProps) {
                           <Label>Last name</Label>
                         </Clerk.Label>
                         <Clerk.Input type="text" required asChild>
-                          <Input
-                            defaultValue={initialValues?.lastName}
-                            className="focus:ring-gray-200 focus:border-gray-300"
-                          />
+                          <Input className="focus:ring-gray-200 focus:border-gray-300" />
                         </Clerk.Input>
                         <Clerk.FieldError className="block text-sm text-destructive" />
                       </Clerk.Field>
@@ -89,10 +85,7 @@ export default function SignUpForm({ initialValues }: SignUpFormProps) {
                         required
                         asChild
                       >
-                        <Input
-                          defaultValue={initialValues?.emailAddress}
-                          className="focus:ring-gray-200 focus:border-gray-300"
-                        />
+                        <Input className="focus:ring-gray-200 focus:border-gray-300" />
                       </Clerk.Input>
                       <Clerk.FieldError className="block text-sm text-destructive" />
                     </Clerk.Field>
