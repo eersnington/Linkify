@@ -10,23 +10,38 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { Input } from '@/components/ui/input';
-import { User } from '@prisma/client';
+import { User, AdminUser } from '@prisma/client';
 import { env } from '@/env.mjs';
 import Link from 'next/link';
 import { UserSignupsChart } from './charts/user-signups-chart';
 import { WebsitePublicationChart } from './charts/published-chart';
 import { PremiumUsersChart } from './charts/premium-users-chart';
 import { PremiumUsersDomainChart } from './charts/domains-chart';
+import { Button } from './ui/button';
+import { toast } from './ui/use-toast';
+import { onAddAdminUser, onDeleteAdminUser } from '@/actions/admin-dashboard';
 
 const rootDomain = env.NEXT_PUBLIC_ROOT_DOMAIN;
 const protocol = rootDomain === 'localhost:3000' ? 'http://' : 'https://';
 
 interface AdminDashboardContentProps {
   users: (User & { website: { domainName: string } | null })[];
+  adminUsers: AdminUser[];
 }
 
-export function AdminDashboardContent({ users }: AdminDashboardContentProps) {
+export function AdminDashboardContent({
+  users,
+  adminUsers: initialAdminUsers,
+}: AdminDashboardContentProps) {
   const [searchTerm, setSearchTerm] = useState('');
+
+  const [adminUsers, setAdminUsers] = useState(initialAdminUsers);
+  const [error, setError] = useState<string | null>(null);
+
+  const [newAdminEmail, setNewAdminEmail] = useState('');
+  const [addingAdmin, setAddingAdmin] = useState(false);
+  const [deletingAdmin, setDeletingAdmin] = useState<string | null>(null);
+
   const [sortColumn, setSortColumn] = useState<'email' | 'createdAt' | ''>('');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
   const [currentPage, setCurrentPage] = useState(1);
@@ -56,6 +71,83 @@ export function AdminDashboardContent({ users }: AdminDashboardContentProps) {
     } else {
       setSortColumn(column);
       setSortOrder('asc');
+    }
+  };
+
+  const handleAddAdminUser = async () => {
+    if (!newAdminEmail) return;
+
+    setAddingAdmin(true);
+    setError(null);
+    try {
+      const result = await onAddAdminUser(newAdminEmail);
+      if (result.success) {
+        toast({
+          title: 'Admin user added',
+          description: `Admin user with email ${newAdminEmail} has been added.`,
+          className: 'bg-green-500 text-white font-mono',
+        });
+        setAdminUsers([
+          ...adminUsers,
+          {
+            id: Date.now().toString(),
+            userEmail: newAdminEmail,
+            createdAt: new Date(),
+            updatedAt: new Date(),
+          } as AdminUser,
+        ]);
+        setNewAdminEmail('');
+      } else {
+        setError(result.error);
+        toast({
+          title: 'Failed to add admin user',
+          description: result.error,
+          variant: 'destructive',
+        });
+      }
+    } catch (error) {
+      console.error('Failed to add admin user:', error);
+      setError('An unexpected error occurred');
+      toast({
+        title: 'Failed to add admin user',
+        description: 'An unexpected error occurred',
+        variant: 'destructive',
+      });
+    } finally {
+      setAddingAdmin(false);
+    }
+  };
+
+  const handleDeleteAdminUser = async (id: string) => {
+    setDeletingAdmin(id);
+    setError(null);
+    try {
+      const result = await onDeleteAdminUser(id);
+      if (result.success) {
+        toast({
+          title: 'Admin user deleted',
+          description: 'Admin user has been deleted.',
+          className: 'bg-green-500 text-white font-mono',
+        });
+        setAdminUsers(adminUsers.filter((admin) => admin.id !== id));
+      } else {
+        setError(result.error);
+        toast({
+          title: 'Failed to delete admin user',
+          description: result.error,
+          variant: 'destructive',
+        });
+      }
+    } catch (error) {
+      console.error('Failed to delete admin user:', error);
+      setError('An unexpected error occurred');
+      toast({
+        title: 'Failed to delete admin user',
+        description: 'An unexpected error occurred',
+        variant: 'destructive',
+      });
+    } finally {
+      setDeletingAdmin(null);
     }
   };
 
@@ -192,6 +284,52 @@ export function AdminDashboardContent({ users }: AdminDashboardContentProps) {
             Next
           </button>
         </div>
+      </section>
+      <section className="my-8">
+        <h2 className="text-2xl font-bold mb-4">Manage Admin Users</h2>
+        <div className="flex gap-4 mb-4">
+          <Input
+            placeholder="Enter admin email"
+            value={newAdminEmail}
+            onChange={(e) => setNewAdminEmail(e.target.value)}
+            className="max-w-sm"
+          />
+          <Button
+            onClick={handleAddAdminUser}
+            disabled={addingAdmin || !newAdminEmail}
+          >
+            {addingAdmin ? 'Adding...' : 'Add Admin'}
+          </Button>
+        </div>
+        {error && <p className="text-red-500 mb-4">{error}</p>}
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Email</TableHead>
+              <TableHead>Added At</TableHead>
+              <TableHead>Actions</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {adminUsers.map((admin) => (
+              <TableRow key={admin.id}>
+                <TableCell>{admin.userEmail}</TableCell>
+                <TableCell>
+                  {new Date(admin.createdAt).toLocaleString()}
+                </TableCell>
+                <TableCell>
+                  <Button
+                    onClick={() => handleDeleteAdminUser(admin.id)}
+                    disabled={deletingAdmin === admin.id}
+                    variant="destructive"
+                  >
+                    {deletingAdmin === admin.id ? 'Deleting...' : 'Delete'}
+                  </Button>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
       </section>
     </div>
   );
