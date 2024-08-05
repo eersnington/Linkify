@@ -6,13 +6,6 @@ export async function POST(request: NextRequest) {
   console.log('Analytics API called by ', request.headers.get('host'));
   const { page, referrer, userAgent, country } = await request.json();
   const userDomain = request.headers.get('host') || '';
-  console.log('Recording analytics:', {
-    page,
-    referrer,
-    userAgent,
-    country,
-    userDomain,
-  });
   try {
     const cleanedPage = page.startsWith('/') ? page.substring(1) : page;
     const website = await prisma.website.findUnique({
@@ -24,7 +17,7 @@ export async function POST(request: NextRequest) {
         { status: 404 }
       );
     }
-    const pageView = await prisma.pageView.create({
+    await prisma.pageView.create({
       data: {
         page: cleanedPage,
         referrer,
@@ -34,7 +27,7 @@ export async function POST(request: NextRequest) {
         websiteId: website.id,
       },
     });
-    console.log('Analytics recorded:', pageView);
+    console.log('Analytics recorded!');
     return NextResponse.json(
       { message: 'Analytics recorded' },
       { status: 200 }
