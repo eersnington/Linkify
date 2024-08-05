@@ -1,8 +1,4 @@
 import { Suspense } from 'react';
-import { Analytics } from '@vercel/analytics/react';
-
-import { marketingConfig } from '@/config/marketing';
-import { NavBar } from '@/components/layout/navbar';
 import { SiteFooter } from '@/components/layout/site-footer';
 import { LandingNavBar } from '@/components/layout/landing-nav';
 

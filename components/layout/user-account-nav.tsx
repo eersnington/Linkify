@@ -2,7 +2,13 @@
 
 import Link from 'next/link';
 import { UserButton } from '@clerk/nextjs';
-import { CreditCard, LayoutDashboard, LogOut, Settings } from 'lucide-react';
+import {
+  CreditCard,
+  LayoutDashboard,
+  LogOut,
+  Settings,
+  ShieldEllipsis,
+} from 'lucide-react';
 import { useClerk } from '@clerk/nextjs';
 import Image from 'next/image';
 
@@ -17,6 +23,7 @@ import {
 interface UserProps {
   name: string;
   email: string;
+  isAdmin?: boolean;
 }
 
 export function UserAccountNav({ user }: { user: UserProps }) {
@@ -53,6 +60,15 @@ export function UserAccountNav({ user }: { user: UserProps }) {
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
           <Link
+            href="/dashboard/admin"
+            className="flex items-center space-x-2.5"
+          >
+            <ShieldEllipsis className="size-4" />{' '}
+            <p className="text-sm">Admin Panel</p>
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <Link
             href="/dashboard/billing"
             className="flex items-center space-x-2.5"
           >
@@ -74,6 +90,7 @@ export function UserAccountNav({ user }: { user: UserProps }) {
           className="cursor-pointer"
           onClick={() => signOut({ redirectUrl: '/' })}
         >
+          <LogOut className="size-4 mr-2" />
           Sign out
         </DropdownMenuItem>
       </DropdownMenuContent>

@@ -4,7 +4,6 @@ import Link from 'next/link';
 import { MainNavItem } from '@/types';
 import { useUser } from '@clerk/nextjs';
 
-import { cn } from '@/lib/utils';
 import useScroll from '@/hooks/use-scroll';
 import { Button, buttonVariants } from '@/components/ui/button';
 import { MainNav } from './main-nav';
@@ -18,6 +17,7 @@ interface NavBarProps {
   rightElements?: React.ReactNode;
   scroll?: boolean;
   stripe?: any;
+  isAdmin?: boolean;
 }
 
 export function NavBar({
@@ -26,6 +26,7 @@ export function NavBar({
   rightElements,
   scroll = false,
   stripe,
+  isAdmin,
 }: NavBarProps) {
   const scrolled = useScroll(50);
   const { isLoaded, isSignedIn, user } = useUser();
@@ -33,6 +34,7 @@ export function NavBar({
   const userObj = {
     name: user?.fullName || '',
     email: user?.emailAddresses[0]?.emailAddress || '',
+    isAdmin,
   };
 
   const { isPaid } = stripe;
