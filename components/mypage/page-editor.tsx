@@ -80,7 +80,7 @@ export default function PageEditor({
           >
             <div className="flex items-center space-x-2">
               {changesMade && (
-                <span className="text-red-700">Publish to see changes</span>
+                <span className="text-red-700">Publish to save changes</span>
               )}
               <Sheet open={open} onOpenChange={setOpen}>
                 <SheetTrigger asChild>
