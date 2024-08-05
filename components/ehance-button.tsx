@@ -8,6 +8,7 @@ import { motion } from 'framer-motion';
 import { useLinkedInData } from '@/context/linkedin-data-context';
 import { enhanceContent } from '@/actions/enhance-content';
 import { toast } from '@/components/ui/use-toast';
+import { useChangesMade } from '@/context/changes-made-context';
 
 const pulseAnimation = {
   scale: [1, 1.05, 1],
@@ -25,6 +26,7 @@ const gradientStyle = `
 export function EnhanceContentButton() {
   const [isEnhancing, setIsEnhancing] = useState(false);
   const { linkedInProfile, updateLinkedInProfile } = useLinkedInData();
+  const { setChangesMade } = useChangesMade();
 
   const handleEnhanceContent = async () => {
     if (!linkedInProfile) return;
@@ -33,6 +35,7 @@ export function EnhanceContentButton() {
     try {
       const enhancedProfile = await enhanceContent(linkedInProfile);
       updateLinkedInProfile(enhancedProfile);
+      setChangesMade(true);
       toast({
         title: 'Content Enhanced',
         description: 'Your profile content has been improved by AI.',
