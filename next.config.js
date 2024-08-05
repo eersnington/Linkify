@@ -43,7 +43,11 @@ const nextConfig = {
     ],
   },
   experimental: {
-    serverComponentsExternalPackages: ['@prisma/client', 'pdf2json'],
+    serverComponentsExternalPackages: [
+      '@prisma/client',
+      'pdf2json',
+      '@clerk/elements',
+    ],
   },
 };
 

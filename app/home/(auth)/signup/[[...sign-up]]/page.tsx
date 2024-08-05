@@ -1,5 +1,6 @@
 import { Metadata } from 'next';
 import { SignUp } from '@clerk/nextjs';
+import SignUpForm from '@/components/clerk/signup-component';
 
 export const metadata: Metadata = {
   title: 'Sign Up',
@@ -26,6 +27,7 @@ export default function SignUpPage({
 
   console.log('Normal Redirect!');
   return (
-    <SignUp initialValues={initialValues} forceRedirectUrl={'/onboard/form'} />
+    // <SignUp initialValues={initialValues} forceRedirectUrl={'/onboard/form'} />
+    <SignUpForm initialValues={initialValues}/>
   );
 }
