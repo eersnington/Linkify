@@ -33,7 +33,19 @@ model User {
   linkedInProfile LinkedInProfile?
   website        Website?
 
+  adminUser      AdminUser?
+
   @@map(name: "users")
+}
+
+model AdminUser{
+  id            String    @id @default(cuid())
+  user          User      @relation(fields: [userEmail], references: [email], onDelete: Cascade)
+  userEmail         String   @unique
+  createdAt     DateTime  @default(now()) @map(name: "created_at")
+  updatedAt     DateTime  @default(now()) @map(name: "updated_at")
+
+  @@map(name: "admin_users")
 }
 
 model LinkedInProfile {
