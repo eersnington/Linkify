@@ -28,6 +28,6 @@ export default function SignUpPage({
   console.log('Normal Redirect!');
   return (
     // <SignUp initialValues={initialValues} forceRedirectUrl={'/onboard/form'} />
-    <SignUpForm initialValues={initialValues}/>
+    <SignUpForm initialValues={initialValues} />
   );
 }
