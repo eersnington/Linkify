@@ -28,17 +28,22 @@ type DateRange = {
 
 // Helper function to convert date part to string
 const formatDatePart = (datePart: DatePart): string => {
-  if (!datePart || (datePart.year === 0 && datePart.month === 0)) return '';
+  if (!datePart || datePart.year === 0) return '';
+  const year = datePart.year.toString();
   const month =
-    datePart.month > 0 ? datePart.month.toString().padStart(2, '0') : '01';
-  return `${datePart.year}-${month}`;
+    datePart.month > 0 ? datePart.month.toString().padStart(2, '0') : '';
+  return month ? `${year}-${month}` : year;
 };
 
 // Helper function to convert date range to string
 const formatDateRange = (dateRange: DateRange): string => {
   const start = formatDatePart(dateRange.start);
   const end = dateRange.end ? formatDatePart(dateRange.end) : 'Present';
-  return start ? `${start} - ${end}` : `Until ${end}`;
+
+  if (!start && !end) return '';
+  if (!start) return `Until ${end}`;
+  if (end === 'Present') return `${start} - Present`;
+  return `${start} - ${end}`;
 };
 
 const rapidAPICall = async (email: string, sample: boolean) => {
