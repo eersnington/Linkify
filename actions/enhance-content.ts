@@ -38,13 +38,14 @@ export async function enhanceContent(
 ): Promise<LinkedInProfile> {
   const model = getModel();
 
-  console.log(profile);
-
   try {
     const { object } = await generateObject({
       model,
       schema: AILinkedInProfileSchema,
-      prompt: `Enhance the following LinkedIn profile data by improving the descriptions, titles, and ensuring a professional tone. If a data is missing or empty, try to give a come up with something with any information you have about the person. Always give me a different output compared to the input (but make sure the details are the same):\n\n${JSON.stringify(profile)}`,
+      prompt: `Enhance the following LinkedIn profile data by improving the writing in the descriptions and titles to ensure a proper tone for a portfolio website. 
+      Enhance the skills with keywords that are relevant to the person's industry.
+      If a data is missing or empty, try to fill it with any information you have about the person.
+      Always give me a different output compared to the input in terms of writing style and content (but make sure the details are accurate):\n\n${JSON.stringify(profile)}`,
     });
 
     const enhancedProfile = {
@@ -52,6 +53,8 @@ export async function enhanceContent(
       userEmail: profile.userEmail,
       ...object,
     };
+
+    console.log(enhancedProfile);
 
     return enhancedProfile as LinkedInProfile;
   } catch (error) {
