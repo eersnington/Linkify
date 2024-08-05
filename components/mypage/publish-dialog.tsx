@@ -185,11 +185,7 @@ export function PublishDialog({
               Congratulations! 🎉
             </DialogTitle>
             <DialogDescription className="text-center font-mono text-sm">
-              Your site{' '}
-              <strong>
-                {domainName}.{rootDomain}
-              </strong>{' '}
-              is now live at:
+              Your site is now live at:
               <br />
               <Link
                 href={`${protocol}${domainName}.${rootDomain}`}
