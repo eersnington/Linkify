@@ -50,8 +50,8 @@ export async function POST(req: Request) {
           firstName: userFirstName,
           lastName: userLastName,
         });
-        console.log('Clerk user created', clerkUser.id);
-
+        console.log('Clerk user created from Stripe Endpoint:', userEmail);
+        console.log('Creating user in Db: ', clerkUser.id);
         await prisma.user.create({
           data: {
             id: clerkUser.id,
@@ -80,7 +80,8 @@ export async function POST(req: Request) {
         });
 
         if (!user) {
-          return new Response(error, { status: 500 });
+          console.error('No User found');
+          return new Response('No User found', { status: 500 });
         }
 
         await prisma.user.update({
