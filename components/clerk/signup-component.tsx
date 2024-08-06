@@ -17,6 +17,7 @@ import { cn } from '@/lib/utils';
 import { CircleArrowRight, Loader } from 'lucide-react';
 import Logo from '../shared/logo';
 import { useRouter } from 'next/navigation';
+import { useClerk } from '@clerk/nextjs';
 
 interface SignUpFormProps {
   initialValues?: {
@@ -26,14 +27,32 @@ interface SignUpFormProps {
   };
 }
 
-export default function SignUpForm({ initialValues }: SignUpFormProps) {
+export function SignUpForm({ initialValues }: SignUpFormProps) {
   const router = useRouter();
+  const { loaded } = useClerk();
 
   const handleChangeEmail = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
     router.push('/signup');
     window.location.reload();
   };
+
+  if (!loaded) {
+    return (
+      <Card className="w-full sm:w-96 shadow-lg">
+        <CardHeader className="text-center">
+          <Logo className="size-12 mx-auto mb-4" />
+          <CardTitle className="text-xl font-semibold">Loading</CardTitle>
+        </CardHeader>
+        <CardContent className="flex justify-center items-center py-12">
+          <div className="relative">
+            <Loader className="size-12 animate-spin text-gray-300" />
+            <Loader className="size-12 animate-spin text-gray-600 absolute top-0 left-0" />
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
 
   return (
     <div className="grid w-full grow items-center px-4 sm:justify-center">
