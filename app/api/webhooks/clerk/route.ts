@@ -1,5 +1,3 @@
-// This function can run for a maximum of 5 seconds
-
 import { headers } from 'next/headers';
 import { NextResponse } from 'next/server';
 import { WebhookEvent } from '@clerk/nextjs/server';
@@ -8,17 +6,12 @@ import { Webhook } from 'svix';
 import { prisma } from '@/lib/db';
 import { tempStore } from '@/lib/temp-store';
 import { v4 as uuidv4 } from 'uuid';
+import { env } from '@/env.mjs';
 
 export const maxDuration = 30;
 
 export async function POST(req: Request) {
-  const WEBHOOK_SECRET = process.env.CLERK_WEBHOOK_SECRET;
-
-  if (!WEBHOOK_SECRET) {
-    throw new Error(
-      'Please add CLERK_WEBHOOK_SECRET from Clerk Dashboard to your Environment Variables'
-    );
-  }
+  const WEBHOOK_SECRET = env.CLERK_WEBHOOK_SECRET;
 
   const headerPayload = headers();
   const svix_id = headerPayload.get('svix-id');
@@ -59,9 +52,7 @@ export async function POST(req: Request) {
 
   try {
     const { id } = payload?.data;
-    // console.log('✅', payload); // Uncomment to see the payload
-
-    console.log(payload.type);
+    console.log('- Clerk Payload Type: ', payload.type);
 
     /*
      * User deletion action
@@ -77,7 +68,14 @@ export async function POST(req: Request) {
 
       const user_email = user?.email;
       console.log('User email:', user_email);
+
+      if (!user_email) {
+        console.error('No email found for user');
+        return new NextResponse('No email found for user', { status: 400 });
+      }
+
       console.log('Awaiting user deletion');
+
       await prisma.user.delete({
         where: { email: user_email },
       });
@@ -116,7 +114,7 @@ export async function POST(req: Request) {
 
       const email = email_addresses[0]?.email_address;
       console.log('Action: Upsert user - ', email);
-      console.log(payload.type);
+      console.log('- Clerk Payload Type: ', payload.type);
 
       await prisma.user.upsert({
         where: { email: email },
@@ -139,6 +137,8 @@ export async function POST(req: Request) {
       const linkedInProfileData = tempStore.get(email);
 
       if (linkedInProfileData) {
+        console.log('Updating LinkedIn profile and website for user:', email);
+
         const websiteName = uuidv4().substring(0, 6).toUpperCase();
 
         await prisma.linkedInProfile.upsert({
