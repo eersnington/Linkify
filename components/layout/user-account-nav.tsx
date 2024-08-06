@@ -58,15 +58,17 @@ export function UserAccountNav({ user }: { user: UserProps }) {
             <p className="text-sm">Dashboard</p>
           </Link>
         </DropdownMenuItem>
-        <DropdownMenuItem asChild>
-          <Link
-            href="/dashboard/admin"
-            className="flex items-center space-x-2.5"
-          >
-            <ShieldEllipsis className="size-4" />{' '}
-            <p className="text-sm">Admin Panel</p>
-          </Link>
-        </DropdownMenuItem>
+        {user.isAdmin && (
+          <DropdownMenuItem asChild>
+            <Link
+              href="/dashboard/admin"
+              className="flex items-center space-x-2.5"
+            >
+              <ShieldEllipsis className="size-4" />{' '}
+              <p className="text-sm">Admin Panel</p>
+            </Link>
+          </DropdownMenuItem>
+        )}
         <DropdownMenuItem asChild>
           <Link
             href="/dashboard/billing"
