@@ -31,6 +31,8 @@ export default function PageEditor({
   const [open, setOpen] = useState(false);
   const { linkedInProfile, updateLinkedInProfile } = useLinkedInData();
   const [showUpgradeDialog, setShowUpgradeDialog] = useState(false);
+  const [hasShownDialog, setHasShownDialog] = useState(false);
+
   const { changesMade } = useChangesMade();
 
   const { selectedTemplate } = useThemeTemplate();
@@ -39,8 +41,12 @@ export default function PageEditor({
   const email = user?.emailAddresses[0].emailAddress || 'example@email.com';
 
   useEffect(() => {
+    if (!isUserPremium && !hasShownDialog) {
+      setShowUpgradeDialog(true);
+      setHasShownDialog(true);
+    }
+
     async function loadProfile() {
-      setShowUpgradeDialog(!isUserPremium);
       try {
         if (!linkedInProfile && profileData) {
           console.log('Updating LinkedIn profile with fetched data');
@@ -56,11 +62,23 @@ export default function PageEditor({
     }
 
     loadProfile();
-  }, [profileData, linkedInProfile, updateLinkedInProfile, isUserPremium]);
+  }, [
+    profileData,
+    linkedInProfile,
+    updateLinkedInProfile,
+    isUserPremium,
+    hasShownDialog,
+  ]);
 
   return (
     <div className="flex h-full w-full">
-      <Dialog open={showUpgradeDialog} onOpenChange={setShowUpgradeDialog}>
+      <Dialog
+        open={showUpgradeDialog}
+        onOpenChange={(open) => {
+          setShowUpgradeDialog(open);
+          if (!open) setHasShownDialog(true);
+        }}
+      >
         <DialogContent>
           <UpgradeCard
             title="Unlock premium templates to boost your career!"

@@ -67,7 +67,10 @@ export function PageCanvas() {
   return (
     <ScrollArea className="rounded-md p-4 shadow-lg">
       {SelectedTemplateComponent ? (
-        <SelectedTemplateComponent profile={processedProfile} />
+        <SelectedTemplateComponent
+          key={JSON.stringify(processedProfile)}
+          profile={processedProfile}
+        />
       ) : (
         <div>No template selected</div>
       )}

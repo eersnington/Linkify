@@ -51,12 +51,17 @@ export function UploadAvatarButton() {
           variant: 'destructive',
         });
       } else if (result.success) {
+        const newAvatarUrl = `${result.linkedinProfile.photoUrl}?t=${Date.now()}`;
+
+        updateLinkedInProfile({
+          ...result.linkedinProfile,
+          photoUrl: newAvatarUrl,
+        });
         toast({
           title: 'Profile Photo Uploaded',
           description: `Your profile photo has been uploaded successfully.`,
           className: 'bg-green-500 text-white font-mono',
         });
-        console.log('result.filePath', result.filePath);
       }
     } catch (error) {
       console.error('Error uploading avatar:', error);
@@ -67,6 +72,7 @@ export function UploadAvatarButton() {
       });
     } finally {
       setIsUploading(false);
+      console.log(linkedInProfile);
     }
   };
 
