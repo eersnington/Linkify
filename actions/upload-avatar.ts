@@ -2,7 +2,6 @@
 
 import { createClient } from '@supabase/supabase-js';
 import { env } from '@/env.mjs';
-import { revalidatePath } from 'next/cache';
 import { prisma } from '@/lib/db';
 import { currentUser } from '@clerk/nextjs/server';
 
@@ -51,18 +50,19 @@ export async function uploadAvatar(form: FormData) {
       .upload(filePath, file, { upsert: true });
 
     if (error) throw error;
+    const photoUrl = `https://tqbquifstcxowvavjpis.supabase.co/storage/v1/object/public/avatars/${filePath}`;
 
-    await prisma.linkedInProfile.update({
+    const new_profile = await prisma.linkedInProfile.update({
       where: { userEmail: user.emailAddresses[0].emailAddress },
       data: {
-        photoUrl: `https://tqbquifstcxowvavjpis.supabase.co/storage/v1/object/public/avatars/${filePath}`,
+        photoUrl,
       },
     });
-    console.log('Successful to prisma');
 
-    revalidatePath('/mypage');
+    console.log(new_profile);
+    console.log('Successful to prisma');
     console.log('Avatar uploaded successfully');
-    return { success: true, filePath };
+    return { success: true, linkedinProfile: new_profile };
   } catch (error) {
     console.error('Error uploading avatar:', error);
     return { error: 'Error uploading avatar. Please try again.' };
