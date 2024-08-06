@@ -126,7 +126,7 @@ export function PublishDialog({
             </DialogTitle>
             <DialogDescription className="font-mono text-sm text-justify">
               Choose a url for your page. It will be accessible at{' '}
-              <strong>{`your_name.${rootDomain}`}</strong>
+              <strong>{`your_name.${'resumade.com'}`}</strong>
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
@@ -192,8 +192,8 @@ export function PublishDialog({
                 target="_blank"
                 className="text-blue-500 hover:underline flex items-center justify-center mt-2"
               >
-                {`${domainName}.${rootDomain}`}{' '}
-                <ExternalLink className="ml-1" />
+                {/* {`${domainName}.${rootDomain}`}{' '} */}
+                {`${domainName}.resumade.com`} <ExternalLink className="ml-1" />
               </Link>
             </DialogDescription>
           </DialogHeader>
