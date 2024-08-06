@@ -44,6 +44,10 @@ const nextConfig = {
         protocol: 'https',
         hostname: process.env.SUPABASE_HOST,
       },
+      {
+        protocol: 'https',
+        hostname: 'tqbquifstcxowvavjpis.supabase.co',
+      },
     ],
   },
   experimental: {
