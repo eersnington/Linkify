@@ -47,7 +47,7 @@ export default function UserPageContent({
           >
             <Logo className="w-6 h-6 mr-2" />
             <Link href={url} target="_blank">
-              Made with Linkify
+              Made with Resumade
             </Link>
           </Button>
         </div>

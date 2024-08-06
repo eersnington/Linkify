@@ -19,7 +19,7 @@ export function FinalCTA() {
             </h2>
             <p className="text-xl lg:text-2xl text-purple-200 mb-8">
               Land better jobs, increase respect and grow professionally with
-              Placeholder.
+              Resumade.
             </p>
             <div className="flex items-center space-x-2 mb-8">
               {/* {[...Array(5)].map((_, i) => (
@@ -49,7 +49,7 @@ export function FinalCTA() {
               <CardContent>
                 <CTAForm />
                 <p className="text-sm text-gray-600 mt-4 text-center">
-                  No credit card required. Set up in minutes.
+                  No credit card required. Set up in seconds.
                 </p>
               </CardContent>
             </Card>

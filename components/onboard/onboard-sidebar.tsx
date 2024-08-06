@@ -42,9 +42,7 @@ export function DemoSidebar({ email }: DemoSidebarProps) {
             <TooltipProvider key={index}>
               <Tooltip>
                 <TooltipTrigger>
-                  <Card
-                    className={`${template.isPremium ? 'opacity-50' : ''} overflow-hidden cursor-pointer`}
-                  >
+                  <Card className={`overflow-hidden cursor-pointer`}>
                     <CardHeader className="p-4">
                       <div className="flex flex-row justify-between items-center">
                         <CardTitle className="text-base">
@@ -58,7 +56,9 @@ export function DemoSidebar({ email }: DemoSidebarProps) {
                       </div>
                     </CardHeader>
                     <CardContent className="p-4">
-                      <div className="relative w-full pt-[56.25%]">
+                      <div
+                        className={`${template.isPremium ? 'opacity-50' : ''} relative w-full pt-[56.25%]`}
+                      >
                         <Image
                           src={template.image}
                           alt={template.name}
@@ -71,9 +71,9 @@ export function DemoSidebar({ email }: DemoSidebarProps) {
                     <CardFooter className="p-4">
                       <Button
                         className={cn('w-full text-sm py-2', {
-                          'bg-purple-500 text-white':
+                          'bg-orange-400 text-white':
                             selectedTemplate === index,
-                          'bg-purple-700 text-black':
+                          'bg-purple-700 text-white':
                             selectedTemplate !== index,
                         })}
                         disabled={template.isPremium}

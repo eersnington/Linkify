@@ -37,7 +37,7 @@ const features = [
   },
   {
     icon: LinkIcon,
-    text: 'No Linkify branding on your website',
+    text: 'No Resumade branding on your website',
   },
   {
     icon: Layout,

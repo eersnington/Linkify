@@ -38,6 +38,10 @@ const nextConfig = {
       },
       {
         protocol: 'https',
+        hostname: 'resumade.com',
+      },
+      {
+        protocol: 'https',
         hostname: process.env.SUPABASE_HOST,
       },
     ],

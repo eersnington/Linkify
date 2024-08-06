@@ -35,7 +35,7 @@ const features = [
   },
   {
     icon: Link,
-    text: 'No Linkify branding on your website',
+    text: 'No Resumade branding on your website',
   },
   {
     icon: Layout,
@@ -59,7 +59,11 @@ const features = [
   },
 ];
 
-export function UpgradeCard({ title, border, sparkle = true }: UpgradeCardProps) {
+export function UpgradeCard({
+  title,
+  border,
+  sparkle = true,
+}: UpgradeCardProps) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
 

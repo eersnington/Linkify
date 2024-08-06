@@ -4,7 +4,7 @@ import { NextResponse } from 'next/server';
 export default clerkMiddleware((auth, req) => {
   const url = req.nextUrl;
 
-  // Get hostname of request (e.g. sree.linkifyme.pro, sree.localhost:3000)
+  // Get hostname of request (e.g. sree.resumade.com, sree.localhost:3000)
   let hostname = req.headers
     .get('host')!
     .replace('.localhost:3000', `.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`);

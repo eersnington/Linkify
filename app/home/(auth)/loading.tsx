@@ -16,7 +16,7 @@ export default function Loading() {
       >
         <Label className="text-purple-950 text-2xl font-semibold mb-4 flex items-center justify-center">
           <Logo className="h-6 w-auto mr-2" />
-          Linkify
+          Resumade
         </Label>
         <motion.div
           animate={{

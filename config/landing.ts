@@ -24,7 +24,7 @@ export const infos: InfoLdg[] = [
   {
     title: "Your launchpad to success",
     description:
-      "Discover why Linkify is the go-to choice for launching your next project. From type safety to scalability, Linkify empowers you to build, scale, and succeed.",
+      "Discover why Resumade is the go-to choice for launching your next project. From type safety to scalability, Resumade empowers you to build, scale, and succeed.",
     image: "/images/code-screenshot.jpg",
     list: [
       {
@@ -121,44 +121,44 @@ export const features: FeaturesList = {
 
 export const testimonials: TestimonialsList = {
   label: "Don't just take our word for it",
-  title: "Here's what our customers have to say about Linkify.",
+  title: "Here's what our customers have to say about Resumade.",
   subtitle:
-    "Discover how Linkify has helped developers, entrepreneurs, and startups accelerate their projects and achieve their goals.",
+    "Discover how Resumade has helped developers, entrepreneurs, and startups accelerate their projects and achieve their goals.",
   testimonialsList: [
     {
       name: "Sarah Thompson",
       job: "Tech Startup Founder",
       image: "https://randomuser.me/api/portraits/women/1.jpg",
       review:
-        "Linkify has been a game-changer for my startup. It allowed us to quickly launch our product and start acquiring customers. This saved us countless hours of development time.",
+        "Resumade has been a game-changer for my startup. It allowed us to quickly launch our product and start acquiring customers. This saved us countless hours of development time.",
     },
     {
       name: "David O'Hara",
       job: "Software Engineer",
       image: "https://randomuser.me/api/portraits/men/2.jpg",
       review:
-        "I've been using Linkify for my side projects, and it's been amazing. It's saved me so much time by providing a solid foundation that I can build upon. I highly recommend it to anyone looking to quickly bootstrap their projects.",
+        "I've been using Resumade for my side projects, and it's been amazing. It's saved me so much time by providing a solid foundation that I can build upon. I highly recommend it to anyone looking to quickly bootstrap their projects.",
     },
     {
       name: "Alex Han",
       job: "Indie Developer",
       image: "https://randomuser.me/api/portraits/men/4.jpg",
       review:
-        "I can't imagine building my projects without Linkify. The speed and efficiency it provides are unmatched.",
+        "I can't imagine building my projects without Resumade. The speed and efficiency it provides are unmatched.",
     },
     {
       name: "Emily W.",
       job: "Aspiring Developer",
       image: "https://randomuser.me/api/portraits/women/3.jpg",
       review:
-        "Linkify has been my guiding light in learning the TypeScript ecosystem and launching my projects. It's been an invaluable resource that I can't recommend enough.",
+        "Resumade has been my guiding light in learning the TypeScript ecosystem and launching my projects. It's been an invaluable resource that I can't recommend enough.",
     },
     {
       name: "Rachel Adams",
       job: "Startup Co-Founder",
       image: "https://randomuser.me/api/portraits/women/5.jpg",
       review:
-        "Launching our startup was a daunting task, but Linkify made it a breeze. It gave us the solid foundation we needed to build our app quickly and efficiently. We couldn't be happier with the results.",
+        "Launching our startup was a daunting task, but Resumade made it a breeze. It gave us the solid foundation we needed to build our app quickly and efficiently. We couldn't be happier with the results.",
     },
   ],
 };

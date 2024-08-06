@@ -12,7 +12,7 @@ export const sample_linkedin_response = {
     phoneNumbers: [],
     companyName: 'DesignWorks Studio',
     location: 'San Francisco Bay Area',
-    photoUrl: 'https://linkifyme.pro/images/portraits/woman_3.jpeg',
+    photoUrl: 'https://resumade.com/images/portraits/woman_3.jpeg',
     linkedInUrl: 'https://linkedin.com/in/janedoe_design',
     schools: [
       {

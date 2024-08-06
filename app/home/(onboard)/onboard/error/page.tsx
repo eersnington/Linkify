@@ -20,7 +20,7 @@ import { ChangesMadeProvider } from '@/context/changes-made-context';
 
 export const metadata: Metadata = {
   title: 'Onboard',
-  description: 'Onboarding of Linkify',
+  description: 'Onboarding of Resumade',
 };
 
 export default async function OnboardPage({

@@ -6,7 +6,7 @@ import {
 import { env } from '@/env.mjs';
 
 export const paymentSupport: paymentSupportConfig = {
-  email: 'support@supportemail.com',
+  email: 'support@resumade.com ',
   message1:
     "If you have any questions or need assistance, please don't hesitate to contact us.", // There is another one in pricing-faq.tsx
   message2: "We're here to help!",
@@ -44,7 +44,7 @@ export const pricingData: SubscriptionPlan[] = [
       'Free custom domain',
       'Webpage analytics',
       'Priority customer support',
-      'No custom Linkify branding',
+      'No custom Resumade branding',
     ],
     limitations: [],
     prices: {

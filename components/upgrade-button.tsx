@@ -18,6 +18,7 @@ import {
   LineChart,
   Headphones,
   Wand2 as MagicWand,
+  LinkIcon,
 } from 'lucide-react';
 import { Button } from './ui/button';
 import { useRouter } from 'next/navigation';
@@ -27,6 +28,10 @@ const features = [
   {
     icon: Globe,
     text: 'Your own custom domain (e.g., yourname.com)',
+  },
+  {
+    icon: LinkIcon,
+    text: 'No Resumade branding on your website',
   },
   {
     icon: Layout,

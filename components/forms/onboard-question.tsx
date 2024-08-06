@@ -69,9 +69,6 @@ export function OnboardingSourceForm() {
           name="source"
           render={({ field }) => (
             <FormItem className="space-y-3">
-              <FormLabel className="text-lg font-semibold text-purple-950">
-                Where did you hear about us?
-              </FormLabel>
               <FormControl>
                 <RadioGroup
                   onValueChange={field.onChange}

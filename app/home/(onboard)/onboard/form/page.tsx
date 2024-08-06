@@ -10,10 +10,9 @@ export default function OnboardingPage() {
         <div className="flex flex-row text-center items-center mb-6">
           <Logo className="w-12 h-12 mr-2" />
           <h1 className="text-3xl font-bold text-purple-950">
-            Tell Us About You
+            Where did you hear about us?
           </h1>
         </div>
-
         <OnboardingSourceForm />
       </div>
     </div>

@@ -71,12 +71,7 @@ export function PageSidebar({ isUserPremium }: PageSidebarProps) {
             <TooltipProvider key={index}>
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <Card
-                    className={cn(
-                      'overflow-hidden',
-                      template.isPremium && !isUserPremium && 'opacity-50'
-                    )}
-                  >
+                  <Card className={cn('overflow-hidden')}>
                     <CardHeader className="p-4">
                       <div className="flex flex-row justify-between items-center">
                         <CardTitle className="text-base">
@@ -86,7 +81,12 @@ export function PageSidebar({ isUserPremium }: PageSidebarProps) {
                       </div>
                     </CardHeader>
                     <CardContent className="p-4">
-                      <div className="relative w-full pt-[56.25%]">
+                      <div
+                        className={cn(
+                          `relative w-full pt-[56.25%]`,
+                          template.isPremium && !isUserPremium && 'opacity-50'
+                        )}
+                      >
                         <Image
                           src={template.image}
                           alt={template.name}
@@ -99,9 +99,10 @@ export function PageSidebar({ isUserPremium }: PageSidebarProps) {
                     <CardFooter className="p-4">
                       <Button
                         className={cn('w-full text-sm py-2', {
-                          'bg-purple-700 text-white':
+                          'bg-orange-400 text-white':
                             selectedTemplate === index,
-                          'bg-slate-500 text-white': selectedTemplate !== index,
+                          'bg-purple-700 text-white':
+                            selectedTemplate !== index,
                         })}
                         disabled={template.isPremium && !isUserPremium}
                         onClick={() => {

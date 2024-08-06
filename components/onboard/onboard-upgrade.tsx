@@ -34,7 +34,7 @@ const features = [
   'Website visitor statistics',
   'Priority customer support',
   'AI-powered content generation',
-  'And much more',
+  'No Resumade branding on your website',
 ];
 
 export default function OnboardUpgrade({
@@ -104,7 +104,7 @@ export default function OnboardUpgrade({
           >
             <Label className="text-purple-950 text-2xl font-semibold">
               <Logo className="h-6 w-auto" />
-              Linkify
+              Resumade
             </Label>
             <Image
               src="/images/web-designer.svg"
@@ -134,7 +134,7 @@ export default function OnboardUpgrade({
                 Elevate Your Career with Premium Features.
                 <br />
                 <span className="font-semibold">
-                  Create your free website on yourname.example.com, or
+                  Create your free website on yourname.resumade.com, or
                   <br />
                   upgrade to represent yourself as a true professional:
                 </span>

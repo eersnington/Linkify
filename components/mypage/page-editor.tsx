@@ -74,10 +74,7 @@ export default function PageEditor({
       </aside>
       <main className="w-full lg:w-3/4 flex-1 overflow-hidden mx-4 my-4 ">
         <DashboardShell className="h-full rounded-lg bg-slate-50 p-4">
-          <DashboardHeader
-            heading="Editor"
-            text="Edit text, generate AI content and customise the design in a moment."
-          >
+          <DashboardHeader heading="Editor" text="">
             <div className="flex items-center space-x-2">
               {changesMade && (
                 <span className="text-red-700">Publish to save changes</span>

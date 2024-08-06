@@ -17,9 +17,9 @@ const steps = [
     icon: <LinkedInLogoIcon className="w-12 h-12" />,
   },
   {
-    title: 'Customize Your Dream Website',
+    title: 'Effortlessly Look Like A Pro',
     description:
-      'Unleash your creativity! Choose from our stunning templates and effortlessly personalize colors, fonts, and layout. Your perfect professional website is just a few clicks away! With no effort, you will look like a pro.',
+      'Our AI will instantly create you a beautiful website and enhance your LinkedIn/CV content. You can also customise and edit the details. Your professional website is fast, easy and free to make',
     video:
       'https://tqbquifstcxowvavjpis.supabase.co/storage/v1/object/public/videos%20linkify/step_two.mp4',
     gradient: 'from-teal-400 to-emerald-500',

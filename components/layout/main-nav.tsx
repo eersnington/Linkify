@@ -10,6 +10,8 @@ import { cn } from '@/lib/utils';
 import { MobileNav } from '@/components/layout/mobile-nav';
 import { Icons } from '@/components/shared/icons';
 
+import { lato, open_sans } from '@/app/fonts';
+
 import Logo from '../shared/logo';
 
 interface MainNavProps {
@@ -47,7 +49,7 @@ export function MainNav({ items, children, isDashboard }: MainNavProps) {
         className="hidden items-center space-x-2 md:flex "
       >
         <Logo />
-        <span className="hidden font-urban text-xl font-bold sm:inline-block">
+        <span className={cn('hidden text-xl sm:inline-block', lato.className)}>
           {siteConfig.name}
         </span>
       </Link>

@@ -33,7 +33,8 @@ export default function OnboardEditor({ email }: PageEditorProps) {
                 Choose your design
               </h1>
               <p className="text-base sm:text-lg text-purple-800">
-                Customize your page and change your template anytime
+                You can change the text, generate AI content and customise the
+                design in a moment.
               </p>
             </div>
             <div className="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-2">

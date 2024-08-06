@@ -1,13 +1,6 @@
 'use client';
 
-import {
-  ExternalLink,
-  Loader,
-  PlusSquare,
-  Sparkles,
-  Crown,
-  Zap,
-} from 'lucide-react';
+import { ExternalLink, Loader, Pencil } from 'lucide-react';
 import { PageViewsChart } from '../charts/page-view-chart';
 import {
   Card,
@@ -50,10 +43,10 @@ export default function DashboardCards({
       <Card className="shadow-md rounded-md py-8">
         <CardContent className="flex flex-col items-center justify-center">
           <span className="text-lg font-medium">
-            You don&apos;t have a website yet.
+            Finish off creating your website.
           </span>
           <span className="text-sm text-gray-500 mt-2">
-            Let&apos;s get you started by creating one!
+            Edit and enhance your page then publish it when you&apos;re ready.
           </span>
           <Button
             disabled={isClicked}
@@ -67,7 +60,7 @@ export default function DashboardCards({
               <Loader className="animate-spin" />
             ) : (
               <Link href="/mypage">
-                <PlusSquare className="inline" /> Create Website
+                <Pencil className="inline" /> Enter Editor
               </Link>
             )}
           </Button>

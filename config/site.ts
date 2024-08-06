@@ -4,40 +4,40 @@ import { env } from '@/env.mjs';
 const site_url = env.NEXT_PUBLIC_APP_URL;
 
 export const siteConfig: SiteConfig = {
-  name: 'Linkify',
+  name: 'Resumade',
   author: 'Sreenington',
   description:
-    'Transform your LinkedIn profile into a stunning personal website effortlessly with Linkify. Showcase your professional experience, skills, and projects in a few clicks.',
+    'Transform your LinkedIn profile into a stunning personal website effortlessly with Resumade. Showcase your professional experience, skills, and projects in a few clicks.',
   url: site_url,
   ogImage: `${site_url}/og.jpg`,
   links: {
-    twitter: 'https://twitter.com/sreenington/',
+    twitter: 'https://twitter.com/ridwan_mahmood/',
     github: '-',
   },
-  twitterID: '@sreenington',
-  mailSupport: 'support@email.com',
+  twitterID: '@ridwan_mahmood',
+  mailSupport: 'support@resumade.com',
   seoKeywords: [
-    'Linkify',
+    'Resumade',
     'LinkedIn profile to website',
     'personal website builder',
     'CV website builder',
     'professional website creation',
     'LinkedIn website transformation',
     'easy CV to website',
-    'Linkify professional site',
+    'Resumade professional site',
     'create a website from LinkedIn',
-    'Linkify website builder',
+    'Resumade website builder',
     'personal branding website',
     'LinkedIn profile website maker',
     'quick CV website',
-    'Linkify site generator',
+    'Resumade site generator',
   ],
   defaultTheme: 'light', // "dark" | "light" | "system"
 };
 
 export const footerLinks: SidebarNavItem[] = [
   {
-    title: 'Linkify',
+    title: 'Resumade',
     items: [
       { title: 'About', href: '#' },
       { title: 'Pricing', href: '/pricing' },

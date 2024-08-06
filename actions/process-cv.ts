@@ -92,7 +92,7 @@ async function callClaudeAPI(
     const { object } = await generateObject({
       model,
       schema: AILinkedInProfileSchema,
-      prompt: `As a professional resume analyzer, your primary objective is to fully comprehend the user's query of a CV resume and extract information in a structured format. Infer from the text provide a description, title, and everything. Don't miss out any details. Let the photo url be 'https://linkifyme.pro/images/portraits/person.png'\n\n${fileContent}.`,
+      prompt: `As a professional resume analyzer, your primary objective is to fully comprehend the user's query of a CV resume and extract information in a structured format. Infer from the text provide a description, title, and everything. Don't miss out any details. Let the photo url be 'https://resumade.com/images/portraits/person.png'\n\n${fileContent}.`,
     });
 
     return object as LinkedInProfile;

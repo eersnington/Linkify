@@ -3,6 +3,8 @@ import {
   DM_Serif_Display,
   Playfair_Display,
   Anton,
+  Lato,
+  Open_Sans,
 } from 'next/font/google';
 
 import { fontImpact } from '@/assets/fonts';
@@ -24,5 +26,9 @@ export const dancing_script = Dancing_Script({
 });
 
 export const anton = Anton({ subsets: ['latin'], weight: '400' });
+
+export const lato = Lato({ subsets: ['latin'], weight: '700' });
+
+export const open_sans = Open_Sans({ subsets: ['latin'], weight: ['600'] });
 
 export const impact = fontImpact;

@@ -88,7 +88,7 @@ const processLinkedInData = (response: any) => {
   const title = data.headline || 'N/A';
   const description = data.about || 'N/A';
   const photoUrl =
-    data.photoUrl || 'https://linkifyme.pro/images/portraits/person.png';
+    data.photoUrl || 'https://resumade.com/images/portraits/person.png';
   const linkedInUrl = data.linkedInUrl || 'N/A';
 
   const workExperiences =
