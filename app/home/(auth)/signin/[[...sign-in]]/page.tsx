@@ -1,6 +1,5 @@
 import { Metadata } from 'next';
-import { SignIn } from '@clerk/nextjs';
-import { currentUser } from '@clerk/nextjs/server';
+import SignInForm from '@/components/clerk/signin-component';
 
 export const metadata: Metadata = {
   title: 'Sign In',
@@ -8,7 +7,7 @@ export const metadata: Metadata = {
 };
 
 const SignInPage = () => {
-  return <SignIn />;
+  return <SignInForm />;
 };
 
 export default SignInPage;

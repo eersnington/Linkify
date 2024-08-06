@@ -1,6 +1,6 @@
 'use client';
 import * as Clerk from '@clerk/elements/common';
-import * as SignUp from '@clerk/elements/sign-up';
+import * as SignIn from '@clerk/elements/sign-in';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import {
@@ -18,111 +18,39 @@ import { CircleArrowRight, Loader } from 'lucide-react';
 import Logo from '../shared/logo';
 import { useRouter } from 'next/navigation';
 
-interface SignUpFormProps {
-  initialValues?: {
-    firstName?: string;
-    lastName?: string;
-    emailAddress?: string;
-  };
-}
-
-export default function SignUpForm({ initialValues }: SignUpFormProps) {
-  const router = useRouter();
-
-  const handleChangeEmail = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    e.preventDefault();
-    router.push('/signup');
-    window.location.reload();
-  };
-
+export default function SignInForm() {
   return (
     <div className="grid w-full grow items-center px-4 sm:justify-center">
-      <SignUp.Root>
+      <SignIn.Root>
         <Clerk.Loading>
           {(isGlobalLoading) => (
             <>
-              <SignUp.Step name="start">
+              <SignIn.Step name="start">
                 <Card className="w-full sm:w-96">
                   <Link href="/">
                     <Logo className="size-8 my-4 mx-auto" />
                   </Link>
                   <CardHeader className="text-center items-center justify-center">
-                    <CardTitle>Create your account</CardTitle>
+                    <CardTitle>Sign in to your account</CardTitle>
                     <CardDescription>
-                      Welcome! Please fill in the details to get started.
+                      Welcome back! Please enter your details.
                     </CardDescription>
                   </CardHeader>
                   <CardContent className="grid gap-y-4">
-                    <div className="grid grid-cols-2 gap-y-4 gap-x-4  ">
-                      <Clerk.Field name="firstName" className="space-y-2">
-                        <Clerk.Label asChild>
-                          <Label>First name</Label>
-                        </Clerk.Label>
-                        {initialValues?.firstName ? (
-                          <Clerk.Input
-                            type="text"
-                            value={initialValues.firstName}
-                            required
-                            asChild
-                          >
-                            <Input className="focus:ring-gray-200 focus:border-gray-300" />
-                          </Clerk.Input>
-                        ) : (
-                          <Clerk.Input type="text" required asChild>
-                            <Input className="focus:ring-gray-200 focus:border-gray-300" />
-                          </Clerk.Input>
-                        )}
-                        <Clerk.FieldError className="block text-sm text-destructive" />
-                      </Clerk.Field>
-                      <Clerk.Field name="lastName" className="space-y-2">
-                        <Clerk.Label asChild>
-                          <Label>Last name</Label>
-                        </Clerk.Label>
-                        {initialValues?.lastName ? (
-                          <Clerk.Input
-                            type="text"
-                            value={initialValues.lastName}
-                            required
-                            asChild
-                          >
-                            <Input className="focus:ring-gray-200 focus:border-gray-300" />
-                          </Clerk.Input>
-                        ) : (
-                          <Clerk.Input type="text" required asChild>
-                            <Input className="focus:ring-gray-200 focus:border-gray-300" />
-                          </Clerk.Input>
-                        )}
-                        <Clerk.FieldError className="block text-sm text-destructive" />
-                      </Clerk.Field>
-                    </div>
-                    <Clerk.Field name="emailAddress" className="space-y-2">
+                    <Clerk.Field name="identifier" className="space-y-2">
                       <Clerk.Label asChild>
                         <Label>Email address</Label>
                       </Clerk.Label>
-                      {initialValues?.emailAddress ? (
-                        <Clerk.Input
-                          type="email"
-                          value={initialValues.emailAddress}
-                          required
-                          asChild
-                        >
-                          <Input className="focus:ring-gray-200 focus:border-gray-300" />
-                        </Clerk.Input>
-                      ) : (
-                        <Clerk.Input type="email" required asChild>
-                          <Input className="focus:ring-gray-200 focus:border-gray-300" />
-                        </Clerk.Input>
-                      )}
+                      <Clerk.Input type="email" required asChild>
+                        <Input />
+                      </Clerk.Input>
                       <Clerk.FieldError className="block text-sm text-destructive" />
                     </Clerk.Field>
                   </CardContent>
-                  <CardFooter className="bg-slate-50 text-center">
+                  <CardFooter className="bg-slate-100 text-center pt-4">
                     <div className="grid w-full gap-y-4">
-                      <SignUp.Action submit asChild>
-                        <Button
-                          disabled={isGlobalLoading}
-                          className="bg-gradient-to-b from-gray-700 to-gray-800 hover:bg-gradient-to-t"
-                        >
+                      <SignIn.Action submit asChild>
+                        <Button disabled={isGlobalLoading}>
                           <Clerk.Loading>
                             {(isLoading) => {
                               return isLoading ? (
@@ -132,25 +60,24 @@ export default function SignUpForm({ initialValues }: SignUpFormProps) {
                               );
                             }}
                           </Clerk.Loading>
-                          <CircleArrowRight className="ml-4 size-4" />
                         </Button>
-                      </SignUp.Action>
+                      </SignIn.Action>
+
                       <p className="text-center text-sm text-zinc-500">
-                        Already have an account?{' '}
+                        Don&apos;t have an account?{' '}
                         <Link
-                          href="/signin"
+                          href="/signup"
                           className="font-medium text-zinc-950 decoration-zinc-950/20 underline-offset-4 outline-none hover:text-zinc-700 hover:underline focus-visible:underline"
                         >
-                          Sign in
+                          Sign Up
                         </Link>
                       </p>
                     </div>
                   </CardFooter>
                 </Card>
-              </SignUp.Step>
-
-              <SignUp.Step name="verifications">
-                <SignUp.Strategy name="email_code">
+              </SignIn.Step>
+              <SignIn.Step name="verifications">
+                <SignIn.Strategy name="email_code">
                   <Card className="w-full sm:w-96">
                     <CardHeader className="text-center items-center justify-center">
                       <Link href="/">
@@ -200,7 +127,7 @@ export default function SignUpForm({ initialValues }: SignUpFormProps) {
                           </div>
                           <Clerk.FieldError className="block text-center text-sm text-destructive" />
                         </Clerk.Field>
-                        <SignUp.Action
+                        <SignIn.Action
                           asChild
                           resend
                           className="text-muted-foreground"
@@ -219,12 +146,12 @@ export default function SignUpForm({ initialValues }: SignUpFormProps) {
                               Didn&apos;t recieve a code? Resend
                             </span>
                           </Button>
-                        </SignUp.Action>
+                        </SignIn.Action>
                       </div>
                     </CardContent>
                     <CardFooter>
                       <div className="grid w-full gap-y-4">
-                        <SignUp.Action submit asChild>
+                        <SignIn.Action submit asChild>
                           <Button
                             disabled={isGlobalLoading}
                             className="bg-gradient-to-b from-gray-700 to-gray-800 hover:bg-gradient-to-t"
@@ -240,25 +167,16 @@ export default function SignUpForm({ initialValues }: SignUpFormProps) {
                             </Clerk.Loading>
                             <CircleArrowRight className="ml-4 size-4" />
                           </Button>
-                        </SignUp.Action>
-                        <p className="text-center text-sm text-zinc-500">
-                          <Link
-                            href="/signup"
-                            className="font-medium decoration-zinc-950/20 underline-offset-4 outline-none hover:text-zinc-700 hover:underline focus-visible:underline"
-                            onClick={handleChangeEmail}
-                          >
-                            Change email address?
-                          </Link>
-                        </p>
+                        </SignIn.Action>
                       </div>
                     </CardFooter>
                   </Card>
-                </SignUp.Strategy>
-              </SignUp.Step>
+                </SignIn.Strategy>
+              </SignIn.Step>
             </>
           )}
         </Clerk.Loading>
-      </SignUp.Root>
+      </SignIn.Root>
     </div>
   );
 }

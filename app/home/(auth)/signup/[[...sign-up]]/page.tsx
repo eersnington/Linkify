@@ -1,5 +1,4 @@
 import { Metadata } from 'next';
-import { SignUp } from '@clerk/nextjs';
 import SignUpForm from '@/components/clerk/signup-component';
 
 export const metadata: Metadata = {

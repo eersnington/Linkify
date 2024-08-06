@@ -23,6 +23,7 @@ import {
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { useRouter } from 'next/navigation';
 import { useUser } from '@clerk/nextjs';
+import { onboardFormSubmit } from '@/actions/source-form-submission';
 
 const sourceSchema = z.object({
   source: z.enum(
@@ -35,7 +36,6 @@ const sourceSchema = z.object({
 
 export function OnboardingSourceForm() {
   const { user } = useUser();
-
   const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
 
@@ -43,14 +43,18 @@ export function OnboardingSourceForm() {
     resolver: zodResolver(sourceSchema),
   });
 
-  function onSubmit(data: z.infer<typeof sourceSchema>) {
+  const handleSubmit = async (data: z.infer<typeof sourceSchema>) => {
     setIsSubmitting(true);
-    console.log(data);
-    setTimeout(() => {
-      setIsSubmitting(false);
+    try {
+      await onboardFormSubmit(data.source, user?.id);
       router.push('/dashboard/');
-    }, 1000);
-  }
+    } catch (error) {
+      console.error('Error saving source data:', error);
+      // Handle error (e.g., show error message to user)
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   const sourceOptions = [
     { value: 'tiktok', label: 'TikTok', icon: TikTok },
@@ -63,7 +67,7 @@ export function OnboardingSourceForm() {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+      <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-8">
         <FormField
           control={form.control}
           name="source"
@@ -104,7 +108,17 @@ export function OnboardingSourceForm() {
           className="w-full h-12 font-semibold text-base sm:text-lg bg-yellow-500 text-purple-950 hover:bg-yellow-600 rounded-lg focus:outline-none hover:transform hover:scale-105 transition-all duration-300"
           disabled={isSubmitting}
         >
-          Continue <ArrowRight className="w-5 h-5 ml-2" />
+          {isSubmitting ? (
+            <>
+              <ArrowRight className="h-6 w-6 mr-2" />
+              Submitting...
+            </>
+          ) : (
+            <>
+              <ArrowRight className="h-6 w-6 mr-2" />
+              Submit
+            </>
+          )}
         </Button>
       </form>
     </Form>

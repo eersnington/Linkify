@@ -35,7 +35,10 @@ model User {
 
   adminUser      AdminUser?
 
+  source Source?
+
   @@map(name: "users")
+
 }
 
 model AdminUser{
@@ -97,4 +100,24 @@ model Website {
   pageViews  PageView[]
 
   @@map(name: "website")
+}
+
+model Source {
+  id        String   @id @default(cuid())
+  userId    String   @unique
+  user      User     @relation(fields: [userId], references: [id])
+  source    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map(name: "source")
+}
+
+enum SourceType {
+  TIKTOK
+  LINKEDIN
+  INSTAGRAM
+  YOUTUBE
+  GOOGLE
+  FRIEND
 }
