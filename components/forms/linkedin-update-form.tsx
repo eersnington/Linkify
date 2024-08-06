@@ -103,7 +103,10 @@ export function LinkedInProfileForm() {
         });
       } else {
         updateProfileContext({
-          ...linkedInProfile,
+          id: userId,
+          userEmail: userEmail,
+          linkedInUrl: linkedInProfile.linkedInUrl,
+          skills: linkedInProfile.skills,
           ...data,
         });
         toast({
