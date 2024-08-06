@@ -12,7 +12,7 @@ const steps = [
     description:
       "Transform your professional presence in seconds! Connect your LinkedIn with your email, and watch the magic unfold. It's that simple! You can also upload your CV/resume if you prefer.",
     video:
-      'https://tqbquifstcxowvavjpis.supabase.co/storage/v1/object/public/videos%20linkify/step_one.mp4',
+      'https://ullcpoficadhnegvsjgo.supabase.co/storage/v1/object/public/resumade/videos/step_one.mp4',
     gradient: 'from-cyan-400 to-blue-500',
     icon: <LinkedInLogoIcon className="w-12 h-12" />,
   },
@@ -21,7 +21,7 @@ const steps = [
     description:
       'Our AI will instantly create you a beautiful website and enhance your LinkedIn/CV content. You can also customise and edit the details. Your professional website is fast, easy and free to make',
     video:
-      'https://tqbquifstcxowvavjpis.supabase.co/storage/v1/object/public/videos%20linkify/step_two.mp4',
+      'https://ullcpoficadhnegvsjgo.supabase.co/storage/v1/object/public/resumade/videos/step_two.mp4',
     gradient: 'from-teal-400 to-emerald-500',
     icon: <Palette className="w-12 h-12" />,
   },
@@ -30,7 +30,7 @@ const steps = [
     description:
       'Get your own shareable URL instantly and start showing off your new professional brand. Impress employers, colleagues and your friends. Optional: you can also get your own custom domain eg. yourname.com',
     video:
-      'https://tqbquifstcxowvavjpis.supabase.co/storage/v1/object/public/videos%20linkify/step_three.mp4',
+      'https://ullcpoficadhnegvsjgo.supabase.co/storage/v1/object/public/resumade/videos/step_three.mp4',
     gradient: 'from-purple-400 to-pink-500',
     icon: <Rocket className="w-12 h-12" />,
   },
