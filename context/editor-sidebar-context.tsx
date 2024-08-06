@@ -23,7 +23,7 @@ export const templates = [
     name: 'Basic Web',
     component: BasicWebTemplate,
     isPremium: false,
-    image: '/images/templates/Basic.png',
+    image: '/images/templates/BasicWeb.png',
   },
   {
     name: 'Creative',

@@ -1,5 +1,4 @@
 'use client';
-
 import { TrendingUp } from 'lucide-react';
 import { Bar, BarChart, XAxis, YAxis } from 'recharts';
 import {
@@ -16,27 +15,43 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from '@/components/ui/chart';
+import { Source } from '@prisma/client';
 
-const chartData = [
-  { source: 'TIKTOK', count: 150, fill: 'hsl(var(--chart-1))' },
-  { source: 'LINKEDIN', count: 100, fill: 'hsl(var(--chart-2))' },
-  { source: 'INSTAGRAM', count: 80, fill: 'hsl(var(--chart-3))' },
-  { source: 'YOUTUBE', count: 60, fill: 'hsl(var(--chart-4))' },
-  { source: 'GOOGLE', count: 40, fill: 'hsl(var(--chart-5))' },
-  { source: 'FRIEND', count: 20, fill: 'hsl(var(--chart-6))' },
-];
+interface SourceChartProp {
+  sources: Source[];
+}
 
-const chartConfig = {
-  count: { label: 'Count' },
-  ...Object.fromEntries(
-    chartData.map(({ source }) => [
+export function SourceChart({ sources }: SourceChartProp) {
+  // Process the sources data
+  const sourceCounts = sources.reduce(
+    (acc, source) => {
+      acc[source.source] = (acc[source.source] || 0) + 1;
+      return acc;
+    },
+    {} as Record<string, number>
+  );
+
+  const chartData = Object.entries(sourceCounts)
+    .map(([source, count], index) => ({
       source,
-      { label: source, color: 'hsl(var(--chart-1))' },
-    ])
-  ),
-} satisfies ChartConfig;
+      count,
+      fill: `hsl(var(--chart-6`, // Cycle through 6 colors
+    }))
+    .sort((a, b) => b.count - a.count)
+    .slice(0, 6); // Limit to top 6 sources
 
-export function SourceChart() {
+  const chartConfig: ChartConfig = {
+    count: { label: 'Count' },
+    ...Object.fromEntries(
+      chartData.map(({ source, fill }) => [
+        source,
+        { label: source, color: fill },
+      ])
+    ),
+  };
+
+  const topSource = chartData[0]?.source || 'N/A';
+
   return (
     <Card>
       <CardHeader>
@@ -67,14 +82,7 @@ export function SourceChart() {
           </BarChart>
         </ChartContainer>
       </CardContent>
-      <CardFooter className="flex-col items-start gap-2 text-sm">
-        <div className="flex gap-2 font-medium leading-none">
-          TikTok is the top source this month <TrendingUp className="h-4 w-4" />
-        </div>
-        <div className="leading-none text-muted-foreground">
-          Showing distribution of user sources
-        </div>
-      </CardFooter>
+      <CardFooter className="flex-col items-start gap-2 text-sm"></CardFooter>
     </Card>
   );
 }

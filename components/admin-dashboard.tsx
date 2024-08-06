@@ -10,7 +10,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { Input } from '@/components/ui/input';
-import { User, AdminUser } from '@prisma/client';
+import { User, AdminUser, Source } from '@prisma/client';
 import { env } from '@/env.mjs';
 import Link from 'next/link';
 import { UserSignupsChart } from './charts/user-signups-chart';
@@ -20,6 +20,7 @@ import { PremiumUsersDomainChart } from './charts/domains-chart';
 import { Button } from './ui/button';
 import { toast } from './ui/use-toast';
 import { onAddAdminUser, onDeleteAdminUser } from '@/actions/admin-dashboard';
+import { SourceChart } from './charts/source-chart';
 
 const rootDomain = env.NEXT_PUBLIC_ROOT_DOMAIN;
 const protocol = rootDomain === 'localhost:3000' ? 'http://' : 'https://';
@@ -27,11 +28,13 @@ const protocol = rootDomain === 'localhost:3000' ? 'http://' : 'https://';
 interface AdminDashboardContentProps {
   users: (User & { website: { domainName: string } | null })[];
   adminUsers: AdminUser[];
+  sources: Source[];
 }
 
 export function AdminDashboardContent({
   users,
   adminUsers: initialAdminUsers,
+  sources,
 }: AdminDashboardContentProps) {
   const [searchTerm, setSearchTerm] = useState('');
 
@@ -185,10 +188,11 @@ export function AdminDashboardContent({
 
       <section className="mb-8">
         <h2 className="text-2xl font-bold mb-4">Key Metrics</h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <PremiumUsersChart users={users} />
           <WebsitePublicationChart users={users} />
           <PremiumUsersDomainChart users={users} />
+          <SourceChart sources={sources} />
         </div>
       </section>
 

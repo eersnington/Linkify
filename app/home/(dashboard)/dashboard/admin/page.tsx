@@ -31,13 +31,19 @@ export default async function AdminDashboardPage() {
     }
   }
 
+  const sources = await prisma.source.findMany();
+
   return (
     <DashboardShell>
       <DashboardHeader
         heading="Admin Dashboard"
         text="View all users and their details."
       />
-      <AdminDashboardContent users={users} adminUsers={adminUsers} />
+      <AdminDashboardContent
+        users={users}
+        adminUsers={adminUsers}
+        sources={sources}
+      />
     </DashboardShell>
   );
 }
