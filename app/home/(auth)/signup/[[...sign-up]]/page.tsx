@@ -1,5 +1,5 @@
 import { Metadata } from 'next';
-import SignUpForm from '@/components/clerk/signup-component';
+import { SignUpForm } from '@/components/clerk/signup-component';
 
 export const metadata: Metadata = {
   title: 'Sign Up',
@@ -25,8 +25,5 @@ export default function SignUpPage({
   };
 
   console.log('Normal Redirect!');
-  return (
-    // <SignUp initialValues={initialValues} forceRedirectUrl={'/onboard/form'} />
-    <SignUpForm initialValues={initialValues} />
-  );
+  return <SignUpForm initialValues={initialValues} />;
 }
