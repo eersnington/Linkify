@@ -25,8 +25,13 @@ export default async function DashboardLayout({
     where: { id: user.id },
     include: {
       adminUser: true,
+      source: true,
     },
   });
+
+  if (!userDb?.source) {
+    redirect('/onboard/form');
+  }
 
   const isAdmin = userDb?.adminUser ? true : false;
 
