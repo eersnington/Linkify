@@ -4,13 +4,18 @@ import { createClient } from '@supabase/supabase-js';
 import { env } from '@/env.mjs';
 import { prisma } from '@/lib/db';
 import { currentUser } from '@clerk/nextjs/server';
+import { LinkedInProfile } from '@prisma/client';
+import { AILinkedInProfileSchema } from '@/lib/validations/linkedin-profile';
 
 const supabase = createClient(
   env.SUPABASE_PROJECT_URL,
   env.SUPABASE_SECRET_KEY
 );
 
-export async function uploadAvatar(form: FormData) {
+export async function uploadAvatar(
+  form: FormData,
+  linkedInProfile: LinkedInProfile
+) {
   const file = form.get('file') as File;
   const userId = form.get('userId') as string;
   console.log('Uploading avatar...');
@@ -52,10 +57,26 @@ export async function uploadAvatar(form: FormData) {
     if (error) throw error;
     const photoUrl = `https://tqbquifstcxowvavjpis.supabase.co/storage/v1/object/public/avatars/${filePath}`;
 
-    const new_profile = await prisma.linkedInProfile.update({
-      where: { userEmail: user.emailAddresses[0].emailAddress },
-      data: {
+    const validatedData = AILinkedInProfileSchema.parse(linkedInProfile);
+
+    const new_profile = await prisma.linkedInProfile.upsert({
+      where: { id: user.id },
+      update: {
+        id: user.id,
         photoUrl,
+      },
+      create: {
+        id: user.id,
+        photoUrl,
+        userEmail: user.emailAddresses[0].emailAddress,
+        firstName: validatedData.firstName,
+        lastName: validatedData.lastName,
+        title: validatedData.title,
+        description: validatedData.description,
+        linkedInUrl: validatedData.linkedInUrl,
+        workExperiences: validatedData.workExperiences,
+        education: validatedData.education,
+        skills: validatedData.skills,
       },
     });
 

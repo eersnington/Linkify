@@ -17,7 +17,7 @@ export async function updateLinkedInProfile(
   }
 
   console.log(`Updating LinkedIn profile for ${email}`);
-
+ 
   try {
     const validatedData = AILinkedInProfileSchema.parse(data);
 

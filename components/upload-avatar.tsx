@@ -41,7 +41,7 @@ export function UploadAvatarButton() {
         );
       }
 
-      const result = await uploadAvatar(formData);
+      const result = await uploadAvatar(formData, linkedInProfile);
 
       if (result.error) {
         toast({

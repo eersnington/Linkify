@@ -135,6 +135,7 @@ export async function POST(req: Request) {
       });
 
       const linkedInProfileData = tempStore.get(email);
+      console.log(linkedInProfileData);
 
       if (linkedInProfileData) {
         console.log('Updating LinkedIn profile and website for user:', email);
