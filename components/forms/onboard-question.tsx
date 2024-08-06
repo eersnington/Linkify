@@ -47,12 +47,11 @@ export function OnboardingSourceForm() {
     setIsSubmitting(true);
     try {
       await onboardFormSubmit(data.source, user?.id);
-      router.push('/dashboard/');
     } catch (error) {
       console.error('Error saving source data:', error);
-      // Handle error (e.g., show error message to user)
     } finally {
       setIsSubmitting(false);
+      router.push('/dashboard/');
     }
   };
 
